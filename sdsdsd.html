@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DeD_u1ya | Hub</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #0e0e10;
+            --twitch-purple: #9146ff;
+            --white: #ffffff;
+            --glass: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --glass-deep: rgba(255, 255, 255, 0.05);
+        }
+
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; cursor: none; }
+
+        body {
+            margin: 0;
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--white);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            overflow-x: hidden;
+            background: radial-gradient(circle at 50% 0%, #1f1635 0%, var(--bg-dark) 100%);
+        }
+
+        #content-wrapper {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transition: filter 0.8s ease;
+            filter: blur(15px);
+        }
+
+        #welcome-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.6);
+            display: flex; align-items: center; justify-content: center;
+            z-index: 30000;
+            backdrop-filter: blur(10px);
+            transition: opacity 0.5s ease;
+        }
+
+        .welcome-box {
+            background: var(--glass-deep);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            border: 1px solid var(--glass-border);
+            padding: 40px;
+            border-radius: 30px;
+            text-align: center;
+            max-width: 340px;
+            transform: translateY(100vh);
+            animation: slideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        @keyframes slideUp { to { transform: translateY(0); } }
+
+        .ok-btn {
+            background: var(--glass);
+            border: 1px solid var(--twitch-purple);
+            color: white;
+            padding: 12px 45px;
+            border-radius: 15px;
+            font-weight: 700;
+            text-transform: uppercase;
+            transition: 0.3s;
+            margin-top: 20px;
+        }
+        .ok-btn:hover { background: var(--twitch-purple); box-shadow: 0 0 20px var(--twitch-purple); }
+
+        #cursor-glow {
+            position: fixed; width: 350px; height: 350px;
+            background: radial-gradient(circle, rgba(145, 70, 255, 0.15) 0%, transparent 70%);
+            border-radius: 50%; pointer-events: none; z-index: 30001; transform: translate(-50%, -50%);
+        }
+        #cursor-dot {
+            position: fixed; width: 8px; height: 8px; background: var(--white);
+            border-radius: 50%; pointer-events: none; z-index: 30002; transform: translate(-50%, -50%);
+            box-shadow: 0 0 15px var(--twitch-purple);
+        }
+        .trail {
+            position: fixed; width: 4px; height: 4px; background: var(--twitch-purple);
+            border-radius: 50%; pointer-events: none; z-index: 30000; opacity: 0.5;
+        }
+
+        main { width: 100%; max-width: 420px; padding: 60px 20px; text-align: center; }
+        .avatar-container { width: 120px; height: 120px; margin: 0 auto 25px; border-radius: 50%; border: 3px solid var(--twitch-purple); padding: 5px; box-shadow: 0 0 25px rgba(145, 70, 255, 0.3); }
+        .avatar-img { width: 100%; height: 100%; border-radius: 50%; background-image: url('ava.jpg'); background-size: cover; background-position: center; }
+        
+        h1 { font-size: 2.4rem; margin: 0; font-weight: 900; }
+        .links { display: flex; flex-direction: column; gap: 12px; margin-top: 30px; }
+        .card { 
+            display: flex; align-items: center; padding: 16px 20px; 
+            background: rgba(24, 24, 27, 0.8); border: 1px solid rgba(255, 255, 255, 0.05); 
+            border-radius: 12px; text-decoration: none; color: var(--white); font-weight: 700; transition: 0.3s;
+        }
+        .card:hover { border-color: var(--twitch-purple); transform: translateY(-2px); }
+        .card img { width: 28px; height: 28px; margin-right: 15px; }
+
+        .music-player {
+            position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
+            background: var(--glass); backdrop-filter: blur(15px); border: 1px solid var(--glass-border); 
+            border-radius: 40px; padding: 8px 20px; display: flex; align-items: center; gap: 15px; z-index: 25000;
+        }
+
+        #nextBtn {
+            background: rgba(145, 70, 255, 0.2); border: 1px solid var(--twitch-purple);
+            color: white; padding: 6px 14px; border-radius: 20px; font-weight: 900;
+            font-size: 0.65rem; text-transform: uppercase;
+        }
+
+        input[type=range] { width: 80px; accent-color: var(--twitch-purple); opacity: 0.7; }
+        .particle { position: fixed; background: var(--twitch-purple); border-radius: 50%; pointer-events: none; z-index: 30003; }
+    </style>
+</head>
+<body>
+
+    <div id="cursor-glow"></div>
+    <div id="cursor-dot"></div>
+
+    <div id="welcome-overlay">
+        <div class="welcome-box">
+            <h2 style="margin:0">ПРИВЕТ!</h2>
+            <p>Добро пожаловать в мой Hub. Нажми «ОК», чтобы войти и включить музыку.</p>
+            <button class="ok-btn" id="startBtn">ОК</button>
+        </div>
+    </div>
+
+    <div id="content-wrapper">
+        <main>
+            <div class="avatar-container">
+                <div class="avatar-img"></div>
+            </div>
+            <h1>DeD_u1ya</h1>
+            <p style="color:#adadb8; letter-spacing: 2px;">OFFICIAL HUB</p>
+
+            <div class="links">
+                <a href="https://t.me/DeD_u1ya" target="_blank" class="card">
+                    <img src="tg.png" alt="TG"> Telegram
+                </a>
+                <a href="https://steamcommunity.com/id/_D_I_C_H_/" target="_blank" class="card">
+                    <img src="Без названия (1).png" alt="Steam"> Steam
+                </a>
+                <a href="https://www.tiktok.com/@dedu1ya1?_t=ZP-8zzbnys6Mkp&_r=1" target="_blank" class="card">
+                    <svg width="28" height="28" style="fill:white; margin-right:15px" viewBox="0 0 24 24"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.17-2.81-.74-3.94-1.67-.49-.42-.94-.87-1.33-1.38v7.41c.01 2.23-.74 4.54-2.4 6.06-1.8 1.7-4.4 2.15-6.68 1.4-2.73-.85-4.6-3.7-4.2-6.53.28-2.4 2.1-4.52 4.48-5.11.83-.22 1.7-.26 2.54-.15v4.1c-.88-.25-1.85-.08-2.55.51-.77.62-1.08 1.66-.89 2.62.2 1.05 1.13 1.88 2.19 2.03.95.14 2-.15 2.59-.92.36-.45.56-1.02.55-1.6V.02z"/></svg>
+                    TikTok
+                </a>
+                <a href="https://www.donationalerts.com/r/ded_u1ya" target="_blank" class="card">
+                    <svg width="28" height="28" style="fill:#ffa500; margin-right:15px" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                    DonationAlerts
+                </a>
+                <a href="https://www.youtube.com/@DeD_u1ya" target="_blank" class="card">
+                    <img src="yt.png" alt="YT"> YouTube
+                </a>
+            </div>
+        </main>
+
+        <div class="music-player">
+            <button id="nextBtn">NEXT</button>
+            <input type="range" id="volumeSlider" min="0" max="1" step="0.01" value="0.23">
+        </div>
+    </div>
+
+    <audio id="bgMusic" preload="auto"></audio>
+
+    <script>
+        const bgMusic = document.getElementById('bgMusic');
+        const overlay = document.getElementById('welcome-overlay');
+        const content = document.getElementById('content-wrapper');
+        const glow = document.getElementById('cursor-glow');
+        const dot = document.getElementById('cursor-dot');
+        const tracks = ['1.mp3', '2.mp3', '3.mp3', '4.mp3'];
+        let currentTrack = 0;
+
+        bgMusic.volume = 0.23;
+
+        document.getElementById('startBtn').addEventListener('click', () => {
+            overlay.style.opacity = '0';
+            setTimeout(() => {
+                overlay.style.display = 'none';
+                content.style.filter = 'none';
+            }, 500);
+            bgMusic.src = tracks[currentTrack];
+            bgMusic.play();
+        });
+
+        window.addEventListener('mousemove', (e) => {
+            glow.style.left = e.clientX + 'px';
+            glow.style.top = e.clientY + 'px';
+            dot.style.left = e.clientX + 'px';
+            dot.style.top = e.clientY + 'px';
+            const trail = document.createElement('div');
+            trail.className = 'trail';
+            trail.style.left = e.clientX + 'px';
+            trail.style.top = e.clientY + 'px';
+            document.body.appendChild(trail);
+            setTimeout(() => {
+                trail.style.opacity = '0';
+                setTimeout(() => trail.remove(), 200);
+            }, 100);
+        });
+
+        window.addEventListener('mousedown', (e) => {
+            for(let i=0; i<8; i++) {
+                const p = document.createElement('div');
+                p.classList.add('particle');
+                document.body.appendChild(p);
+                const size = Math.random() * 5 + 2;
+                p.style.width = size + 'px'; p.style.height = size + 'px';
+                p.style.left = e.clientX + 'px'; p.style.top = e.clientY + 'px';
+                const destX = (Math.random() - 0.5) * 100;
+                const destY = (Math.random() - 0.5) * 100;
+                p.animate([{ transform: 'translate(0, 0) scale(1)', opacity: 1 }, { transform: `translate(${destX}px, ${destY}px) scale(0)`, opacity: 0 }], { duration: 400 }).onfinish = () => p.remove();
+            }
+        });
+
+        document.getElementById('nextBtn').addEventListener('click', (e) => {
+            e.stopPropagation();
+            currentTrack = (currentTrack + 1) % tracks.length;
+            bgMusic.src = tracks[currentTrack];
+            bgMusic.play();
+        });
+
+        document.getElementById('volumeSlider').addEventListener('input', (e) => {
+            bgMusic.volume = e.target.value;
+        });
+
+        bgMusic.onended = () => { document.getElementById('nextBtn').click(); };
+
+        document.querySelectorAll('.card').forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = (e.clientX - rect.left - rect.width/2) / 20;
+                const y = (e.clientY - rect.top - rect.height/2) / 10;
+                card.style.transform = `perspective(1000px) rotateX(${-y}deg) rotateY(${x}deg) translateY(-2px)`;
+            });
+            card.addEventListener('mouseleave', () => card.style.transform = 'none');
+        });
+    </script>
+</body>
+</html>
