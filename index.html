@@ -42,7 +42,12 @@
         .avatar-container.cooldown { opacity: 0.4; transform: scale(0.9); }
         .avatar-img { width: 100%; height: 100%; border-radius: 50%; background: url('ava.jpg') center/cover; }
         .links { display: flex; flex-direction: column; gap: 12px; margin-top: 25px; }
-        .card { display: flex; align-items: center; padding: 18px 24px; background: var(--glass); border: 2px solid transparent; border-radius: 16px; text-decoration: none; color: white; font-weight: 700; transition: all 0.2s ease-out; transform-style: preserve-3d; }
+        .card { 
+            display: flex; align-items: center; padding: 18px 24px; background: var(--glass); border: 2px solid transparent; border-radius: 16px; 
+            text-decoration: none; color: white; font-weight: 700; transition: all 0.2s ease-out; transform-style: preserve-3d;
+            opacity: 0; transform: translateY(30px);
+        }
+        .card.show { opacity: 1; transform: translateY(0); }
         .card:hover { border-color: var(--twitch-purple); background: rgba(145, 70, 255, 0.1); box-shadow: 0 0 15px rgba(145, 70, 255, 0.3); }
         .card img, .card svg { width: 24px; height: 24px; margin-right: 15px; pointer-events: none; }
         #music-player {
@@ -56,6 +61,8 @@
         .visualizer { display: flex; align-items: flex-end; gap: 3px; height: 16px; }
         .vis-bar { width: 3px; background: var(--twitch-purple); border-radius: 1px; height: 4px; }
         .playing .vis-bar { animation: wave 0.8s ease-in-out infinite; }
+        .playing .vis-bar:nth-child(2) { animation-delay: 0.1s; }
+        .playing .vis-bar:nth-child(3) { animation-delay: 0.2s; }
         @keyframes wave { 0%, 100% { height: 4px; } 50% { height: 16px; } }
         .p-btn { background: none; border: none; color: white; padding: 5px; display: flex; transition: 0.2s; }
         .p-btn svg { width: 20px; height: 20px; fill: currentColor; }
@@ -112,40 +119,24 @@
         const player = document.getElementById('music-player'), viz = document.getElementById('viz');
         const icon = document.getElementById('playPauseIcon').querySelector('path');
         const cGlow = document.getElementById('cursor-glow'), cDot = document.getElementById('cursor-dot');
-
         function loadT(i) { audio.src = tracks[i]; audio.load(); }
         loadT(0);
-
         document.getElementById('playPauseBtn').onclick = () => {
             if(audio.paused) { audio.play(); viz.classList.add('playing'); icon.setAttribute('d', 'M6 19h4V5H6v14zm8-14v14h4V5h-4z'); }
             else { audio.pause(); viz.classList.remove('playing'); icon.setAttribute('d', 'M8 5v14l11-7z'); }
         };
-        document.getElementById('nextBtn').onclick = () => {
-            curT = shuffle ? Math.floor(Math.random()*tracks.length) : (curT+1)%tracks.length;
-            loadT(curT); audio.play(); viz.classList.add('playing'); icon.setAttribute('d', 'M6 19h4V5H6v14zm8-14v14h4V5h-4z');
-        };
-        document.getElementById('prevBtn').onclick = () => {
-            curT = (curT-1+tracks.length)%tracks.length;
-            loadT(curT); audio.play(); viz.classList.add('playing'); icon.setAttribute('d', 'M6 19h4V5H6v14zm8-14v14h4V5h-4z');
-        };
+        document.getElementById('nextBtn').onclick = () => { curT = shuffle ? Math.floor(Math.random()*tracks.length) : (curT+1)%tracks.length; loadT(curT); audio.play(); viz.classList.add('playing'); icon.setAttribute('d', 'M6 19h4V5H6v14zm8-14v14h4V5h-4z'); };
+        document.getElementById('prevBtn').onclick = () => { curT = (curT-1+tracks.length)%tracks.length; loadT(curT); audio.play(); viz.classList.add('playing'); icon.setAttribute('d', 'M6 19h4V5H6v14zm8-14v14h4V5h-4z'); };
         document.getElementById('volumeSlider').oninput = (e) => audio.volume = e.target.value;
         document.getElementById('shuffleToggle').onchange = (e) => shuffle = e.target.checked;
-        audio.ontimeupdate = () => {
-            const m = Math.floor(audio.currentTime / 60), s = Math.floor(audio.currentTime % 60);
-            document.getElementById('currentTime').innerText = `${m}:${s<10?'0':''}${s}`;
-        };
+        audio.ontimeupdate = () => { const m = Math.floor(audio.currentTime / 60), s = Math.floor(audio.currentTime % 60); document.getElementById('currentTime').innerText = `${m}:${s<10?'0':''}${s}`; };
         audio.onended = () => document.getElementById('nextBtn').click();
         document.getElementById('settBtn').onclick = (e) => { e.stopPropagation(); const m = document.getElementById('settings-menu'); m.style.display = m.style.display === 'block' ? 'none' : 'block'; };
         window.onclick = () => document.getElementById('settings-menu').style.display = 'none';
-
         document.querySelectorAll('.card').forEach(el => {
-            el.addEventListener('mousemove', (e) => {
-                const r = el.getBoundingClientRect(), x = e.clientX - r.left - r.width/2, y = e.clientY - r.top - r.height/2;
-                el.style.transform = `perspective(1000px) translate(${x*0.1}px, ${y*0.1}px) rotateX(${-y*0.05}deg) rotateY(${x*0.05}deg) scale(1.02)`;
-            });
+            el.addEventListener('mousemove', (e) => { const r = el.getBoundingClientRect(), x = e.clientX - r.left - r.width/2, y = e.clientY - r.top - r.height/2; el.style.transform = `perspective(1000px) translate(${x*0.1}px, ${y*0.1}px) rotateX(${-y*0.05}deg) rotateY(${x*0.05}deg) scale(1.02)`; });
             el.addEventListener('mouseleave', () => el.style.transform = '');
         });
-
         const phrases = ["Бля буду", "Ой напьюсь я", "Здарова плесень"];
         document.getElementById('avatar').onclick = (e) => {
             if(cooldown) return; cooldown = true;
@@ -154,47 +145,26 @@
             p.className = 'falling-phrase'; p.innerText = phrases[Math.floor(Math.random()*phrases.length)];
             document.body.appendChild(p);
             let x = e.clientX, y = e.clientY, vx = (Math.random()-0.5)*14, vy = -10, g = 0.5;
-            function anim() {
-                x += vx; vy += g; y += vy; p.style.left = x + 'px'; p.style.top = y + 'px';
-                p.style.opacity = parseFloat(p.style.opacity || 1) - 0.015;
-                if(y < window.innerHeight && parseFloat(p.style.opacity) > 0) requestAnimationFrame(anim); else p.remove();
-            }
-            anim();
-            setTimeout(() => { cooldown = false; document.getElementById('avatar').classList.remove('cooldown'); }, 2000);
+            function anim() { x += vx; vy += g; y += vy; p.style.left = x + 'px'; p.style.top = y + 'px'; p.style.opacity = parseFloat(p.style.opacity || 1) - 0.015; if(y < window.innerHeight && parseFloat(p.style.opacity) > 0) requestAnimationFrame(anim); else p.remove(); }
+            anim(); setTimeout(() => { cooldown = false; document.getElementById('avatar').classList.remove('cooldown'); }, 2000);
         };
-
-        player.onmousedown = (e) => {
-            if(e.target.closest('button') || e.target.closest('input')) return;
-            drag = true;
-            ox = e.clientX - player.getBoundingClientRect().left;
-            oy = e.clientY - player.getBoundingClientRect().top;
-            player.style.transition = 'none';
-        };
+        player.onmousedown = (e) => { if(e.target.closest('button') || e.target.closest('input')) return; drag = true; const r = player.getBoundingClientRect(); ox = e.clientX - r.left; oy = e.clientY - r.top; player.style.transition = 'none'; };
         window.onmousemove = (e) => {
-            cDot.style.left = cGlow.style.left = e.clientX + 'px';
-            cDot.style.top = cGlow.style.top = e.clientY + 'px';
-            if(drag) {
-                player.style.left = (e.clientX - ox + player.offsetWidth / 2) + 'px';
-                player.style.top = (e.clientY - oy + player.offsetHeight / 2) + 'px';
-                player.style.bottom = 'auto';
-                player.style.transform = 'translateX(-50%)';
-            }
+            cDot.style.left = cGlow.style.left = e.clientX + 'px'; cDot.style.top = cGlow.style.top = e.clientY + 'px';
+            if(drag) { player.style.left = (e.clientX - ox + player.offsetWidth / 2) + 'px'; player.style.top = (e.clientY - oy + player.offsetHeight / 2) + 'px'; player.style.bottom = 'auto'; player.style.transform = 'translateX(-50%)'; }
         };
         window.onmouseup = () => { drag = false; player.style.transition = '0.3s cubic-bezier(0.2, 0.8, 0.2, 1)'; };
-
         const canvas = document.getElementById('snow-canvas'), ctx = canvas.getContext('2d'), nyT = document.getElementById('nyToggle');
-        let f = [];
-        function res() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
-        window.onresize = res; res();
+        let f = []; function res() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; } window.onresize = res; res();
         for(let i=0; i<85; i++) f.push({x:Math.random()*canvas.width, y:Math.random()*canvas.height, r:Math.random()*2+1, s:Math.random()*0.6+0.2});
         function draw() { ctx.clearRect(0,0,canvas.width,canvas.height); if(nyT.checked) { ctx.fillStyle = "rgba(255,255,255,0.4)"; f.forEach(p => { ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI*2); ctx.fill(); p.y += p.s; if(p.y > canvas.height) p.y = -5; }); } requestAnimationFrame(draw); }
         draw();
-
         document.getElementById('startBtn').onclick = () => {
             document.getElementById('welcome-overlay').style.opacity = '0';
             setTimeout(() => {
                 document.getElementById('welcome-overlay').style.display = 'none';
                 document.getElementById('content-wrapper').style.filter = 'none';
+                document.querySelectorAll('.card').forEach((c, i) => { setTimeout(() => c.classList.add('show'), i * 150); });
                 audio.play(); viz.classList.add('playing'); icon.setAttribute('d', 'M6 19h4V5H6v14zm8-14v14h4V5h-4z');
             }, 600);
         };
