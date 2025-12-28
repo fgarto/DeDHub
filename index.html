@@ -22,7 +22,6 @@
             background: radial-gradient(circle at 50% 0%, #1f1635 0%, var(--bg-dark) 100%);
         }
         #content-wrapper { width: 100%; display: flex; flex-direction: column; align-items: center; transition: 0.8s; filter: blur(20px); }
-        
         #welcome-overlay {
             position: fixed; inset: 0; background: rgba(0,0,0,0.9); display: flex; flex-direction: column; align-items: center; justify-content: center;
             z-index: 50000; backdrop-filter: blur(25px); transition: 0.6s;
@@ -33,56 +32,35 @@
             border-radius: 24px; text-align: center; max-width: 300px; backdrop-filter: blur(10px);
         }
         .welcome-text { font-size: 16px; opacity: 0.8; margin-bottom: 25px; line-height: 1.5; }
-        
         .ok-btn { background: var(--twitch-purple); border: none; color: white; padding: 15px 30px; border-radius: 12px; font-weight: 900; font-size: 16px; transition: 0.3s; width: 100%; }
         .ok-btn:hover { box-shadow: 0 0 20px var(--twitch-purple); transform: scale(1.02); }
-
-        #cursor-glow, #cursor-dot { position: fixed; pointer-events: none; z-index: 60000; transform: translate(-50%, -50%); display: block; }
-        #cursor-glow { width: 300px; height: 300px; background: radial-gradient(circle, rgba(145, 70, 255, 0.15) 0%, transparent 70%); }
-        #cursor-dot { width: 6px; height: 6px; background: white; border-radius: 50%; box-shadow: 0 0 15px var(--twitch-purple); }
-
+        #cursor-glow, #cursor-dot { position: fixed; pointer-events: none; z-index: 60000; left: 0; top: 0; display: block; }
+        #cursor-glow { width: 300px; height: 300px; background: radial-gradient(circle, rgba(145, 70, 255, 0.15) 0%, transparent 70%); transform: translate(-50%, -50%); }
+        #cursor-dot { width: 6px; height: 6px; background: white; border-radius: 50%; box-shadow: 0 0 15px var(--twitch-purple); transform: translate(-50%, -50%); }
         main { width: 100%; max-width: 420px; padding: 60px 20px; text-align: center; z-index: 10; perspective: 1200px; }
-        .avatar-container { 
-            width: 120px; height: 120px; margin: 0 auto 20px; border-radius: 50%; 
-            border: 2px solid var(--twitch-purple); padding: 5px; transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); position: relative;
-        }
+        .avatar-container { width: 120px; height: 120px; margin: 0 auto 20px; border-radius: 50%; border: 2px solid var(--twitch-purple); padding: 5px; transition: 0.3s; position: relative; }
         .avatar-container.cooldown { opacity: 0.4; transform: scale(0.9); }
         .avatar-img { width: 100%; height: 100%; border-radius: 50%; background: url('ava.jpg') center/cover; }
-        
         .links { display: flex; flex-direction: column; gap: 12px; margin-top: 25px; }
-        .card { 
-            display: flex; align-items: center; padding: 18px 24px; 
-            background: var(--glass); border: 2px solid transparent; 
-            border-radius: 16px; text-decoration: none; color: white; font-weight: 700; 
-            transition: all 0.2s ease-out; transform-style: preserve-3d;
-        }
-        .card:hover { 
-            border-color: var(--twitch-purple); 
-            background: rgba(145, 70, 255, 0.1);
-            box-shadow: 0 0 15px rgba(145, 70, 255, 0.3);
-        }
+        .card { display: flex; align-items: center; padding: 18px 24px; background: var(--glass); border: 2px solid transparent; border-radius: 16px; text-decoration: none; color: white; font-weight: 700; transition: all 0.2s ease-out; transform-style: preserve-3d; }
+        .card:hover { border-color: var(--twitch-purple); background: rgba(145, 70, 255, 0.1); box-shadow: 0 0 15px rgba(145, 70, 255, 0.3); }
         .card img, .card svg { width: 24px; height: 24px; margin-right: 15px; pointer-events: none; }
-
         #music-player {
             position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
             background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(25px);
             border: 1px solid var(--glass-border); border-radius: 50px;
             padding: 10px 22px; display: flex; align-items: center; gap: 10px;
             z-index: 30000; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            will-change: transform, left, top;
         }
         .visualizer { display: flex; align-items: flex-end; gap: 3px; height: 16px; }
         .vis-bar { width: 3px; background: var(--twitch-purple); border-radius: 1px; height: 4px; }
         .playing .vis-bar { animation: wave 0.8s ease-in-out infinite; }
         @keyframes wave { 0%, 100% { height: 4px; } 50% { height: 16px; } }
-        
         .p-btn { background: none; border: none; color: white; padding: 5px; display: flex; transition: 0.2s; }
         .p-btn svg { width: 20px; height: 20px; fill: currentColor; }
         #playPauseBtn { background: var(--twitch-purple); border-radius: 50%; padding: 8px; color: white !important; }
-        #settings-menu {
-            display: none; position: absolute; bottom: 70px; right: 0;
-            background: rgba(20, 20, 25, 0.95); border: 1px solid var(--glass-border);
-            padding: 15px; border-radius: 20px; width: 180px; backdrop-filter: blur(10px);
-        }
+        #settings-menu { display: none; position: absolute; bottom: 70px; right: 0; background: rgba(20, 20, 25, 0.95); border: 1px solid var(--glass-border); padding: 15px; border-radius: 20px; width: 180px; backdrop-filter: blur(10px); }
         .sett-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; font-size: 14px; }
         .falling-phrase { position: fixed; pointer-events: none; font-weight: 900; color: white; text-shadow: 0 0 10px var(--twitch-purple); z-index: 10000; font-size: 1.3rem; }
         #snow-canvas { position: fixed; inset: 0; pointer-events: none; z-index: 1; }
@@ -93,7 +71,6 @@
     <canvas id="snow-canvas"></canvas>
     <div id="cursor-glow"></div>
     <div id="cursor-dot"></div>
-
     <div id="welcome-overlay">
         <div class="welcome-title">Всем привет!</div>
         <div class="welcome-box">
@@ -101,7 +78,6 @@
             <button class="ok-btn" id="startBtn">ВОЙТИ</button>
         </div>
     </div>
-
     <div id="content-wrapper">
         <main>
             <div class="avatar-container" id="avatar"><div class="avatar-img"></div></div>
@@ -109,12 +85,8 @@
             <div class="links">
                 <a href="https://t.me/DeD_u1ya" target="_blank" class="card"><img src="tg.png"> Telegram</a>
                 <a href="https://steamcommunity.com/id/_D_I_C_H_/" target="_blank" class="card"><img src="Без названия (1).png"> Steam</a>
-                <a href="https://www.tiktok.com/@dedu1ya1" target="_blank" class="card">
-                    <svg fill="white" viewBox="0 0 24 24"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.17-2.81-.74-3.94-1.67-.49-.42-.94-.87-1.33-1.38v7.41c.01 2.23-.74 4.54-2.4 6.06-1.8 1.7-4.4 2.15-6.68 1.4-2.73-.85-4.6-3.7-4.2-6.53.28-2.4 2.1-4.52 4.48-5.11.83-.22 1.7-.26 2.54-.15v4.1c-.88-.25-1.85-.08-2.55.51-.77.62-1.08 1.66-.89 2.62.2 1.05 1.13 1.88 2.19 2.03.95.14 2-.15 2.59-.92.36-.45.56-1.02.55-1.6V.02z"/></svg> TikTok
-                </a>
-                <a href="https://www.donationalerts.com/r/ded_u1ya" target="_blank" class="card">
-                    <svg fill="#ffa500" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg> DonationAlerts
-                </a>
+                <a href="https://www.tiktok.com/@dedu1ya1" target="_blank" class="card"><svg fill="white" viewBox="0 0 24 24"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.17-2.81-.74-3.94-1.67-.49-.42-.94-.87-1.33-1.38v7.41c.01 2.23-.74 4.54-2.4 6.06-1.8 1.7-4.4 2.15-6.68 1.4-2.73-.85-4.6-3.7-4.2-6.53.28-2.4 2.1-4.52 4.48-5.11.83-.22 1.7-.26 2.54-.15v4.1c-.88-.25-1.85-.08-2.55.51-.77.62-1.08 1.66-.89 2.62.2 1.05 1.13 1.88 2.19 2.03.95.14 2-.15 2.59-.92.36-.45.56-1.02.55-1.6V.02z"/></svg> TikTok</a>
+                <a href="https://www.donationalerts.com/r/ded_u1ya" target="_blank" class="card"><svg fill="#ffa500" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg> DonationAlerts</a>
                 <a href="https://www.youtube.com/@DeD_u1ya" target="_blank" class="card"><img src="yt.png"> YouTube</a>
             </div>
         </main>
@@ -139,6 +111,7 @@
         let curT = 0, shuffle = false, drag = false, ox, oy, cooldown = false;
         const player = document.getElementById('music-player'), viz = document.getElementById('viz');
         const icon = document.getElementById('playPauseIcon').querySelector('path');
+        const cGlow = document.getElementById('cursor-glow'), cDot = document.getElementById('cursor-dot');
 
         function loadT(i) { audio.src = tracks[i]; audio.load(); }
         loadT(0);
@@ -147,17 +120,14 @@
             if(audio.paused) { audio.play(); viz.classList.add('playing'); icon.setAttribute('d', 'M6 19h4V5H6v14zm8-14v14h4V5h-4z'); }
             else { audio.pause(); viz.classList.remove('playing'); icon.setAttribute('d', 'M8 5v14l11-7z'); }
         };
-
         document.getElementById('nextBtn').onclick = () => {
             curT = shuffle ? Math.floor(Math.random()*tracks.length) : (curT+1)%tracks.length;
             loadT(curT); audio.play(); viz.classList.add('playing'); icon.setAttribute('d', 'M6 19h4V5H6v14zm8-14v14h4V5h-4z');
         };
-
         document.getElementById('prevBtn').onclick = () => {
             curT = (curT-1+tracks.length)%tracks.length;
             loadT(curT); audio.play(); viz.classList.add('playing'); icon.setAttribute('d', 'M6 19h4V5H6v14zm8-14v14h4V5h-4z');
         };
-
         document.getElementById('volumeSlider').oninput = (e) => audio.volume = e.target.value;
         document.getElementById('shuffleToggle').onchange = (e) => shuffle = e.target.checked;
         audio.ontimeupdate = () => {
@@ -165,22 +135,20 @@
             document.getElementById('currentTime').innerText = `${m}:${s<10?'0':''}${s}`;
         };
         audio.onended = () => document.getElementById('nextBtn').click();
-
         document.getElementById('settBtn').onclick = (e) => { e.stopPropagation(); const m = document.getElementById('settings-menu'); m.style.display = m.style.display === 'block' ? 'none' : 'block'; };
         window.onclick = () => document.getElementById('settings-menu').style.display = 'none';
 
         document.querySelectorAll('.card').forEach(el => {
             el.addEventListener('mousemove', (e) => {
                 const r = el.getBoundingClientRect(), x = e.clientX - r.left - r.width/2, y = e.clientY - r.top - r.height/2;
-                el.style.transform = `perspective(1000px) translate(${x*0.15}px, ${y*0.15}px) rotateX(${-y*0.08}deg) rotateY(${x*0.08}deg) scale(1.03)`;
+                el.style.transform = `perspective(1000px) translate(${x*0.1}px, ${y*0.1}px) rotateX(${-y*0.05}deg) rotateY(${x*0.05}deg) scale(1.02)`;
             });
             el.addEventListener('mouseleave', () => el.style.transform = '');
         });
 
         const phrases = ["Бля буду", "Ой напьюсь я", "Здарова плесень"];
         document.getElementById('avatar').onclick = (e) => {
-            if(cooldown) return;
-            cooldown = true;
+            if(cooldown) return; cooldown = true;
             document.getElementById('avatar').classList.add('cooldown');
             const p = document.createElement('div');
             p.className = 'falling-phrase'; p.innerText = phrases[Math.floor(Math.random()*phrases.length)];
@@ -189,18 +157,28 @@
             function anim() {
                 x += vx; vy += g; y += vy; p.style.left = x + 'px'; p.style.top = y + 'px';
                 p.style.opacity = parseFloat(p.style.opacity || 1) - 0.015;
-                if(y < window.innerHeight && parseFloat(p.style.opacity) > 0) requestAnimationFrame(anim);
-                else p.remove();
+                if(y < window.innerHeight && parseFloat(p.style.opacity) > 0) requestAnimationFrame(anim); else p.remove();
             }
             anim();
             setTimeout(() => { cooldown = false; document.getElementById('avatar').classList.remove('cooldown'); }, 2000);
         };
 
-        player.onmousedown = (e) => { if(e.target.closest('button') || e.target.closest('input')) return; drag = true; ox = e.clientX - player.offsetLeft; oy = e.clientY - player.offsetTop; player.style.transition = 'none'; };
+        player.onmousedown = (e) => {
+            if(e.target.closest('button') || e.target.closest('input')) return;
+            drag = true;
+            ox = e.clientX - player.getBoundingClientRect().left;
+            oy = e.clientY - player.getBoundingClientRect().top;
+            player.style.transition = 'none';
+        };
         window.onmousemove = (e) => {
-            if(drag) { player.style.left = (e.clientX - ox + player.offsetWidth/2) + 'px'; player.style.top = (e.clientY - oy + player.offsetHeight/2) + 'px'; player.style.bottom = 'auto'; }
-            document.getElementById('cursor-glow').style.left = document.getElementById('cursor-dot').style.left = e.clientX + 'px';
-            document.getElementById('cursor-glow').style.top = document.getElementById('cursor-dot').style.top = e.clientY + 'px';
+            cDot.style.left = cGlow.style.left = e.clientX + 'px';
+            cDot.style.top = cGlow.style.top = e.clientY + 'px';
+            if(drag) {
+                player.style.left = (e.clientX - ox + player.offsetWidth / 2) + 'px';
+                player.style.top = (e.clientY - oy + player.offsetHeight / 2) + 'px';
+                player.style.bottom = 'auto';
+                player.style.transform = 'translateX(-50%)';
+            }
         };
         window.onmouseup = () => { drag = false; player.style.transition = '0.3s cubic-bezier(0.2, 0.8, 0.2, 1)'; };
 
