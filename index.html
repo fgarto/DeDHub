@@ -29,46 +29,24 @@
         .orb-3 { width: 250px; height: 250px; top: 40%; left: 60%; background: #9146ff; animation-duration: 30s; animation-delay: -10s; }
         @keyframes float { 0%, 100% { transform: translate(0, 0) scale(1); } 33% { transform: translate(30px, 50px) scale(1.1); } 66% { transform: translate(-20px, 20px) scale(0.9); } }
         #content-wrapper { width: 100%; display: flex; flex-direction: column; align-items: center; transition: 1s ease-in-out; filter: blur(20px); position: relative; z-index: 2; }
-        
-        #welcome-overlay {
-            position: fixed; inset: 0; background: rgba(0,0,0,0.95); display: flex; flex-direction: column; align-items: center; justify-content: center;
-            z-index: 50000; backdrop-filter: blur(25px); transition: 0.6s; padding: 20px;
-        }
+        #welcome-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.95); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 50000; backdrop-filter: blur(25px); transition: 0.6s; padding: 20px; }
         .welcome-title { font-size: clamp(32px, 8vw, 48px); font-weight: 900; margin-bottom: 10px; text-shadow: 0 0 20px var(--twitch-purple); text-align: center; }
-        .welcome-sub-box { 
-            background: var(--glass); border: 1px solid var(--glass-border); padding: 15px 25px; 
-            border-radius: 15px; margin-bottom: 30px; max-width: 300px; text-align: center;
-            font-size: 14px; color: rgba(255,255,255,0.7); line-height: 1.4;
-        }
+        .welcome-sub-box { background: var(--glass); border: 1px solid var(--glass-border); padding: 15px 25px; border-radius: 15px; margin-bottom: 30px; max-width: 300px; text-align: center; font-size: 14px; color: rgba(255,255,255,0.7); line-height: 1.4; }
         .ok-btn { background: var(--twitch-purple); border: none; color: white; padding: 15px 40px; border-radius: 12px; font-weight: 900; font-size: 16px; transition: 0.3s; cursor: pointer; }
         .ok-btn:hover { transform: scale(1.05); box-shadow: 0 0 20px var(--twitch-purple); }
-
         #cursor-glow, #cursor-dot { position: fixed; pointer-events: none; z-index: 999999; left: 0; top: 0; display: block; }
         #cursor-glow { width: 300px; height: 300px; background: radial-gradient(circle, rgba(145, 70, 255, 0.15) 0%, transparent 70%); transform: translate(-50%, -50%); }
         #cursor-dot { width: 6px; height: 6px; background: white; border-radius: 50%; box-shadow: 0 0 15px var(--twitch-purple); transform: translate(-50%, -50%); }
         @media (hover: none) and (pointer: coarse) { #cursor-glow, #cursor-dot { display: none !important; } * { cursor: auto !important; } }
-        
         main { width: 100%; max-width: 420px; padding: 40px 20px 120px; text-align: center; z-index: 10; perspective: 1200px; box-sizing: border-box; }
         .avatar-container { width: 110px; height: 110px; margin: 0 auto 15px; border-radius: 50%; border: 2px solid var(--twitch-purple); padding: 5px; transition: 0.3s; position: relative; }
         .avatar-img { width: 100%; height: 100%; border-radius: 50%; background: url('ava.jpg') center/cover; }
         .links { display: flex; flex-direction: column; gap: 12px; margin-top: 20px; width: 100%; }
-        .card { 
-            display: flex; align-items: center; padding: 16px 20px; background: var(--glass); border: 2px solid transparent; border-radius: 16px; 
-            text-decoration: none; color: white; font-weight: 700; transition: all 0.2s ease-out; transform-style: preserve-3d;
-            opacity: 0; transform: translateY(20px); box-sizing: border-box; width: 100%;
-        }
+        .card { display: flex; align-items: center; padding: 16px 20px; background: var(--glass); border: 2px solid transparent; border-radius: 16px; text-decoration: none; color: white; font-weight: 700; transition: all 0.2s ease-out; transform-style: preserve-3d; opacity: 0; transform: translateY(20px); box-sizing: border-box; width: 100%; }
         .card.show { opacity: 1; transform: translateY(0); }
         @media (hover: hover) { .card:hover { border-color: var(--twitch-purple); background: rgba(145, 70, 255, 0.1); box-shadow: 0 0 15px rgba(145, 70, 255, 0.3); } }
         .card img, .card svg { width: 22px; height: 22px; margin-right: 15px; flex-shrink: 0; }
-        
-        #music-player {
-            position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
-            background: rgba(15, 15, 20, 0.85); backdrop-filter: blur(25px);
-            border: 1px solid var(--glass-border); border-radius: 50px;
-            padding: 8px 16px; display: flex; align-items: center; gap: 8px;
-            z-index: 30000; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            width: fit-content; max-width: 95vw; will-change: left, top;
-        }
+        #music-player { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: rgba(15, 15, 20, 0.85); backdrop-filter: blur(25px); border: 1px solid var(--glass-border); border-radius: 50px; padding: 8px 16px; display: flex; align-items: center; gap: 8px; z-index: 30000; box-shadow: 0 10px 30px rgba(0,0,0,0.5); width: fit-content; max-width: 95vw; will-change: left, top; }
         .visualizer { display: flex; align-items: flex-end; gap: 3px; height: 14px; }
         .vis-bar { width: 3px; background: var(--twitch-purple); border-radius: 1px; height: 4px; }
         .playing .vis-bar { animation: wave 0.8s ease-in-out infinite; }
@@ -83,68 +61,25 @@
         .falling-phrase { position: fixed; pointer-events: none; font-weight: 900; color: white; text-shadow: 0 0 10px var(--twitch-purple); z-index: 10000; font-size: 1.1rem; white-space: nowrap; }
         #snow-canvas { position: fixed; inset: 0; pointer-events: none; z-index: 1; }
         input[type=range] { width: 40px; accent-color: var(--twitch-purple); }
-
-        /* ЗАМОК */
-        #secret-lock {
-            position: fixed; bottom: 20px; right: 20px; width: 40px; height: 40px;
-            background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border);
-            border-radius: 12px; display: flex; align-items: center; justify-content: center;
-            cursor: pointer; transition: 0.5s cubic-bezier(0.2, 0.8, 0.2, 1); z-index: 40000;
-        }
+        #secret-lock { position: fixed; bottom: 20px; right: 20px; width: 40px; height: 40px; background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); border-radius: 12px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.5s cubic-bezier(0.2, 0.8, 0.2, 1); z-index: 40000; }
         #secret-lock:hover { background: var(--twitch-purple); box-shadow: 0 0 20px var(--twitch-purple); transform: scale(1.1) rotate(15deg); }
         #secret-lock svg { width: 20px; height: 20px; fill: white; transition: 0.5s; }
         #secret-lock:hover svg { fill: white; transform: rotate(-15deg); }
-
-        #riddle-modal {
-            position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 50000;
-            display: none; align-items: center; justify-content: center; backdrop-filter: blur(10px);
-        }
-        .riddle-box {
-            background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 40px; border-radius: 20px; text-align: center; max-width: 400px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.5); backdrop-filter: blur(20px);
-            transform: scale(0.9); transition: 0.3s;
-        }
+        #riddle-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 50000; display: none; align-items: center; justify-content: center; backdrop-filter: blur(10px); }
+        .riddle-box { background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.1); padding: 40px; border-radius: 20px; text-align: center; max-width: 400px; box-shadow: 0 20px 50px rgba(0,0,0,0.5); backdrop-filter: blur(20px); transform: scale(0.9); transition: 0.3s; }
         .riddle-text { font-size: 20px; font-weight: 700; margin-bottom: 20px; }
-        .liquid-input {
-            width: 100%; padding: 15px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.2);
-            background: rgba(255, 255, 255, 0.05); color: white; font-family: 'Outfit', sans-serif;
-            font-size: 18px; text-align: center; margin-bottom: 20px; box-sizing: border-box;
-            transition: 0.3s;
-        }
+        .liquid-input { width: 100%; padding: 15px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.2); background: rgba(255, 255, 255, 0.05); color: white; font-family: 'Outfit', sans-serif; font-size: 18px; text-align: center; margin-bottom: 20px; box-sizing: border-box; transition: 0.3s; }
         .liquid-input:focus { background: rgba(255, 255, 255, 0.1); border-color: var(--twitch-purple); box-shadow: 0 0 15px rgba(145, 70, 255, 0.3); }
-
-        #secret-scene {
-            position: fixed; inset: 0; background: black; z-index: 60000;
-            display: none; flex-direction: column; align-items: center; justify-content: center;
-            opacity: 0; transition: opacity 1s ease;
-        }
+        #secret-scene { position: fixed; inset: 0; background: black; z-index: 60000; display: none; flex-direction: column; align-items: center; justify-content: center; opacity: 0; transition: opacity 1s ease; }
         .scene-content { display: flex; flex-direction: column; align-items: center; gap: 20px; transition: 1s cubic-bezier(0.4, 0, 0.2, 1); }
         .ded-photo { width: 220px; height: 220px; border-radius: 20px; border: 3px solid var(--twitch-purple); box-shadow: 0 0 30px var(--twitch-purple); object-fit: cover; transition: 1.5s ease; }
-        .dialog-box {
-            width: 320px; padding: 25px; background: rgba(20, 20, 20, 0.95);
-            border: 2px solid var(--twitch-purple); border-radius: 15px;
-            font-size: 14px; line-height: 1.5; color: #fff; min-height: 80px; text-align: center;
-            font-family: 'Press Start 2P', cursive;
-        }
+        .dialog-box { width: 320px; padding: 25px; background: rgba(20, 20, 20, 0.95); border: 2px solid var(--twitch-purple); border-radius: 15px; font-size: 14px; line-height: 1.5; color: #fff; min-height: 80px; text-align: center; font-family: 'Press Start 2P', cursive; }
         .scene-choices { display: flex; gap: 10px; margin-top: 20px; flex-wrap: wrap; justify-content: center; transition: 0.5s; }
-        .choice-btn {
-            background: transparent; border: 1px solid var(--twitch-purple); color: var(--twitch-purple);
-            padding: 10px 20px; font-weight: 700; font-size: 16px; border-radius: 8px; transition: 0.3s; cursor: none;
-        }
+        .choice-btn { background: transparent; border: 1px solid var(--twitch-purple); color: var(--twitch-purple); padding: 10px 20px; font-weight: 700; font-size: 16px; border-radius: 8px; transition: 0.3s; cursor: none; }
         .choice-btn:hover { background: var(--twitch-purple); color: white; box-shadow: 0 0 15px var(--twitch-purple); }
-
         #you-dead { position: fixed; inset: 0; display: none; align-items: center; justify-content: center; color: #ff0000; font-size: 60px; font-weight: 900; text-transform: uppercase; z-index: 100000; background: rgba(0,0,0,0.95); opacity: 0; transition: 0.5s; text-shadow: 0 0 30px #ff0000; }
-        
         .particle { position: fixed; width: 6px; height: 6px; background: var(--twitch-purple); border-radius: 50%; pointer-events: none; z-index: 65000; box-shadow: 0 0 10px var(--twitch-purple); }
-        
-        /* Круг в конце */
-        #victory-pulse {
-            position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0);
-            width: 10px; height: 10px; background: var(--twitch-purple); border-radius: 50%;
-            z-index: 59000; pointer-events: none; opacity: 0; transition: 2s ease-out;
-        }
-
+        #victory-pulse { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0); width: 10px; height: 10px; background: var(--twitch-purple); border-radius: 50%; z-index: 59000; pointer-events: none; opacity: 0; transition: 2s ease-out; }
         @media (hover: none) and (pointer: coarse) { #secret-lock { display: none !important; } }
     </style>
 </head>
@@ -157,16 +92,13 @@
     <canvas id="snow-canvas"></canvas>
     <div id="cursor-glow"></div>
     <div id="cursor-dot"></div>
-    
     <div id="victory-pulse"></div>
     <div id="you-dead"><div class="death-text">ю дед(you dead)</div></div>
-
     <div id="welcome-overlay">
         <div class="welcome-title">Всем привет!</div>
         <div class="welcome-sub-box">Здесь находятся все мои ссылки, спасибо что зашли</div>
         <button class="ok-btn" id="startBtn">ВОЙТИ</button>
     </div>
-
     <div id="content-wrapper">
         <main>
             <div class="avatar-container" id="avatar"><div class="avatar-img"></div></div>
@@ -203,7 +135,6 @@
             <input type="text" class="liquid-input" id="riddle-answer" placeholder="(на английском с пробелом)">
         </div>
     </div>
-    
     <div id="secret-scene">
         <div class="scene-content" id="final-container">
             <img src="DeD.png" class="ded-photo" id="ded-img">
@@ -211,7 +142,6 @@
             <div class="scene-choices" id="choicesBox"></div>
         </div>
     </div>
-
     <script>
         const audio = document.getElementById('bgMusic');
         const tracks = ['1.mp3', '2.mp3', '3.mp3', '4.mp3', '5.mp3', '6.mp3', '7.mp3']; 
@@ -219,12 +149,9 @@
         const player = document.getElementById('music-player'), viz = document.getElementById('viz');
         const icon = document.getElementById('playPauseIcon').querySelector('path');
         const cGlow = document.getElementById('cursor-glow'), cDot = document.getElementById('cursor-dot');
-        
         audio.volume = 0.1; 
-        
         function loadT(i) { audio.src = tracks[i]; audio.load(); }
         loadT(0);
-        
         document.getElementById('playPauseBtn').onclick = () => { if(audio.paused) { audio.play(); viz.classList.add('playing'); icon.setAttribute('d', 'M6 19h4V5H6v14zm8-14v14h4V5h-4z'); } else { audio.pause(); viz.classList.remove('playing'); icon.setAttribute('d', 'M8 5v14l11-7z'); } };
         document.getElementById('nextBtn').onclick = () => { curT = shuffle ? Math.floor(Math.random()*tracks.length) : (curT+1)%tracks.length; loadT(curT); audio.play(); viz.classList.add('playing'); icon.setAttribute('d', 'M6 19h4V5H6v14zm8-14v14h4V5h-4z'); };
         document.getElementById('prevBtn').onclick = () => { curT = (curT-1+tracks.length)%tracks.length; loadT(curT); audio.play(); viz.classList.add('playing'); icon.setAttribute('d', 'M6 19h4V5H6v14zm8-14v14h4V5h-4z'); };
@@ -234,9 +161,7 @@
         audio.onended = () => document.getElementById('nextBtn').click();
         document.getElementById('settBtn').onclick = (e) => { e.stopPropagation(); const m = document.getElementById('settings-menu'); m.style.display = m.style.display === 'block' ? 'none' : 'block'; };
         window.onclick = () => document.getElementById('settings-menu').style.display = 'none';
-        
         document.querySelectorAll('.card').forEach(el => { el.addEventListener('mousemove', (e) => { if(window.matchMedia("(hover: hover)").matches) { const r = el.getBoundingClientRect(), x = e.clientX - r.left - r.width/2, y = e.clientY - r.top - r.height/2; el.style.transform = `perspective(1000px) translate(${x*0.1}px, ${y*0.1}px) rotateX(${-y*0.05}deg) rotateY(${x*0.05}deg) scale(1.02)`; } }); el.addEventListener('mouseleave', () => el.style.transform = ''); });
-        
         const phrases = ["Бля буду", "Ой напьюсь я", "Здарова плесень"];
         document.getElementById('avatar').onclick = (e) => {
             if(cooldown) return; cooldown = true;
@@ -246,14 +171,12 @@
             function anim() { x += vx; vy += g; y += vy; p.style.left = x + 'px'; p.style.top = y + 'px'; p.style.opacity = parseFloat(p.style.opacity || 1) - 0.02; if(y < window.innerHeight && parseFloat(p.style.opacity) > 0) requestAnimationFrame(anim); else p.remove(); }
             anim(); setTimeout(() => cooldown = false, 1500);
         };
-        
         player.onmousedown = (e) => { if(e.target.closest('button') || e.target.closest('input')) return; drag = true; const r = player.getBoundingClientRect(); ox = e.clientX - r.left; oy = e.clientY - r.top; player.style.transition = 'none'; };
         window.onmousemove = (e) => {
             cDot.style.left = cGlow.style.left = e.clientX + 'px'; cDot.style.top = cGlow.style.top = e.clientY + 'px';
             if(drag) { player.style.left = (e.clientX - ox + player.offsetWidth / 2) + 'px'; player.style.top = (e.clientY - oy + player.offsetHeight / 2) + 'px'; player.style.bottom = 'auto'; player.style.transform = 'translateX(-50%)'; }
         };
         window.onmouseup = () => { drag = false; player.style.transition = '0.3s cubic-bezier(0.2, 0.8, 0.2, 1)'; };
-        
         const canvas = document.getElementById('snow-canvas'), ctx = canvas.getContext('2d'), nyT = document.getElementById('nyToggle');
         let flakes = []; 
         function initSnow() {
@@ -293,8 +216,6 @@
             requestAnimationFrame(drawSnow); 
         }
         drawSnow();
-
-        // --- ЛОГИКА БАТТЛА ---
         const lock = document.getElementById('secret-lock');
         const modal = document.getElementById('riddle-modal');
         const input = document.getElementById('riddle-answer');
@@ -305,7 +226,6 @@
         const youDead = document.getElementById('you-dead');
         const dedImg = document.getElementById('ded-img');
         const victoryPulse = document.getElementById('victory-pulse');
-
         const questions = [
             { q: "Сколько мне лет?", a: ["-12", "75", "19"], c: 2 },
             { q: "Существует ли 2 дед в чате твича", a: ["Да", "нет", "Что такое твич"], c: 0 },
@@ -313,15 +233,12 @@
             { q: "Дед мастер в доте или нет", a: ["Да", "Нет", "Он нищита в доте"], c: 0 }
         ];
         let qIdx = 0;
-
         lock.onclick = () => { 
             modal.style.display = 'flex'; 
             input.value = "";
             setTimeout(() => document.querySelector('.riddle-box').style.transform = 'scale(1)', 10); 
         };
-        
         modal.onclick = (e) => { if(e.target === modal) modal.style.display = 'none'; };
-        
         input.oninput = () => {
             if(input.value.toLowerCase().trim() === 'dota 2') {
                 modal.style.display = 'none';
@@ -334,7 +251,6 @@
                 }, 1000);
             }
         };
-
         function startIntro() {
             typeWriter("А ты умен что будешь делать дальше?", () => {
                 choicesBox.innerHTML = '';
@@ -349,7 +265,6 @@
                 choicesBox.style.opacity = "1";
             });
         }
-
         function nextQuestion() {
             if (qIdx >= questions.length) {
                 finishGame();
@@ -375,7 +290,6 @@
                 choicesBox.style.opacity = "1";
             });
         }
-
         function typeWriter(txt, cb) {
             choicesBox.style.opacity = "0";
             dialogText.innerHTML = "";
@@ -389,7 +303,6 @@
                 }
             }, 40);
         }
-
         function death() {
             youDead.style.display = "flex";
             setTimeout(() => youDead.style.opacity = "1", 50);
@@ -398,7 +311,6 @@
                 setTimeout(() => { youDead.style.display = "none"; backToHub(); }, 500);
             }, 2500);
         }
-
         function backToHub() {
             scene.style.opacity = "0";
             qIdx = 0;
@@ -408,22 +320,15 @@
                 setTimeout(() => wrapper.style.opacity = "1", 50);
             }, 800);
         }
-
         function finishGame() {
             choicesBox.style.opacity = "0";
             dialogText.style.opacity = "0";
-            
-            // Фиолетовый круг
             victoryPulse.style.opacity = "0.5";
             victoryPulse.style.transform = "translate(-50%, -50%) scale(300)";
-            
-            // Анимация фото по центру и вращение
             dedImg.style.transform = "rotate(360deg) scale(1.2)";
-            
             setTimeout(() => {
                 dedImg.style.opacity = "0";
             }, 1000);
-
             setTimeout(() => {
                 dedImg.style.opacity = "1";
                 dedImg.style.transform = "none";
@@ -433,7 +338,6 @@
                 backToHub();
             }, 3000);
         }
-
         document.getElementById('startBtn').onclick = () => {
             document.getElementById('welcome-overlay').style.opacity = '0';
             setTimeout(() => {
