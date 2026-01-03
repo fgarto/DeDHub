@@ -22,22 +22,63 @@
             background: radial-gradient(circle at 50% 0%, #1f1635 0%, var(--bg-dark) 100%);
             position: relative;
         }
+
+        /* Красивые переключатели (Тумблеры) */
+        .toggle-switch {
+            appearance: none;
+            width: 40px; height: 22px;
+            background: #333;
+            border-radius: 20px;
+            position: relative;
+            cursor: pointer;
+            transition: 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+            outline: none;
+        }
+        .toggle-switch::after {
+            content: '';
+            position: absolute;
+            top: 3px; left: 3px;
+            width: 16px; height: 16px;
+            background: white;
+            border-radius: 50%;
+            transition: 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+        }
+        .toggle-switch:checked {
+            background: var(--twitch-purple);
+            box-shadow: 0 0 10px rgba(145, 70, 255, 0.4);
+        }
+        .toggle-switch:checked::after {
+            transform: translateX(18px);
+        }
+
+        /* Оптимизация (Eco Mode) */
+        body.eco-mode .bg-orbs, body.eco-mode #snow-canvas, body.eco-mode #cursor-glow { display: none !important; }
+        body.eco-mode * { backdrop-filter: none !important; -webkit-backdrop-filter: none !important; box-shadow: none !important; text-shadow: none !important; transition: none !important; }
+        body.eco-mode .card, body.eco-mode #music-player, body.eco-mode .welcome-sub-box, body.eco-mode #settings-menu, body.eco-mode .dialog-box, body.eco-mode .riddle-box { background: #111 !important; border: 1px solid #333 !important; }
+        body.eco-mode .card:hover { background: #222 !important; border-color: var(--twitch-purple) !important; transform: none !important; }
+        body.eco-mode .toggle-switch { background: #222; box-shadow: none !important; }
+        body.eco-mode .toggle-switch:checked { background: #555; }
+
         .bg-orbs { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
         .orb { position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.15; background: var(--twitch-purple); animation: float 20s infinite ease-in-out; }
         .orb-1 { width: 400px; height: 400px; top: -100px; left: -100px; animation-duration: 25s; }
         .orb-2 { width: 300px; height: 300px; bottom: -50px; right: -50px; background: #6441a5; animation-duration: 18s; animation-delay: -5s; }
         .orb-3 { width: 250px; height: 250px; top: 40%; left: 60%; background: #9146ff; animation-duration: 30s; animation-delay: -10s; }
         @keyframes float { 0%, 100% { transform: translate(0, 0) scale(1); } 33% { transform: translate(30px, 50px) scale(1.1); } 66% { transform: translate(-20px, 20px) scale(0.9); } }
+        
         #content-wrapper { width: 100%; display: flex; flex-direction: column; align-items: center; transition: 1s ease-in-out; filter: blur(20px); position: relative; z-index: 2; }
         #welcome-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.95); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 50000; backdrop-filter: blur(25px); transition: 0.6s; padding: 20px; }
         .welcome-title { font-size: clamp(32px, 8vw, 48px); font-weight: 900; margin-bottom: 10px; text-shadow: 0 0 20px var(--twitch-purple); text-align: center; }
         .welcome-sub-box { background: var(--glass); border: 1px solid var(--glass-border); padding: 15px 25px; border-radius: 15px; margin-bottom: 30px; max-width: 300px; text-align: center; font-size: 14px; color: rgba(255,255,255,0.7); line-height: 1.4; }
         .ok-btn { background: var(--twitch-purple); border: none; color: white; padding: 15px 40px; border-radius: 12px; font-weight: 900; font-size: 16px; transition: 0.3s; cursor: pointer; }
         .ok-btn:hover { transform: scale(1.05); box-shadow: 0 0 20px var(--twitch-purple); }
+        
         #cursor-glow, #cursor-dot { position: fixed; pointer-events: none; z-index: 999999; left: 0; top: 0; display: block; }
         #cursor-glow { width: 300px; height: 300px; background: radial-gradient(circle, rgba(145, 70, 255, 0.15) 0%, transparent 70%); transform: translate(-50%, -50%); }
         #cursor-dot { width: 6px; height: 6px; background: white; border-radius: 50%; box-shadow: 0 0 15px var(--twitch-purple); transform: translate(-50%, -50%); }
         @media (hover: none) and (pointer: coarse) { #cursor-glow, #cursor-dot { display: none !important; } * { cursor: auto !important; } }
+        
         main { width: 100%; max-width: 420px; padding: 40px 20px 120px; text-align: center; z-index: 10; perspective: 1200px; box-sizing: border-box; }
         .avatar-container { width: 110px; height: 110px; margin: 0 auto 15px; border-radius: 50%; border: 2px solid var(--twitch-purple); padding: 5px; transition: 0.3s; position: relative; }
         .avatar-img { width: 100%; height: 100%; border-radius: 50%; background: url('ava.jpg') center/cover; }
@@ -46,6 +87,7 @@
         .card.show { opacity: 1; transform: translateY(0); }
         @media (hover: hover) { .card:hover { border-color: var(--twitch-purple); background: rgba(145, 70, 255, 0.1); box-shadow: 0 0 15px rgba(145, 70, 255, 0.3); } }
         .card img, .card svg { width: 22px; height: 22px; margin-right: 15px; flex-shrink: 0; }
+        
         #music-player { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: rgba(15, 15, 20, 0.85); backdrop-filter: blur(25px); border: 1px solid var(--glass-border); border-radius: 50px; padding: 8px 16px; display: flex; align-items: center; gap: 8px; z-index: 30000; box-shadow: 0 10px 30px rgba(0,0,0,0.5); width: fit-content; max-width: 95vw; will-change: left, top; }
         .visualizer { display: flex; align-items: flex-end; gap: 3px; height: 14px; }
         .vis-bar { width: 3px; background: var(--twitch-purple); border-radius: 1px; height: 4px; }
@@ -56,20 +98,25 @@
         .p-btn { background: none; border: none; color: white; padding: 6px; display: flex; }
         .p-btn svg { width: 18px; height: 18px; fill: currentColor; }
         #playPauseBtn { background: var(--twitch-purple); border-radius: 50%; padding: 8px; }
-        #settings-menu { display: none; position: absolute; bottom: 65px; right: 0; background: rgba(20, 20, 25, 0.98); border: 1px solid var(--glass-border); padding: 15px; border-radius: 20px; width: 160px; }
-        .sett-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; font-size: 14px; }
+        #settings-menu { display: none; position: absolute; bottom: 65px; right: 0; background: rgba(20, 20, 25, 0.98); border: 1px solid var(--glass-border); padding: 15px; border-radius: 20px; width: 200px; cursor: default !important; }
+        .sett-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; font-size: 13px; font-weight: 700; }
         .falling-phrase { position: fixed; pointer-events: none; font-weight: 900; color: white; text-shadow: 0 0 10px var(--twitch-purple); z-index: 10000; font-size: 1.1rem; white-space: nowrap; }
         #snow-canvas { position: fixed; inset: 0; pointer-events: none; z-index: 1; }
         input[type=range] { width: 40px; accent-color: var(--twitch-purple); }
+        
         #secret-lock { position: fixed; bottom: 20px; right: 20px; width: 40px; height: 40px; background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); border-radius: 12px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.5s cubic-bezier(0.2, 0.8, 0.2, 1); z-index: 40000; }
         #secret-lock:hover { background: var(--twitch-purple); box-shadow: 0 0 20px var(--twitch-purple); transform: scale(1.1) rotate(15deg); }
         #secret-lock svg { width: 20px; height: 20px; fill: white; transition: 0.5s; }
         #secret-lock:hover svg { fill: white; transform: rotate(-15deg); }
+        
+        @media (max-width: 768px) { #secret-lock { bottom: auto; right: auto; top: 20px; left: 20px; } }
+
         #riddle-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 50000; display: none; align-items: center; justify-content: center; backdrop-filter: blur(10px); }
-        .riddle-box { background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.1); padding: 40px; border-radius: 20px; text-align: center; max-width: 400px; box-shadow: 0 20px 50px rgba(0,0,0,0.5); backdrop-filter: blur(20px); transform: scale(0.9); transition: 0.3s; }
+        .riddle-box { background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.1); padding: 40px; border-radius: 20px; text-align: center; max-width: 400px; width: 90%; box-shadow: 0 20px 50px rgba(0,0,0,0.5); backdrop-filter: blur(20px); transform: scale(0.9); transition: 0.3s; }
         .riddle-text { font-size: 20px; font-weight: 700; margin-bottom: 20px; }
-        .liquid-input { width: 100%; padding: 15px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.2); background: rgba(255, 255, 255, 0.05); color: white; font-family: 'Outfit', sans-serif; font-size: 18px; text-align: center; margin-bottom: 20px; box-sizing: border-box; transition: 0.3s; }
+        .liquid-input { width: 100%; padding: 15px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.2); background: rgba(255, 255, 255, 0.05); color: white; font-family: 'Outfit', sans-serif; font-size: 16px; text-align: center; margin-bottom: 20px; box-sizing: border-box; transition: 0.3s; }
         .liquid-input:focus { background: rgba(255, 255, 255, 0.1); border-color: var(--twitch-purple); box-shadow: 0 0 15px rgba(145, 70, 255, 0.3); }
+        
         #secret-scene { position: fixed; inset: 0; background: black; z-index: 60000; display: none; flex-direction: column; align-items: center; justify-content: center; opacity: 0; transition: opacity 1s ease; }
         .scene-content { display: flex; flex-direction: column; align-items: center; gap: 20px; transition: 1s cubic-bezier(0.4, 0, 0.2, 1); }
         .ded-photo { width: 220px; height: 220px; border-radius: 20px; border: 3px solid var(--twitch-purple); box-shadow: 0 0 30px var(--twitch-purple); object-fit: cover; transition: 1.5s ease; }
@@ -77,21 +124,16 @@
         .scene-choices { display: flex; gap: 10px; margin-top: 20px; flex-wrap: wrap; justify-content: center; transition: 0.5s; }
         .choice-btn { background: transparent; border: 1px solid var(--twitch-purple); color: var(--twitch-purple); padding: 10px 20px; font-weight: 700; font-size: 16px; border-radius: 8px; transition: 0.3s; cursor: none; }
         .choice-btn:hover { background: var(--twitch-purple); color: white; box-shadow: 0 0 15px var(--twitch-purple); }
+        
         #you-dead { position: fixed; inset: 0; display: none; align-items: center; justify-content: center; color: #ff0000; font-size: 60px; font-weight: 900; text-transform: uppercase; z-index: 100000; background: rgba(0,0,0,0.95); opacity: 0; transition: 0.5s; text-shadow: 0 0 30px #ff0000; }
         .particle { position: fixed; width: 6px; height: 6px; background: var(--twitch-purple); border-radius: 50%; pointer-events: none; z-index: 65000; box-shadow: 0 0 10px var(--twitch-purple); }
         #victory-pulse { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0); width: 10px; height: 10px; background: var(--twitch-purple); border-radius: 50%; z-index: 59000; pointer-events: none; opacity: 0; transition: 2s ease-out; }
-        @media (hover: none) and (pointer: coarse) { #secret-lock { display: none !important; } }
     </style>
 </head>
 <body>
-    <div class="bg-orbs">
-        <div class="orb orb-1"></div>
-        <div class="orb orb-2"></div>
-        <div class="orb orb-3"></div>
-    </div>
+    <div class="bg-orbs"><div class="orb orb-1"></div><div class="orb orb-2"></div><div class="orb orb-3"></div></div>
     <canvas id="snow-canvas"></canvas>
-    <div id="cursor-glow"></div>
-    <div id="cursor-dot"></div>
+    <div id="cursor-glow"></div><div id="cursor-dot"></div>
     <div id="victory-pulse"></div>
     <div id="you-dead"><div class="death-text">ю дед(you dead)</div></div>
     <div id="welcome-overlay">
@@ -123,8 +165,9 @@
             <input type="range" id="volumeSlider" min="0" max="1" step="0.01" value="0.1">
             <button class="p-btn" id="settBtn"><svg viewBox="0 0 24 24"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg></button>
             <div id="settings-menu">
-                <div class="sett-row"><span>Снег</span><input type="checkbox" id="nyToggle" checked></div>
-                <div class="sett-row"><span>Shuffle</span><input type="checkbox" id="shuffleToggle"></div>
+                <div class="sett-row"><span>Eco Mode</span><input type="checkbox" id="ecoToggle" class="toggle-switch"></div>
+                <div class="sett-row"><span>Снег</span><input type="checkbox" id="nyToggle" checked class="toggle-switch"></div>
+                <div class="sett-row"><span>Shuffle</span><input type="checkbox" id="shuffleToggle" class="toggle-switch"></div>
             </div>
         </div>
     </div>
@@ -149,9 +192,16 @@
         const player = document.getElementById('music-player'), viz = document.getElementById('viz');
         const icon = document.getElementById('playPauseIcon').querySelector('path');
         const cGlow = document.getElementById('cursor-glow'), cDot = document.getElementById('cursor-dot');
+        const ecoToggle = document.getElementById('ecoToggle');
         audio.volume = 0.1; 
         function loadT(i) { audio.src = tracks[i]; audio.load(); }
         loadT(0);
+        
+        ecoToggle.onchange = (e) => {
+            if(e.target.checked) document.body.classList.add('eco-mode');
+            else document.body.classList.remove('eco-mode');
+        };
+
         document.getElementById('playPauseBtn').onclick = () => { if(audio.paused) { audio.play(); viz.classList.add('playing'); icon.setAttribute('d', 'M6 19h4V5H6v14zm8-14v14h4V5h-4z'); } else { audio.pause(); viz.classList.remove('playing'); icon.setAttribute('d', 'M8 5v14l11-7z'); } };
         document.getElementById('nextBtn').onclick = () => { curT = shuffle ? Math.floor(Math.random()*tracks.length) : (curT+1)%tracks.length; loadT(curT); audio.play(); viz.classList.add('playing'); icon.setAttribute('d', 'M6 19h4V5H6v14zm8-14v14h4V5h-4z'); };
         document.getElementById('prevBtn').onclick = () => { curT = (curT-1+tracks.length)%tracks.length; loadT(curT); audio.play(); viz.classList.add('playing'); icon.setAttribute('d', 'M6 19h4V5H6v14zm8-14v14h4V5h-4z'); };
@@ -159,9 +209,13 @@
         document.getElementById('shuffleToggle').onchange = (e) => shuffle = e.target.checked;
         audio.ontimeupdate = () => { const m = Math.floor(audio.currentTime / 60), s = Math.floor(audio.currentTime % 60); document.getElementById('currentTime').innerText = `${m}:${s<10?'0':''}${s}`; };
         audio.onended = () => document.getElementById('nextBtn').click();
+        
+        // Исправленная логика настроек
         document.getElementById('settBtn').onclick = (e) => { e.stopPropagation(); const m = document.getElementById('settings-menu'); m.style.display = m.style.display === 'block' ? 'none' : 'block'; };
-        window.onclick = () => document.getElementById('settings-menu').style.display = 'none';
-        document.querySelectorAll('.card').forEach(el => { el.addEventListener('mousemove', (e) => { if(window.matchMedia("(hover: hover)").matches) { const r = el.getBoundingClientRect(), x = e.clientX - r.left - r.width/2, y = e.clientY - r.top - r.height/2; el.style.transform = `perspective(1000px) translate(${x*0.1}px, ${y*0.1}px) rotateX(${-y*0.05}deg) rotateY(${x*0.05}deg) scale(1.02)`; } }); el.addEventListener('mouseleave', () => el.style.transform = ''); });
+        document.getElementById('settings-menu').onclick = (e) => e.stopPropagation(); // Меню не закрывается при клике внутри
+        window.onclick = () => document.getElementById('settings-menu').style.display = 'none'; // Закрывается только при клике ВНЕ меню
+        
+        document.querySelectorAll('.card').forEach(el => { el.addEventListener('mousemove', (e) => { if(!document.body.classList.contains('eco-mode') && window.matchMedia("(hover: hover)").matches) { const r = el.getBoundingClientRect(), x = e.clientX - r.left - r.width/2, y = e.clientY - r.top - r.height/2; el.style.transform = `perspective(1000px) translate(${x*0.1}px, ${y*0.1}px) rotateX(${-y*0.05}deg) rotateY(${x*0.05}deg) scale(1.02)`; } }); el.addEventListener('mouseleave', () => el.style.transform = ''); });
         const phrases = ["Бля буду", "Ой напьюсь я", "Здарова плесень"];
         document.getElementById('avatar').onclick = (e) => {
             if(cooldown) return; cooldown = true;
@@ -171,7 +225,7 @@
             function anim() { x += vx; vy += g; y += vy; p.style.left = x + 'px'; p.style.top = y + 'px'; p.style.opacity = parseFloat(p.style.opacity || 1) - 0.02; if(y < window.innerHeight && parseFloat(p.style.opacity) > 0) requestAnimationFrame(anim); else p.remove(); }
             anim(); setTimeout(() => cooldown = false, 1500);
         };
-        player.onmousedown = (e) => { if(e.target.closest('button') || e.target.closest('input')) return; drag = true; const r = player.getBoundingClientRect(); ox = e.clientX - r.left; oy = e.clientY - r.top; player.style.transition = 'none'; };
+        player.onmousedown = (e) => { if(e.target.closest('button') || e.target.closest('input') || e.target.closest('#settings-menu')) return; drag = true; const r = player.getBoundingClientRect(); ox = e.clientX - r.left; oy = e.clientY - r.top; player.style.transition = 'none'; };
         window.onmousemove = (e) => {
             cDot.style.left = cGlow.style.left = e.clientX + 'px'; cDot.style.top = cGlow.style.top = e.clientY + 'px';
             if(drag) { player.style.left = (e.clientX - ox + player.offsetWidth / 2) + 'px'; player.style.top = (e.clientY - oy + player.offsetHeight / 2) + 'px'; player.style.bottom = 'auto'; player.style.transform = 'translateX(-50%)'; }
@@ -180,37 +234,19 @@
         const canvas = document.getElementById('snow-canvas'), ctx = canvas.getContext('2d'), nyT = document.getElementById('nyToggle');
         let flakes = []; 
         function initSnow() {
-            canvas.width = window.innerWidth; 
-            canvas.height = window.innerHeight;
-            if(flakes.length === 0) {
-                for(let i=0; i<80; i++) {
-                    flakes.push({
-                        x: Math.random() * canvas.width,
-                        y: Math.random() * canvas.height,
-                        r: Math.random() * 2 + 0.5, 
-                        d: Math.random() * 1 + 0.5, 
-                        a: Math.random() * Math.PI * 2, 
-                        o: Math.random() * 0.5 + 0.3 
-                    });
-                }
-            }
+            canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+            if(flakes.length === 0) { for(let i=0; i<80; i++) { flakes.push({ x: Math.random() * canvas.width, y: Math.random() * canvas.height, r: Math.random() * 2 + 0.5, d: Math.random() * 1 + 0.5, a: Math.random() * Math.PI * 2, o: Math.random() * 0.5 + 0.3 }); } }
         }
         window.addEventListener('resize', () => { canvas.width = window.innerWidth; canvas.height = window.innerHeight; });
         initSnow();
         function drawSnow() { 
             ctx.clearRect(0,0,canvas.width,canvas.height); 
-            if(nyT.checked) { 
+            if(nyT.checked && !document.body.classList.contains('eco-mode')) { 
                 flakes.forEach(p => { 
-                    ctx.fillStyle = `rgba(255,255,255, ${p.o})`;
-                    ctx.beginPath(); 
-                    ctx.arc(p.x, p.y, p.r, 0, Math.PI*2); 
-                    ctx.fill(); 
-                    p.y += p.d; 
-                    p.x += Math.sin(p.a) * 0.5; 
-                    p.a += 0.02; 
+                    ctx.fillStyle = `rgba(255,255,255, ${p.o})`; ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI*2); ctx.fill(); 
+                    p.y += p.d; p.x += Math.sin(p.a) * 0.5; p.a += 0.02; 
                     if(p.y > canvas.height) { p.y = -5; p.x = Math.random() * canvas.width; }
-                    if(p.x > canvas.width) p.x = 0;
-                    if(p.x < 0) p.x = canvas.width;
+                    if(p.x > canvas.width) p.x = 0; if(p.x < 0) p.x = canvas.width;
                 }); 
             } 
             requestAnimationFrame(drawSnow); 
@@ -233,109 +269,57 @@
             { q: "Дед мастер в доте или нет", a: ["Да", "Нет", "Он нищита в доте"], c: 0 }
         ];
         let qIdx = 0;
-        lock.onclick = () => { 
-            modal.style.display = 'flex'; 
-            input.value = "";
-            setTimeout(() => document.querySelector('.riddle-box').style.transform = 'scale(1)', 10); 
-        };
+        lock.onclick = () => { modal.style.display = 'flex'; input.value = ""; setTimeout(() => document.querySelector('.riddle-box').style.transform = 'scale(1)', 10); };
         modal.onclick = (e) => { if(e.target === modal) modal.style.display = 'none'; };
         input.oninput = () => {
             if(input.value.toLowerCase().trim() === 'dota 2') {
-                modal.style.display = 'none';
-                wrapper.style.opacity = '0';
-                setTimeout(() => {
-                    wrapper.style.display = 'none';
-                    scene.style.display = 'flex';
-                    setTimeout(() => scene.style.opacity = '1', 100);
-                    startIntro();
-                }, 1000);
+                modal.style.display = 'none'; wrapper.style.opacity = '0';
+                setTimeout(() => { wrapper.style.display = 'none'; scene.style.display = 'flex'; setTimeout(() => scene.style.opacity = '1', 100); startIntro(); }, 1000);
             }
         };
         function startIntro() {
             typeWriter("А ты умен что будешь делать дальше?", () => {
                 choicesBox.innerHTML = '';
-                const b1 = document.createElement("button"); b1.className = "choice-btn"; b1.innerText = "Не еби мозги, я выйду от сюда";
-                b1.onclick = backToHub;
+                const b1 = document.createElement("button"); b1.className = "choice-btn"; b1.innerText = "Не еби мозги, я выйду от сюда"; b1.onclick = backToHub;
                 const b2 = document.createElement("button"); b2.className = "choice-btn"; b2.innerText = "Ну давай дальше пойду че лох что ли";
-                b2.onclick = () => {
-                    typeWriter("Хорошо игра началась", () => setTimeout(nextQuestion, 1000));
-                };
-                choicesBox.appendChild(b1);
-                choicesBox.appendChild(b2);
-                choicesBox.style.opacity = "1";
+                b2.onclick = () => { typeWriter("Хорошо игра началась", () => setTimeout(nextQuestion, 1000)); };
+                choicesBox.appendChild(b1); choicesBox.appendChild(b2); choicesBox.style.opacity = "1";
             });
         }
         function nextQuestion() {
-            if (qIdx >= questions.length) {
-                finishGame();
-                return;
-            }
+            if (qIdx >= questions.length) { finishGame(); return; }
             const curr = questions[qIdx];
             typeWriter(curr.q, () => {
                 choicesBox.innerHTML = "";
                 curr.a.forEach((ans, i) => {
-                    const b = document.createElement("button");
-                    b.className = "choice-btn";
-                    b.innerText = ans;
-                    b.onclick = () => {
-                        if (i === curr.c) {
-                            qIdx++;
-                            nextQuestion();
-                        } else {
-                            death();
-                        }
-                    };
+                    const b = document.createElement("button"); b.className = "choice-btn"; b.innerText = ans;
+                    b.onclick = () => { if (i === curr.c) { qIdx++; nextQuestion(); } else { death(); } };
                     choicesBox.appendChild(b);
                 });
                 choicesBox.style.opacity = "1";
             });
         }
         function typeWriter(txt, cb) {
-            choicesBox.style.opacity = "0";
-            dialogText.innerHTML = "";
-            let i = 0;
-            const t = setInterval(() => {
-                dialogText.innerHTML += txt.charAt(i);
-                i++;
-                if (i >= txt.length) {
-                    clearInterval(t);
-                    if (cb) cb();
-                }
-            }, 40);
+            choicesBox.style.opacity = "0"; dialogText.innerHTML = ""; let i = 0;
+            const t = setInterval(() => { dialogText.innerHTML += txt.charAt(i); i++; if (i >= txt.length) { clearInterval(t); if (cb) cb(); } }, 40);
         }
         function death() {
-            youDead.style.display = "flex";
-            setTimeout(() => youDead.style.opacity = "1", 50);
-            setTimeout(() => {
-                youDead.style.opacity = "0";
-                setTimeout(() => { youDead.style.display = "none"; backToHub(); }, 500);
-            }, 2500);
+            youDead.style.display = "flex"; setTimeout(() => youDead.style.opacity = "1", 50);
+            setTimeout(() => { youDead.style.opacity = "0"; setTimeout(() => { youDead.style.display = "none"; backToHub(); }, 500); }, 2500);
         }
         function backToHub() {
-            scene.style.opacity = "0";
-            qIdx = 0;
-            setTimeout(() => {
-                scene.style.display = "none";
-                wrapper.style.display = "flex";
-                setTimeout(() => wrapper.style.opacity = "1", 50);
-            }, 800);
+            scene.style.opacity = "0"; qIdx = 0;
+            setTimeout(() => { scene.style.display = "none"; wrapper.style.display = "flex"; setTimeout(() => wrapper.style.opacity = "1", 50); }, 800);
         }
         function finishGame() {
-            choicesBox.style.opacity = "0";
-            dialogText.style.opacity = "0";
-            victoryPulse.style.opacity = "0.5";
-            victoryPulse.style.transform = "translate(-50%, -50%) scale(300)";
+            choicesBox.style.opacity = "0"; dialogText.style.opacity = "0";
+            victoryPulse.style.opacity = "0.5"; victoryPulse.style.transform = "translate(-50%, -50%) scale(300)";
             dedImg.style.transform = "rotate(360deg) scale(1.2)";
+            setTimeout(() => { dedImg.style.opacity = "0"; }, 1000);
             setTimeout(() => {
-                dedImg.style.opacity = "0";
-            }, 1000);
-            setTimeout(() => {
-                dedImg.style.opacity = "1";
-                dedImg.style.transform = "none";
-                victoryPulse.style.opacity = "0";
-                victoryPulse.style.transform = "translate(-50%, -50%) scale(0)";
-                dialogText.style.opacity = "1";
-                backToHub();
+                dedImg.style.opacity = "1"; dedImg.style.transform = "none";
+                victoryPulse.style.opacity = "0"; victoryPulse.style.transform = "translate(-50%, -50%) scale(0)";
+                dialogText.style.opacity = "1"; backToHub();
             }, 3000);
         }
         document.getElementById('startBtn').onclick = () => {
