@@ -94,7 +94,7 @@
         .steam-container .bg-image {
             height: 160px; top: -65px; right: -70px; transform: rotate(10deg);
         }
-        /* ИЗМЕНЕНЫ КООРДИНАТЫ ДЛЯ DED2.PNG */
+        /
         .youtube-container .bg-image {
             height: 150px; top: -40px; left: -85px; transform: rotate(-10deg);
         }
@@ -180,7 +180,7 @@
                 <a href="https://www.donationalerts.com/r/ded_u1ya" target="_blank" class="card"><svg fill="#ffa500" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg> DonationAlerts</a>
                 
                 <div class="link-container youtube-container">
-                    <img src="ded2.png" class="bg-image" alt="">
+                    <img src="" class="bg-image" alt="">
                     <a href="https://www.youtube.com/@DeD_u1ya" target="_blank" class="card"><img src="yt.png"> YouTube</a>
                 </div>
             </div>
@@ -228,9 +228,9 @@
         const cGlow = document.getElementById('cursor-glow'), cDot = document.getElementById('cursor-dot');
         const ecoToggle = document.getElementById('ecoToggle');
         
-        // ЛОГИКА ШЛЕЙФА (ИЗМЕНЕНА)
+        
         const trailDots = [];
-        const trailCount = 20; // Увеличено количество точек
+        const trailCount = 20; 
         for(let i=0; i<trailCount; i++) {
             const d = document.createElement('div');
             d.className = 'trail-dot';
@@ -274,14 +274,14 @@
         window.onmousemove = (e) => {
             cDot.style.left = cGlow.style.left = e.clientX + 'px'; cDot.style.top = cGlow.style.top = e.clientY + 'px';
             
-            // Обновляем шлейф (ИЗМЕНЕНО: увеличена задержка)
+            
             trailDots.forEach((dot, index) => {
                 setTimeout(() => {
                     dot.el.style.left = e.clientX + 'px';
                     dot.el.style.top = e.clientY + 'px';
-                    dot.el.style.opacity = (1 - index/trailCount) * 0.8; // Увеличена непрозрачность
+                    dot.el.style.opacity = (1 - index/trailCount) * 0.8; 
                     dot.el.style.transform = `translate(-50%, -50%) scale(${1 - index/trailCount})`;
-                }, index * 35); // Увеличена задержка для более длинного хвоста
+                }, index * 35); 
             });
 
             if(drag) { player.style.left = (e.clientX - ox + player.offsetWidth / 2) + 'px'; player.style.top = (e.clientY - oy + player.offsetHeight / 2) + 'px'; player.style.bottom = 'auto'; player.style.transform = 'translateX(-50%)'; }
@@ -391,3 +391,4 @@
     </script>
 </body>
 </html>
+
