@@ -18,12 +18,23 @@
             margin: 0; font-family: 'Outfit', sans-serif;
             background-color: var(--bg-dark); color: var(--white);
             display: flex; flex-direction: column; align-items: center;
-            min-height: 100vh; overflow-x: hidden; /* Важно чтобы картинки не растягивали экран */
+            min-height: 100vh; overflow-x: hidden;
             background: radial-gradient(circle at 50% 0%, #1f1635 0%, var(--bg-dark) 100%);
             position: relative;
         }
 
-        /* --- Тумблеры --- */
+        /* СТИЛИ ДЛЯ ШЛЕЙФА */
+        .trail-dot {
+            position: fixed; width: 8px; height: 8px; /* Увеличен размер точек */
+            background: var(--twitch-purple);
+            border-radius: 50%; pointer-events: none; z-index: 999998;
+            opacity: 0.8; /* Увеличена непрозрачность */
+            transform: translate(-50%, -50%);
+            box-shadow: 0 0 5px var(--twitch-purple); /* Добавлено свечение */
+            transition: opacity 0.3s;
+        }
+
+        /* Тумблеры */
         .toggle-switch {
             appearance: none; width: 40px; height: 22px; background: #333;
             border-radius: 20px; position: relative; cursor: pointer;
@@ -35,88 +46,70 @@
         }
         .toggle-switch:checked { background: var(--twitch-purple); box-shadow: 0 0 10px rgba(145, 70, 255, 0.4); }
         .toggle-switch:checked::after { transform: translateX(18px); }
-
-        /* --- Eco Mode --- */
-        body.eco-mode .bg-orbs, body.eco-mode #snow-canvas, body.eco-mode #cursor-glow, body.eco-mode .bg-image { display: none !important; }
+        body.eco-mode .bg-orbs, body.eco-mode #snow-canvas, body.eco-mode #cursor-glow, body.eco-mode .bg-image, body.eco-mode .trail-dot { display: none !important; }
         body.eco-mode * { backdrop-filter: none !important; box-shadow: none !important; text-shadow: none !important; transition: none !important; }
-        body.eco-mode .card, body.eco-mode #music-player, body.eco-mode .welcome-sub-box, body.eco-mode #settings-menu { background: #111 !important; border: 1px solid #333 !important; }
-
-        /* --- Фон и эффекты --- */
+        body.eco-mode .card, body.eco-mode #music-player, body.eco-mode .welcome-sub-box, body.eco-mode #settings-menu, body.eco-mode .bio-text { background: #111 !important; border: 1px solid #333 !important; box-shadow: none !important; backdrop-filter: none !important; }
         .bg-orbs { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
         .orb { position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.15; background: var(--twitch-purple); animation: float 20s infinite ease-in-out; }
         .orb-1 { width: 400px; height: 400px; top: -100px; left: -100px; animation-duration: 25s; }
         .orb-2 { width: 300px; height: 300px; bottom: -50px; right: -50px; background: #6441a5; animation-duration: 18s; animation-delay: -5s; }
         .orb-3 { width: 250px; height: 250px; top: 40%; left: 60%; background: #9146ff; animation-duration: 30s; animation-delay: -10s; }
         @keyframes float { 0%, 100% { transform: translate(0, 0) scale(1); } 33% { transform: translate(30px, 50px) scale(1.1); } 66% { transform: translate(-20px, 20px) scale(0.9); } }
-        
         #content-wrapper { width: 100%; display: flex; flex-direction: column; align-items: center; transition: 1s ease-in-out; filter: blur(20px); position: relative; z-index: 2; }
-        
-        /* --- Welcome Screen --- */
         #welcome-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.95); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 50000; backdrop-filter: blur(25px); transition: 0.6s; padding: 20px; }
         .welcome-title { font-size: clamp(32px, 8vw, 48px); font-weight: 900; margin-bottom: 10px; text-shadow: 0 0 20px var(--twitch-purple); text-align: center; }
         .welcome-sub-box { background: var(--glass); border: 1px solid var(--glass-border); padding: 15px 25px; border-radius: 15px; margin-bottom: 30px; max-width: 300px; text-align: center; font-size: 14px; color: rgba(255,255,255,0.7); line-height: 1.4; }
         .ok-btn { background: var(--twitch-purple); border: none; color: white; padding: 15px 40px; border-radius: 12px; font-weight: 900; font-size: 16px; transition: 0.3s; cursor: pointer; }
         .ok-btn:hover { transform: scale(1.05); box-shadow: 0 0 20px var(--twitch-purple); }
-        
-        /* --- Курсор --- */
         #cursor-glow, #cursor-dot { position: fixed; pointer-events: none; z-index: 999999; left: 0; top: 0; display: block; }
         #cursor-glow { width: 300px; height: 300px; background: radial-gradient(circle, rgba(145, 70, 255, 0.15) 0%, transparent 70%); transform: translate(-50%, -50%); }
         #cursor-dot { width: 6px; height: 6px; background: white; border-radius: 50%; box-shadow: 0 0 15px var(--twitch-purple); transform: translate(-50%, -50%); }
-        @media (hover: none) and (pointer: coarse) { #cursor-glow, #cursor-dot { display: none !important; } * { cursor: auto !important; } }
-        
-        /* --- Main Content --- */
+        @media (hover: none) and (pointer: coarse) { #cursor-glow, #cursor-dot, .trail-dot { display: none !important; } * { cursor: auto !important; } }
         main { width: 100%; max-width: 420px; padding: 40px 20px 120px; text-align: center; z-index: 10; perspective: 1200px; box-sizing: border-box; }
         .avatar-container { width: 110px; height: 110px; margin: 0 auto 15px; border-radius: 50%; border: 2px solid var(--twitch-purple); padding: 5px; transition: 0.3s; position: relative; }
         .avatar-img { width: 100%; height: 100%; border-radius: 50%; background: url('ava.jpg') center/cover; }
-        
-        /* --- ССЫЛКИ И КАРТИНКИ ЗА НИМИ --- */
-        .links { display: flex; flex-direction: column; gap: 12px; margin-top: 20px; width: 100%; position: relative; }
-        
-        /* Контейнер для кнопки с картинкой */
+        .bio-text {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            padding: 15px 20px;
+            border-radius: 16px;
+            margin: 10px 0 25px;
+            color: rgba(255, 255, 255, 0.85);
+            font-size: 15px;
+            line-height: 1.5;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            opacity: 0;
+            transform: translateY(10px);
+            animation: fadeBio 0.8s ease-out forwards;
+            animation-delay: 0.1s;
+        }
+        @keyframes fadeBio { to { opacity: 1; transform: translateY(0); } }
+        .links { display: flex; flex-direction: column; gap: 12px; margin-top: 0; width: 100%; position: relative; }
         .link-container { position: relative; width: 100%; z-index: 1; }
-        
         .bg-image {
-            position: absolute;
-            z-index: -1; /* За кнопкой */
-            pointer-events: none; /* Чтобы клик проходил сквозь картинку */
-            transition: 0.3s;
+            position: absolute; z-index: -1; pointer-events: none; transition: 0.3s;
         }
-
-        /* Настройка для Steam (картинка справа) */
         .steam-container .bg-image {
-            height: 160px; /* Размер картинки */
-            top: -65px;    /* Сдвиг вверх */
-            right: -70px;  /* Сдвиг вправо (торчит) */
-            transform: rotate(10deg); /* Легкий наклон */
+            height: 160px; top: -65px; right: -70px; transform: rotate(10deg);
         }
-
-        /* Настройка для YouTube (картинка слева снизу) */
+        /* ИЗМЕНЕНЫ КООРДИНАТЫ ДЛЯ DED2.PNG */
         .youtube-container .bg-image {
-            height: 150px;
-            top: -50px;    /* Чуть выше кнопки */
-            left: -70px;   /* Сдвиг влево */
-            transform: rotate(-10deg);
+            height: 150px; top: -40px; left: -85px; transform: rotate(-10deg);
         }
-
-        /* При наведении на кнопку картинка может немного двигаться (опционально) */
-        .link-container:hover .bg-image {
-            transform: scale(1.05) rotate(0deg);
-        }
-
+        .link-container:hover .bg-image { transform: scale(1.05) rotate(0deg); }
         .card { 
             display: flex; align-items: center; padding: 16px 20px; 
             background: var(--glass); border: 2px solid transparent; border-radius: 16px; 
             text-decoration: none; color: white; font-weight: 700; 
             transition: all 0.2s ease-out; transform-style: preserve-3d; 
             opacity: 0; transform: translateY(20px); box-sizing: border-box; width: 100%;
-            position: relative; z-index: 2; /* Кнопка выше картинки */
-            backdrop-filter: blur(10px); /* Чтобы картинка за кнопкой размывалась */
+            position: relative; z-index: 2; backdrop-filter: blur(10px);
         }
         .card.show { opacity: 1; transform: translateY(0); }
         @media (hover: hover) { .card:hover { border-color: var(--twitch-purple); background: rgba(145, 70, 255, 0.1); box-shadow: 0 0 15px rgba(145, 70, 255, 0.3); } }
         .card img, .card svg { width: 22px; height: 22px; margin-right: 15px; flex-shrink: 0; }
-        
-        /* --- Плеер --- */
         #music-player { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: rgba(15, 15, 20, 0.85); backdrop-filter: blur(25px); border: 1px solid var(--glass-border); border-radius: 50px; padding: 8px 16px; display: flex; align-items: center; gap: 8px; z-index: 30000; box-shadow: 0 10px 30px rgba(0,0,0,0.5); width: fit-content; max-width: 95vw; will-change: left, top; }
         .visualizer { display: flex; align-items: flex-end; gap: 3px; height: 14px; }
         .vis-bar { width: 3px; background: var(--twitch-purple); border-radius: 1px; height: 4px; }
@@ -129,24 +122,19 @@
         #playPauseBtn { background: var(--twitch-purple); border-radius: 50%; padding: 8px; }
         #settings-menu { display: none; position: absolute; bottom: 65px; right: 0; background: rgba(20, 20, 25, 0.98); border: 1px solid var(--glass-border); padding: 15px; border-radius: 20px; width: 200px; cursor: default !important; }
         .sett-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; font-size: 13px; font-weight: 700; }
-        
-        /* --- Остальное --- */
         .falling-phrase { position: fixed; pointer-events: none; font-weight: 900; color: white; text-shadow: 0 0 10px var(--twitch-purple); z-index: 10000; font-size: 1.1rem; white-space: nowrap; }
         #snow-canvas { position: fixed; inset: 0; pointer-events: none; z-index: 1; }
         input[type=range] { width: 40px; accent-color: var(--twitch-purple); }
-        
         #secret-lock { position: fixed; bottom: 20px; right: 20px; width: 40px; height: 40px; background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); border-radius: 12px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.5s cubic-bezier(0.2, 0.8, 0.2, 1); z-index: 40000; }
         #secret-lock:hover { background: var(--twitch-purple); box-shadow: 0 0 20px var(--twitch-purple); transform: scale(1.1) rotate(15deg); }
         #secret-lock svg { width: 20px; height: 20px; fill: white; transition: 0.5s; }
         #secret-lock:hover svg { fill: white; transform: rotate(-15deg); }
         @media (max-width: 768px) { #secret-lock { bottom: auto; right: auto; top: 20px; left: 20px; } }
-
         #riddle-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 50000; display: none; align-items: center; justify-content: center; backdrop-filter: blur(10px); }
         .riddle-box { background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.1); padding: 40px; border-radius: 20px; text-align: center; max-width: 400px; width: 90%; box-shadow: 0 20px 50px rgba(0,0,0,0.5); backdrop-filter: blur(20px); transform: scale(0.9); transition: 0.3s; }
         .riddle-text { font-size: 20px; font-weight: 700; margin-bottom: 20px; }
         .liquid-input { width: 100%; padding: 15px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.2); background: rgba(255, 255, 255, 0.05); color: white; font-family: 'Outfit', sans-serif; font-size: 16px; text-align: center; margin-bottom: 20px; box-sizing: border-box; transition: 0.3s; }
         .liquid-input:focus { background: rgba(255, 255, 255, 0.1); border-color: var(--twitch-purple); box-shadow: 0 0 15px rgba(145, 70, 255, 0.3); }
-        
         #secret-scene { position: fixed; inset: 0; background: black; z-index: 60000; display: none; flex-direction: column; align-items: center; justify-content: center; opacity: 0; transition: opacity 1s ease; }
         .scene-content { display: flex; flex-direction: column; align-items: center; gap: 20px; transition: 1s cubic-bezier(0.4, 0, 0.2, 1); }
         .ded-photo { width: 220px; height: 220px; border-radius: 20px; border: 3px solid var(--twitch-purple); box-shadow: 0 0 30px var(--twitch-purple); object-fit: cover; transition: 1.5s ease; }
@@ -154,7 +142,6 @@
         .scene-choices { display: flex; gap: 10px; margin-top: 20px; flex-wrap: wrap; justify-content: center; transition: 0.5s; }
         .choice-btn { background: transparent; border: 1px solid var(--twitch-purple); color: var(--twitch-purple); padding: 10px 20px; font-weight: 700; font-size: 16px; border-radius: 8px; transition: 0.3s; cursor: none; }
         .choice-btn:hover { background: var(--twitch-purple); color: white; box-shadow: 0 0 15px var(--twitch-purple); }
-        
         #you-dead { position: fixed; inset: 0; display: none; align-items: center; justify-content: center; color: #ff0000; font-size: 60px; font-weight: 900; text-transform: uppercase; z-index: 100000; background: rgba(0,0,0,0.95); opacity: 0; transition: 0.5s; text-shadow: 0 0 30px #ff0000; }
         #victory-pulse { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0); width: 10px; height: 10px; background: var(--twitch-purple); border-radius: 50%; z-index: 59000; pointer-events: none; opacity: 0; transition: 2s ease-out; }
     </style>
@@ -176,6 +163,11 @@
         <main>
             <div class="avatar-container" id="avatar"><div class="avatar-img"></div></div>
             <h1>DeD_u1ya</h1>
+            
+            <div class="bio-text">
+                Приветствую тебя путник, подписываясь на мои соцсети не забудь стать моим другом. В будущем нас будет много!
+            </div>
+            
             <div class="links">
                 <a href="https://t.me/DeD_u1ya" target="_blank" class="card"><img src="tg.png"> Telegram</a>
                 
@@ -235,6 +227,17 @@
         const icon = document.getElementById('playPauseIcon').querySelector('path');
         const cGlow = document.getElementById('cursor-glow'), cDot = document.getElementById('cursor-dot');
         const ecoToggle = document.getElementById('ecoToggle');
+        
+        // ЛОГИКА ШЛЕЙФА (ИЗМЕНЕНА)
+        const trailDots = [];
+        const trailCount = 20; // Увеличено количество точек
+        for(let i=0; i<trailCount; i++) {
+            const d = document.createElement('div');
+            d.className = 'trail-dot';
+            document.body.appendChild(d);
+            trailDots.push({el: d});
+        }
+
         audio.volume = 0.1; 
         function loadT(i) { audio.src = tracks[i]; audio.load(); }
         loadT(0);
@@ -267,10 +270,23 @@
             anim(); setTimeout(() => cooldown = false, 1500);
         };
         player.onmousedown = (e) => { if(e.target.closest('button') || e.target.closest('input') || e.target.closest('#settings-menu')) return; drag = true; const r = player.getBoundingClientRect(); ox = e.clientX - r.left; oy = e.clientY - r.top; player.style.transition = 'none'; };
+        
         window.onmousemove = (e) => {
             cDot.style.left = cGlow.style.left = e.clientX + 'px'; cDot.style.top = cGlow.style.top = e.clientY + 'px';
+            
+            // Обновляем шлейф (ИЗМЕНЕНО: увеличена задержка)
+            trailDots.forEach((dot, index) => {
+                setTimeout(() => {
+                    dot.el.style.left = e.clientX + 'px';
+                    dot.el.style.top = e.clientY + 'px';
+                    dot.el.style.opacity = (1 - index/trailCount) * 0.8; // Увеличена непрозрачность
+                    dot.el.style.transform = `translate(-50%, -50%) scale(${1 - index/trailCount})`;
+                }, index * 35); // Увеличена задержка для более длинного хвоста
+            });
+
             if(drag) { player.style.left = (e.clientX - ox + player.offsetWidth / 2) + 'px'; player.style.top = (e.clientY - oy + player.offsetHeight / 2) + 'px'; player.style.bottom = 'auto'; player.style.transform = 'translateX(-50%)'; }
         };
+        
         window.onmouseup = () => { drag = false; player.style.transition = '0.3s cubic-bezier(0.2, 0.8, 0.2, 1)'; };
         const canvas = document.getElementById('snow-canvas'), ctx = canvas.getContext('2d'), nyT = document.getElementById('nyToggle');
         let flakes = []; 
