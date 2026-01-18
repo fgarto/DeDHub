@@ -18,48 +18,30 @@
             margin: 0; font-family: 'Outfit', sans-serif;
             background-color: var(--bg-dark); color: var(--white);
             display: flex; flex-direction: column; align-items: center;
-            min-height: 100vh; overflow: hidden;
+            min-height: 100vh; overflow-x: hidden; /* Важно чтобы картинки не растягивали экран */
             background: radial-gradient(circle at 50% 0%, #1f1635 0%, var(--bg-dark) 100%);
             position: relative;
         }
 
-        /* Красивые переключатели (Тумблеры) */
+        /* --- Тумблеры --- */
         .toggle-switch {
-            appearance: none;
-            width: 40px; height: 22px;
-            background: #333;
-            border-radius: 20px;
-            position: relative;
-            cursor: pointer;
-            transition: 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
-            outline: none;
+            appearance: none; width: 40px; height: 22px; background: #333;
+            border-radius: 20px; position: relative; cursor: pointer;
+            transition: 0.3s cubic-bezier(0.4, 0.0, 0.2, 1); outline: none;
         }
         .toggle-switch::after {
-            content: '';
-            position: absolute;
-            top: 3px; left: 3px;
-            width: 16px; height: 16px;
-            background: white;
-            border-radius: 50%;
-            transition: 0.3s cubic-bezier(0.4, 0.0, 0.2, 1);
-            box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+            content: ''; position: absolute; top: 3px; left: 3px; width: 16px; height: 16px;
+            background: white; border-radius: 50%; transition: 0.3s; box-shadow: 0 2px 5px rgba(0,0,0,0.3);
         }
-        .toggle-switch:checked {
-            background: var(--twitch-purple);
-            box-shadow: 0 0 10px rgba(145, 70, 255, 0.4);
-        }
-        .toggle-switch:checked::after {
-            transform: translateX(18px);
-        }
+        .toggle-switch:checked { background: var(--twitch-purple); box-shadow: 0 0 10px rgba(145, 70, 255, 0.4); }
+        .toggle-switch:checked::after { transform: translateX(18px); }
 
-        /* Оптимизация (Eco Mode) */
-        body.eco-mode .bg-orbs, body.eco-mode #snow-canvas, body.eco-mode #cursor-glow { display: none !important; }
-        body.eco-mode * { backdrop-filter: none !important; -webkit-backdrop-filter: none !important; box-shadow: none !important; text-shadow: none !important; transition: none !important; }
-        body.eco-mode .card, body.eco-mode #music-player, body.eco-mode .welcome-sub-box, body.eco-mode #settings-menu, body.eco-mode .dialog-box, body.eco-mode .riddle-box { background: #111 !important; border: 1px solid #333 !important; }
-        body.eco-mode .card:hover { background: #222 !important; border-color: var(--twitch-purple) !important; transform: none !important; }
-        body.eco-mode .toggle-switch { background: #222; box-shadow: none !important; }
-        body.eco-mode .toggle-switch:checked { background: #555; }
+        /* --- Eco Mode --- */
+        body.eco-mode .bg-orbs, body.eco-mode #snow-canvas, body.eco-mode #cursor-glow, body.eco-mode .bg-image { display: none !important; }
+        body.eco-mode * { backdrop-filter: none !important; box-shadow: none !important; text-shadow: none !important; transition: none !important; }
+        body.eco-mode .card, body.eco-mode #music-player, body.eco-mode .welcome-sub-box, body.eco-mode #settings-menu { background: #111 !important; border: 1px solid #333 !important; }
 
+        /* --- Фон и эффекты --- */
         .bg-orbs { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
         .orb { position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.15; background: var(--twitch-purple); animation: float 20s infinite ease-in-out; }
         .orb-1 { width: 400px; height: 400px; top: -100px; left: -100px; animation-duration: 25s; }
@@ -68,26 +50,73 @@
         @keyframes float { 0%, 100% { transform: translate(0, 0) scale(1); } 33% { transform: translate(30px, 50px) scale(1.1); } 66% { transform: translate(-20px, 20px) scale(0.9); } }
         
         #content-wrapper { width: 100%; display: flex; flex-direction: column; align-items: center; transition: 1s ease-in-out; filter: blur(20px); position: relative; z-index: 2; }
+        
+        /* --- Welcome Screen --- */
         #welcome-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.95); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 50000; backdrop-filter: blur(25px); transition: 0.6s; padding: 20px; }
         .welcome-title { font-size: clamp(32px, 8vw, 48px); font-weight: 900; margin-bottom: 10px; text-shadow: 0 0 20px var(--twitch-purple); text-align: center; }
         .welcome-sub-box { background: var(--glass); border: 1px solid var(--glass-border); padding: 15px 25px; border-radius: 15px; margin-bottom: 30px; max-width: 300px; text-align: center; font-size: 14px; color: rgba(255,255,255,0.7); line-height: 1.4; }
         .ok-btn { background: var(--twitch-purple); border: none; color: white; padding: 15px 40px; border-radius: 12px; font-weight: 900; font-size: 16px; transition: 0.3s; cursor: pointer; }
         .ok-btn:hover { transform: scale(1.05); box-shadow: 0 0 20px var(--twitch-purple); }
         
+        /* --- Курсор --- */
         #cursor-glow, #cursor-dot { position: fixed; pointer-events: none; z-index: 999999; left: 0; top: 0; display: block; }
         #cursor-glow { width: 300px; height: 300px; background: radial-gradient(circle, rgba(145, 70, 255, 0.15) 0%, transparent 70%); transform: translate(-50%, -50%); }
         #cursor-dot { width: 6px; height: 6px; background: white; border-radius: 50%; box-shadow: 0 0 15px var(--twitch-purple); transform: translate(-50%, -50%); }
         @media (hover: none) and (pointer: coarse) { #cursor-glow, #cursor-dot { display: none !important; } * { cursor: auto !important; } }
         
+        /* --- Main Content --- */
         main { width: 100%; max-width: 420px; padding: 40px 20px 120px; text-align: center; z-index: 10; perspective: 1200px; box-sizing: border-box; }
         .avatar-container { width: 110px; height: 110px; margin: 0 auto 15px; border-radius: 50%; border: 2px solid var(--twitch-purple); padding: 5px; transition: 0.3s; position: relative; }
         .avatar-img { width: 100%; height: 100%; border-radius: 50%; background: url('ava.jpg') center/cover; }
-        .links { display: flex; flex-direction: column; gap: 12px; margin-top: 20px; width: 100%; }
-        .card { display: flex; align-items: center; padding: 16px 20px; background: var(--glass); border: 2px solid transparent; border-radius: 16px; text-decoration: none; color: white; font-weight: 700; transition: all 0.2s ease-out; transform-style: preserve-3d; opacity: 0; transform: translateY(20px); box-sizing: border-box; width: 100%; }
+        
+        /* --- ССЫЛКИ И КАРТИНКИ ЗА НИМИ --- */
+        .links { display: flex; flex-direction: column; gap: 12px; margin-top: 20px; width: 100%; position: relative; }
+        
+        /* Контейнер для кнопки с картинкой */
+        .link-container { position: relative; width: 100%; z-index: 1; }
+        
+        .bg-image {
+            position: absolute;
+            z-index: -1; /* За кнопкой */
+            pointer-events: none; /* Чтобы клик проходил сквозь картинку */
+            transition: 0.3s;
+        }
+
+        /* Настройка для Steam (картинка справа) */
+        .steam-container .bg-image {
+            height: 160px; /* Размер картинки */
+            top: -65px;    /* Сдвиг вверх */
+            right: -70px;  /* Сдвиг вправо (торчит) */
+            transform: rotate(10deg); /* Легкий наклон */
+        }
+
+        /* Настройка для YouTube (картинка слева снизу) */
+        .youtube-container .bg-image {
+            height: 150px;
+            top: -50px;    /* Чуть выше кнопки */
+            left: -70px;   /* Сдвиг влево */
+            transform: rotate(-10deg);
+        }
+
+        /* При наведении на кнопку картинка может немного двигаться (опционально) */
+        .link-container:hover .bg-image {
+            transform: scale(1.05) rotate(0deg);
+        }
+
+        .card { 
+            display: flex; align-items: center; padding: 16px 20px; 
+            background: var(--glass); border: 2px solid transparent; border-radius: 16px; 
+            text-decoration: none; color: white; font-weight: 700; 
+            transition: all 0.2s ease-out; transform-style: preserve-3d; 
+            opacity: 0; transform: translateY(20px); box-sizing: border-box; width: 100%;
+            position: relative; z-index: 2; /* Кнопка выше картинки */
+            backdrop-filter: blur(10px); /* Чтобы картинка за кнопкой размывалась */
+        }
         .card.show { opacity: 1; transform: translateY(0); }
         @media (hover: hover) { .card:hover { border-color: var(--twitch-purple); background: rgba(145, 70, 255, 0.1); box-shadow: 0 0 15px rgba(145, 70, 255, 0.3); } }
         .card img, .card svg { width: 22px; height: 22px; margin-right: 15px; flex-shrink: 0; }
         
+        /* --- Плеер --- */
         #music-player { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: rgba(15, 15, 20, 0.85); backdrop-filter: blur(25px); border: 1px solid var(--glass-border); border-radius: 50px; padding: 8px 16px; display: flex; align-items: center; gap: 8px; z-index: 30000; box-shadow: 0 10px 30px rgba(0,0,0,0.5); width: fit-content; max-width: 95vw; will-change: left, top; }
         .visualizer { display: flex; align-items: flex-end; gap: 3px; height: 14px; }
         .vis-bar { width: 3px; background: var(--twitch-purple); border-radius: 1px; height: 4px; }
@@ -100,6 +129,8 @@
         #playPauseBtn { background: var(--twitch-purple); border-radius: 50%; padding: 8px; }
         #settings-menu { display: none; position: absolute; bottom: 65px; right: 0; background: rgba(20, 20, 25, 0.98); border: 1px solid var(--glass-border); padding: 15px; border-radius: 20px; width: 200px; cursor: default !important; }
         .sett-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; font-size: 13px; font-weight: 700; }
+        
+        /* --- Остальное --- */
         .falling-phrase { position: fixed; pointer-events: none; font-weight: 900; color: white; text-shadow: 0 0 10px var(--twitch-purple); z-index: 10000; font-size: 1.1rem; white-space: nowrap; }
         #snow-canvas { position: fixed; inset: 0; pointer-events: none; z-index: 1; }
         input[type=range] { width: 40px; accent-color: var(--twitch-purple); }
@@ -108,7 +139,6 @@
         #secret-lock:hover { background: var(--twitch-purple); box-shadow: 0 0 20px var(--twitch-purple); transform: scale(1.1) rotate(15deg); }
         #secret-lock svg { width: 20px; height: 20px; fill: white; transition: 0.5s; }
         #secret-lock:hover svg { fill: white; transform: rotate(-15deg); }
-        
         @media (max-width: 768px) { #secret-lock { bottom: auto; right: auto; top: 20px; left: 20px; } }
 
         #riddle-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 50000; display: none; align-items: center; justify-content: center; backdrop-filter: blur(10px); }
@@ -126,7 +156,6 @@
         .choice-btn:hover { background: var(--twitch-purple); color: white; box-shadow: 0 0 15px var(--twitch-purple); }
         
         #you-dead { position: fixed; inset: 0; display: none; align-items: center; justify-content: center; color: #ff0000; font-size: 60px; font-weight: 900; text-transform: uppercase; z-index: 100000; background: rgba(0,0,0,0.95); opacity: 0; transition: 0.5s; text-shadow: 0 0 30px #ff0000; }
-        .particle { position: fixed; width: 6px; height: 6px; background: var(--twitch-purple); border-radius: 50%; pointer-events: none; z-index: 65000; box-shadow: 0 0 10px var(--twitch-purple); }
         #victory-pulse { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0); width: 10px; height: 10px; background: var(--twitch-purple); border-radius: 50%; z-index: 59000; pointer-events: none; opacity: 0; transition: 2s ease-out; }
     </style>
 </head>
@@ -136,26 +165,39 @@
     <div id="cursor-glow"></div><div id="cursor-dot"></div>
     <div id="victory-pulse"></div>
     <div id="you-dead"><div class="death-text">ю дед(you dead)</div></div>
+    
     <div id="welcome-overlay">
         <div class="welcome-title">Всем привет!</div>
         <div class="welcome-sub-box">Здесь находятся все мои ссылки, спасибо что зашли</div>
         <button class="ok-btn" id="startBtn">ВОЙТИ</button>
     </div>
+    
     <div id="content-wrapper">
         <main>
             <div class="avatar-container" id="avatar"><div class="avatar-img"></div></div>
             <h1>DeD_u1ya</h1>
             <div class="links">
                 <a href="https://t.me/DeD_u1ya" target="_blank" class="card"><img src="tg.png"> Telegram</a>
-                <a href="https://steamcommunity.com/id/_D_I_C_H_/" target="_blank" class="card"><img src="Без названия (1).png"> Steam</a>
+                
+                <div class="link-container steam-container">
+                    <img src="ded1.png" class="bg-image" alt="">
+                    <a href="https://steamcommunity.com/id/_D_I_C_H_/" target="_blank" class="card"><img src="Без названия (1).png"> Steam</a>
+                </div>
+
                 <a href="https://www.tiktok.com/@dedu1ya1" target="_blank" class="card"><svg fill="white" viewBox="0 0 24 24"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.17-2.81-.74-3.94-1.67-.49-.42-.94-.87-1.33-1.38v7.41c.01 2.23-.74 4.54-2.4 6.06-1.8 1.7-4.4 2.15-6.68 1.4-2.73-.85-4.6-3.7-4.2-6.53.28-2.4 2.1-4.52 4.48-5.11.83-.22 1.7-.26 2.54-.15v4.1c-.88-.25-1.85-.08-2.55.51-.77.62-1.08 1.66-.89 2.62.2 1.05 1.13 1.88 2.19 2.03.95.14 2-.15 2.59-.92.36-.45.56-1.02.55-1.6V.02z"/></svg> TikTok</a>
                 <a href="https://www.donationalerts.com/r/ded_u1ya" target="_blank" class="card"><svg fill="#ffa500" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg> DonationAlerts</a>
-                <a href="https://www.youtube.com/@DeD_u1ya" target="_blank" class="card"><img src="yt.png"> YouTube</a>
+                
+                <div class="link-container youtube-container">
+                    <img src="ded2.png" class="bg-image" alt="">
+                    <a href="https://www.youtube.com/@DeD_u1ya" target="_blank" class="card"><img src="yt.png"> YouTube</a>
+                </div>
             </div>
         </main>
+        
         <div id="secret-lock">
             <svg viewBox="0 0 24 24"><path d="M12 17c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm6-9h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zM9 6c0-1.66 1.34-3 3-3s3 1.34 3 3v2H9V6z"/></svg>
         </div>
+        
         <div id="music-player">
             <div class="visualizer" id="viz"><div class="vis-bar"></div><div class="vis-bar"></div><div class="vis-bar"></div></div>
             <div style="font-size:11px; min-width:35px; color:var(--twitch-purple); font-weight:700" id="currentTime">0:00</div>
@@ -210,10 +252,9 @@
         audio.ontimeupdate = () => { const m = Math.floor(audio.currentTime / 60), s = Math.floor(audio.currentTime % 60); document.getElementById('currentTime').innerText = `${m}:${s<10?'0':''}${s}`; };
         audio.onended = () => document.getElementById('nextBtn').click();
         
-        // Исправленная логика настроек
         document.getElementById('settBtn').onclick = (e) => { e.stopPropagation(); const m = document.getElementById('settings-menu'); m.style.display = m.style.display === 'block' ? 'none' : 'block'; };
-        document.getElementById('settings-menu').onclick = (e) => e.stopPropagation(); // Меню не закрывается при клике внутри
-        window.onclick = () => document.getElementById('settings-menu').style.display = 'none'; // Закрывается только при клике ВНЕ меню
+        document.getElementById('settings-menu').onclick = (e) => e.stopPropagation();
+        window.onclick = () => document.getElementById('settings-menu').style.display = 'none';
         
         document.querySelectorAll('.card').forEach(el => { el.addEventListener('mousemove', (e) => { if(!document.body.classList.contains('eco-mode') && window.matchMedia("(hover: hover)").matches) { const r = el.getBoundingClientRect(), x = e.clientX - r.left - r.width/2, y = e.clientY - r.top - r.height/2; el.style.transform = `perspective(1000px) translate(${x*0.1}px, ${y*0.1}px) rotateX(${-y*0.05}deg) rotateY(${x*0.05}deg) scale(1.02)`; } }); el.addEventListener('mouseleave', () => el.style.transform = ''); });
         const phrases = ["Бля буду", "Ой напьюсь я", "Здарова плесень"];
