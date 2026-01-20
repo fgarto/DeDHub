@@ -12,8 +12,10 @@
             --white: #ffffff;
             --glass: rgba(255, 255, 255, 0.08);
             --glass-border: rgba(255, 255, 255, 0.15);
+            --success: #00ff88;
+            --error: #ff4444;
         }
-        * { cursor: none !important; -webkit-tap-highlight-color: transparent; outline: none; }
+        * { cursor: none !important; -webkit-tap-highlight-color: transparent; outline: none; box-sizing: border-box; }
         body {
             margin: 0; font-family: 'Outfit', sans-serif;
             background-color: var(--bg-dark); color: var(--white);
@@ -23,32 +25,99 @@
             position: relative;
         }
 
-        /* СТИЛИ ДЛЯ ШЛЕЙФА */
-        .trail-dot {
-            position: fixed; width: 8px; height: 8px; /* Увеличен размер точек */
-            background: var(--twitch-purple);
-            border-radius: 50%; pointer-events: none; z-index: 999998;
-            opacity: 0.8; /* Увеличена непрозрачность */
-            transform: translate(-50%, -50%);
-            box-shadow: 0 0 5px var(--twitch-purple); /* Добавлено свечение */
-            transition: opacity 0.3s;
+        
+        .top-nav {
+            display: flex; gap: 15px; margin-top: 20px; z-index: 20;
+            background: rgba(0,0,0,0.3); padding: 5px; border-radius: 15px;
+            backdrop-filter: blur(10px); border: 1px solid var(--glass-border);
         }
+        .nav-btn {
+            background: transparent; border: none; color: rgba(255,255,255,0.6);
+            padding: 10px 20px; border-radius: 10px; font-weight: 900;
+            font-size: 14px; transition: 0.3s; text-transform: uppercase;
+        }
+        .nav-btn.active {
+            background: var(--twitch-purple); color: white;
+            box-shadow: 0 0 15px rgba(145, 70, 255, 0.4);
+        }
+        .nav-btn:hover:not(.active) { color: white; background: rgba(255,255,255,0.1); }
 
-        /* Тумблеры */
-        .toggle-switch {
-            appearance: none; width: 40px; height: 22px; background: #333;
-            border-radius: 20px; position: relative; cursor: pointer;
-            transition: 0.3s cubic-bezier(0.4, 0.0, 0.2, 1); outline: none;
+       
+        .view-section { display: none; width: 100%; max-width: 420px; animation: fadeIn 0.5s ease; }
+        .view-section.active-view { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        
+        .progress-box {
+            margin: 30px 20px; padding: 25px;
+            background: linear-gradient(145deg, rgba(255,255,255,0.05) 0%, rgba(20,20,20,0.8) 100%);
+            border: 1px solid var(--glass-border); border-radius: 20px;
+            position: relative; overflow: hidden;
         }
-        .toggle-switch::after {
-            content: ''; position: absolute; top: 3px; left: 3px; width: 16px; height: 16px;
-            background: white; border-radius: 50%; transition: 0.3s; box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+        .progress-title {
+            font-size: 18px; font-weight: 900; text-transform: uppercase;
+            margin-bottom: 20px; letter-spacing: 2px; text-align: center;
+            text-shadow: 0 0 15px var(--twitch-purple);
         }
+        .progress-track {
+            height: 16px; background: rgba(0,0,0,0.5); border-radius: 10px;
+            position: relative; overflow: hidden; box-shadow: inset 0 0 10px #000;
+        }
+        .progress-fill {
+            height: 100%; width: 0%; background: linear-gradient(90deg, #6441a5, var(--twitch-purple), #d9b3ff);
+            border-radius: 10px; position: relative;
+            box-shadow: 0 0 20px var(--twitch-purple);
+            transition: width 1.5s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        .progress-fill::after {
+            content: ''; position: absolute; top: 0; left: 0; bottom: 0; right: 0;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent);
+            transform: skewX(-20deg) translateX(-150%);
+            animation: shine 2s infinite;
+        }
+        @keyframes shine { 100% { transform: skewX(-20deg) translateX(250%); } }
+        .progress-stats {
+            display: flex; justify-content: space-between; margin-top: 10px;
+            font-size: 12px; font-weight: 700; color: rgba(255,255,255,0.7);
+        }
+        .current-stat { font-size: 24px; color: white; text-shadow: 0 0 10px var(--twitch-purple); }
+
+        
+        .comm-form {
+            margin: 0 20px 100px; background: var(--glass);
+            padding: 20px; border-radius: 20px; border: 1px solid var(--glass-border);
+        }
+        .inp-group { margin-bottom: 12px; position: relative; }
+        .c-input {
+            width: 100%; background: rgba(0,0,0,0.3); border: 1px solid var(--glass-border);
+            padding: 14px; border-radius: 12px; color: white; font-family: 'Outfit', sans-serif;
+            transition: 0.3s;
+        }
+        .c-input:focus { border-color: var(--twitch-purple); box-shadow: 0 0 15px rgba(145, 70, 255, 0.2); }
+        .c-btn {
+            width: 100%; background: var(--twitch-purple); border: none; padding: 14px;
+            border-radius: 12px; color: white; font-weight: 900; text-transform: uppercase;
+            transition: 0.3s; margin-top: 5px;
+        }
+        .c-btn:hover { box-shadow: 0 0 20px var(--twitch-purple); transform: translateY(-2px); }
+        .comm-list { margin-top: 25px; display: flex; flex-direction: column; gap: 10px; }
+        .comm-item {
+            background: rgba(255,255,255,0.03); padding: 15px; border-radius: 12px;
+            border-left: 3px solid var(--twitch-purple); text-align: left;
+        }
+        .comm-header { display: flex; justify-content: space-between; font-size: 12px; opacity: 0.6; margin-bottom: 5px; }
+        .comm-name { font-weight: 900; color: var(--twitch-purple); font-size: 14px; }
+        .comm-text { font-size: 14px; line-height: 1.4; word-wrap: break-word; }
+
+        /* Остальные стили из твоего кода */
+        .trail-dot { position: fixed; width: 8px; height: 8px; background: var(--twitch-purple); border-radius: 50%; pointer-events: none; z-index: 999998; opacity: 0.8; transform: translate(-50%, -50%); box-shadow: 0 0 5px var(--twitch-purple); transition: opacity 0.3s; }
+        .toggle-switch { appearance: none; width: 40px; height: 22px; background: #333; border-radius: 20px; position: relative; cursor: pointer; transition: 0.3s cubic-bezier(0.4, 0.0, 0.2, 1); outline: none; }
+        .toggle-switch::after { content: ''; position: absolute; top: 3px; left: 3px; width: 16px; height: 16px; background: white; border-radius: 50%; transition: 0.3s; box-shadow: 0 2px 5px rgba(0,0,0,0.3); }
         .toggle-switch:checked { background: var(--twitch-purple); box-shadow: 0 0 10px rgba(145, 70, 255, 0.4); }
         .toggle-switch:checked::after { transform: translateX(18px); }
         body.eco-mode .bg-orbs, body.eco-mode #snow-canvas, body.eco-mode #cursor-glow, body.eco-mode .bg-image, body.eco-mode .trail-dot { display: none !important; }
         body.eco-mode * { backdrop-filter: none !important; box-shadow: none !important; text-shadow: none !important; transition: none !important; }
-        body.eco-mode .card, body.eco-mode #music-player, body.eco-mode .welcome-sub-box, body.eco-mode #settings-menu, body.eco-mode .bio-text { background: #111 !important; border: 1px solid #333 !important; box-shadow: none !important; backdrop-filter: none !important; }
+        body.eco-mode .card, body.eco-mode #music-player, body.eco-mode .welcome-sub-box, body.eco-mode #settings-menu, body.eco-mode .bio-text, body.eco-mode .progress-box, body.eco-mode .comm-form { background: #111 !important; border: 1px solid #333 !important; box-shadow: none !important; backdrop-filter: none !important; }
         .bg-orbs { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
         .orb { position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.15; background: var(--twitch-purple); animation: float 20s infinite ease-in-out; }
         .orb-1 { width: 400px; height: 400px; top: -100px; left: -100px; animation-duration: 25s; }
@@ -65,51 +134,24 @@
         #cursor-glow { width: 300px; height: 300px; background: radial-gradient(circle, rgba(145, 70, 255, 0.15) 0%, transparent 70%); transform: translate(-50%, -50%); }
         #cursor-dot { width: 6px; height: 6px; background: white; border-radius: 50%; box-shadow: 0 0 15px var(--twitch-purple); transform: translate(-50%, -50%); }
         @media (hover: none) and (pointer: coarse) { #cursor-glow, #cursor-dot, .trail-dot { display: none !important; } * { cursor: auto !important; } }
-        main { width: 100%; max-width: 420px; padding: 40px 20px 120px; text-align: center; z-index: 10; perspective: 1200px; box-sizing: border-box; }
+        
+        main { width: 100%; padding: 40px 20px 120px; text-align: center; z-index: 10; perspective: 1200px; box-sizing: border-box; }
+        
         .avatar-container { width: 110px; height: 110px; margin: 0 auto 15px; border-radius: 50%; border: 2px solid var(--twitch-purple); padding: 5px; transition: 0.3s; position: relative; }
         .avatar-img { width: 100%; height: 100%; border-radius: 50%; background: url('ava.jpg') center/cover; }
-        .bio-text {
-            background: var(--glass);
-            border: 1px solid var(--glass-border);
-            padding: 15px 20px;
-            border-radius: 16px;
-            margin: 10px 0 25px;
-            color: rgba(255, 255, 255, 0.85);
-            font-size: 15px;
-            line-height: 1.5;
-            text-align: center;
-            backdrop-filter: blur(10px);
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-            opacity: 0;
-            transform: translateY(10px);
-            animation: fadeBio 0.8s ease-out forwards;
-            animation-delay: 0.1s;
-        }
-        @keyframes fadeBio { to { opacity: 1; transform: translateY(0); } }
+        .bio-text { background: var(--glass); border: 1px solid var(--glass-border); padding: 15px 20px; border-radius: 16px; margin: 10px 0 25px; color: rgba(255, 255, 255, 0.85); font-size: 15px; line-height: 1.5; text-align: center; backdrop-filter: blur(10px); box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2); }
+        
         .links { display: flex; flex-direction: column; gap: 12px; margin-top: 0; width: 100%; position: relative; }
         .link-container { position: relative; width: 100%; z-index: 1; }
-        .bg-image {
-            position: absolute; z-index: -1; pointer-events: none; transition: 0.3s;
-        }
-        .steam-container .bg-image {
-            height: 160px; top: -65px; right: -70px; transform: rotate(10deg);
-        }
-        /
-        .youtube-container .bg-image {
-            height: 150px; top: -40px; left: -85px; transform: rotate(-10deg);
-        }
+        .bg-image { position: absolute; z-index: -1; pointer-events: none; transition: 0.3s; }
+        .steam-container .bg-image { height: 160px; top: -65px; right: -70px; transform: rotate(10deg); }
+        .youtube-container .bg-image { height: 150px; top: -40px; left: -85px; transform: rotate(-10deg); }
         .link-container:hover .bg-image { transform: scale(1.05) rotate(0deg); }
-        .card { 
-            display: flex; align-items: center; padding: 16px 20px; 
-            background: var(--glass); border: 2px solid transparent; border-radius: 16px; 
-            text-decoration: none; color: white; font-weight: 700; 
-            transition: all 0.2s ease-out; transform-style: preserve-3d; 
-            opacity: 0; transform: translateY(20px); box-sizing: border-box; width: 100%;
-            position: relative; z-index: 2; backdrop-filter: blur(10px);
-        }
+        .card { display: flex; align-items: center; padding: 16px 20px; background: var(--glass); border: 2px solid transparent; border-radius: 16px; text-decoration: none; color: white; font-weight: 700; transition: all 0.2s ease-out; transform-style: preserve-3d; opacity: 0; transform: translateY(20px); box-sizing: border-box; width: 100%; position: relative; z-index: 2; backdrop-filter: blur(10px); }
         .card.show { opacity: 1; transform: translateY(0); }
         @media (hover: hover) { .card:hover { border-color: var(--twitch-purple); background: rgba(145, 70, 255, 0.1); box-shadow: 0 0 15px rgba(145, 70, 255, 0.3); } }
         .card img, .card svg { width: 22px; height: 22px; margin-right: 15px; flex-shrink: 0; }
+        
         #music-player { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: rgba(15, 15, 20, 0.85); backdrop-filter: blur(25px); border: 1px solid var(--glass-border); border-radius: 50px; padding: 8px 16px; display: flex; align-items: center; gap: 8px; z-index: 30000; box-shadow: 0 10px 30px rgba(0,0,0,0.5); width: fit-content; max-width: 95vw; will-change: left, top; }
         .visualizer { display: flex; align-items: flex-end; gap: 3px; height: 14px; }
         .vis-bar { width: 3px; background: var(--twitch-purple); border-radius: 1px; height: 4px; }
@@ -125,16 +167,19 @@
         .falling-phrase { position: fixed; pointer-events: none; font-weight: 900; color: white; text-shadow: 0 0 10px var(--twitch-purple); z-index: 10000; font-size: 1.1rem; white-space: nowrap; }
         #snow-canvas { position: fixed; inset: 0; pointer-events: none; z-index: 1; }
         input[type=range] { width: 40px; accent-color: var(--twitch-purple); }
+        
         #secret-lock { position: fixed; bottom: 20px; right: 20px; width: 40px; height: 40px; background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); border-radius: 12px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.5s cubic-bezier(0.2, 0.8, 0.2, 1); z-index: 40000; }
         #secret-lock:hover { background: var(--twitch-purple); box-shadow: 0 0 20px var(--twitch-purple); transform: scale(1.1) rotate(15deg); }
         #secret-lock svg { width: 20px; height: 20px; fill: white; transition: 0.5s; }
         #secret-lock:hover svg { fill: white; transform: rotate(-15deg); }
         @media (max-width: 768px) { #secret-lock { bottom: auto; right: auto; top: 20px; left: 20px; } }
+        
         #riddle-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 50000; display: none; align-items: center; justify-content: center; backdrop-filter: blur(10px); }
         .riddle-box { background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.1); padding: 40px; border-radius: 20px; text-align: center; max-width: 400px; width: 90%; box-shadow: 0 20px 50px rgba(0,0,0,0.5); backdrop-filter: blur(20px); transform: scale(0.9); transition: 0.3s; }
         .riddle-text { font-size: 20px; font-weight: 700; margin-bottom: 20px; }
         .liquid-input { width: 100%; padding: 15px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.2); background: rgba(255, 255, 255, 0.05); color: white; font-family: 'Outfit', sans-serif; font-size: 16px; text-align: center; margin-bottom: 20px; box-sizing: border-box; transition: 0.3s; }
         .liquid-input:focus { background: rgba(255, 255, 255, 0.1); border-color: var(--twitch-purple); box-shadow: 0 0 15px rgba(145, 70, 255, 0.3); }
+        
         #secret-scene { position: fixed; inset: 0; background: black; z-index: 60000; display: none; flex-direction: column; align-items: center; justify-content: center; opacity: 0; transition: opacity 1s ease; }
         .scene-content { display: flex; flex-direction: column; align-items: center; gap: 20px; transition: 1s cubic-bezier(0.4, 0, 0.2, 1); }
         .ded-photo { width: 220px; height: 220px; border-radius: 20px; border: 3px solid var(--twitch-purple); box-shadow: 0 0 30px var(--twitch-purple); object-fit: cover; transition: 1.5s ease; }
@@ -160,7 +205,12 @@
     </div>
     
     <div id="content-wrapper">
-        <main>
+        <nav class="top-nav">
+            <button class="nav-btn active" onclick="switchView('hub', this)">Hub</button>
+            <button class="nav-btn" onclick="switchView('community', this)">Сообщество</button>
+        </nav>
+
+        <main id="hub-view" class="view-section active-view">
             <div class="avatar-container" id="avatar"><div class="avatar-img"></div></div>
             <h1>DeD_u1ya</h1>
             
@@ -184,6 +234,34 @@
                 </div>
             </div>
         </main>
+
+        <section id="community-view" class="view-section">
+            <div class="progress-box">
+                <div class="progress-title">Преодолено</div>
+                <div class="progress-track">
+                    <div class="progress-fill" id="p-bar"></div>
+                </div>
+                <div class="progress-stats">
+                    <span class="current-stat">128</span>
+                    <span>/ 130 цель</span>
+                </div>
+            </div>
+
+            <div class="comm-form">
+                <div class="inp-group">
+                    <input type="text" id="comm-name" class="c-input" placeholder="Твой ник">
+                </div>
+                <div class="inp-group">
+                    <input type="email" id="comm-email" class="c-input" placeholder="Email (для верификации)">
+                </div>
+                <div class="inp-group">
+                    <textarea id="comm-msg" class="c-input" placeholder="Напиши что-нибудь..." style="height: 80px; resize: vertical;"></textarea>
+                </div>
+                <button class="c-btn" onclick="sendComment()">Отправить</button>
+            </div>
+
+            <div id="comm-list" class="comm-form comm-list" style="margin-top: -80px; display: none;"></div>
+        </section>
         
         <div id="secret-lock">
             <svg viewBox="0 0 24 24"><path d="M12 17c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm6-9h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zM9 6c0-1.66 1.34-3 3-3s3 1.34 3 3v2H9V6z"/></svg>
@@ -219,6 +297,55 @@
         </div>
     </div>
     <script>
+        // ЛОГИКА ВКЛАДОК
+        function switchView(viewId, btn) {
+            document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active-view'));
+            document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('active'));
+            document.getElementById(viewId + '-view').classList.add('active-view');
+            btn.classList.add('active');
+            if(viewId === 'community') {
+                setTimeout(() => document.getElementById('p-bar').style.width = '84.3%', 100);
+            }
+        }
+
+        // ЛОГИКА КОММЕНТАРИЕВ
+        function loadComments() {
+            const list = document.getElementById('comm-list');
+            const data = JSON.parse(localStorage.getItem('ded_comments') || '[]');
+            if(data.length > 0) list.style.display = 'flex';
+            list.innerHTML = data.map(c => `
+                <div class="comm-item">
+                    <div class="comm-header"><span class="comm-name">${c.name}</span></div>
+                    <div class="comm-text">${c.msg}</div>
+                </div>
+            `).join('');
+        }
+        
+        function sendComment() {
+            const name = document.getElementById('comm-name').value.trim();
+            const email = document.getElementById('comm-email').value.trim();
+            const msg = document.getElementById('comm-msg').value.trim();
+            
+            if(!name || !email || !msg) return alert('Заполни все поля!');
+            
+            let data = JSON.parse(localStorage.getItem('ded_comments') || '[]');
+            
+            // Проверка почты: если почта есть, а ник другой - ошибка
+            const existingUser = data.find(u => u.email === email);
+            if(existingUser && existingUser.name !== name) {
+                return alert('Эта почта уже занята другим ником!');
+            }
+            
+            data.unshift({ name, email, msg });
+            localStorage.setItem('ded_comments', JSON.stringify(data));
+            
+            document.getElementById('comm-msg').value = '';
+            loadComments();
+        }
+        
+        loadComments();
+
+        // ОСТАЛЬНОЙ JS (Плеер, Снег, Загадка)
         const audio = document.getElementById('bgMusic');
         const tracks = ['1.mp3', '2.mp3', '3.mp3', '4.mp3', '5.mp3', '6.mp3', '7.mp3']; 
         let curT = 0, shuffle = false, drag = false, ox, oy, cooldown = false;
@@ -226,7 +353,6 @@
         const icon = document.getElementById('playPauseIcon').querySelector('path');
         const cGlow = document.getElementById('cursor-glow'), cDot = document.getElementById('cursor-dot');
         const ecoToggle = document.getElementById('ecoToggle');
-        
         
         const trailDots = [];
         const trailCount = 20; 
@@ -272,8 +398,6 @@
         
         window.onmousemove = (e) => {
             cDot.style.left = cGlow.style.left = e.clientX + 'px'; cDot.style.top = cGlow.style.top = e.clientY + 'px';
-            
-            
             trailDots.forEach((dot, index) => {
                 setTimeout(() => {
                     dot.el.style.left = e.clientX + 'px';
@@ -282,7 +406,6 @@
                     dot.el.style.transform = `translate(-50%, -50%) scale(${1 - index/trailCount})`;
                 }, index * 35); 
             });
-
             if(drag) { player.style.left = (e.clientX - ox + player.offsetWidth / 2) + 'px'; player.style.top = (e.clientY - oy + player.offsetHeight / 2) + 'px'; player.style.bottom = 'auto'; player.style.transform = 'translateX(-50%)'; }
         };
         
