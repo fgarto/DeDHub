@@ -25,7 +25,6 @@
             position: relative;
         }
 
-        
         .top-nav {
             display: flex; gap: 15px; margin-top: 20px; z-index: 20;
             background: rgba(0,0,0,0.3); padding: 5px; border-radius: 15px;
@@ -42,12 +41,10 @@
         }
         .nav-btn:hover:not(.active) { color: white; background: rgba(255,255,255,0.1); }
 
-       
         .view-section { display: none; width: 100%; max-width: 420px; animation: fadeIn 0.5s ease; }
         .view-section.active-view { display: block; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-        
         .progress-box {
             margin: 30px 20px; padding: 25px;
             background: linear-gradient(145deg, rgba(255,255,255,0.05) 0%, rgba(20,20,20,0.8) 100%);
@@ -82,7 +79,6 @@
         }
         .current-stat { font-size: 24px; color: white; text-shadow: 0 0 10px var(--twitch-purple); }
 
-        
         .comm-form {
             margin: 0 20px 100px; background: var(--glass);
             padding: 20px; border-radius: 20px; border: 1px solid var(--glass-border);
@@ -109,7 +105,6 @@
         .comm-name { font-weight: 900; color: var(--twitch-purple); font-size: 14px; }
         .comm-text { font-size: 14px; line-height: 1.4; word-wrap: break-word; }
 
-        /* Остальные стили из твоего кода */
         .trail-dot { position: fixed; width: 8px; height: 8px; background: var(--twitch-purple); border-radius: 50%; pointer-events: none; z-index: 999998; opacity: 0.8; transform: translate(-50%, -50%); box-shadow: 0 0 5px var(--twitch-purple); transition: opacity 0.3s; }
         .toggle-switch { appearance: none; width: 40px; height: 22px; background: #333; border-radius: 20px; position: relative; cursor: pointer; transition: 0.3s cubic-bezier(0.4, 0.0, 0.2, 1); outline: none; }
         .toggle-switch::after { content: ''; position: absolute; top: 3px; left: 3px; width: 16px; height: 16px; background: white; border-radius: 50%; transition: 0.3s; box-shadow: 0 2px 5px rgba(0,0,0,0.3); }
@@ -296,8 +291,12 @@
             <div class="scene-choices" id="choicesBox"></div>
         </div>
     </div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+
     <script>
-        // ЛОГИКА ВКЛАДОК
         function switchView(viewId, btn) {
             document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active-view'));
             document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('active'));
@@ -308,44 +307,91 @@
             }
         }
 
-        // ЛОГИКА КОММЕНТАРИЕВ
+        const firebaseConfig = {
+            apiKey: "AIzaSyCKF_ipQCwh5ZXlKjE3-W3RBb9RCxq2nkg",
+            authDomain: "fgaarto.firebaseapp.com",
+            databaseURL: "https://fgaarto-default-rtdb.firebaseio.com",
+            projectId: "fgaarto",
+            storageBucket: "fgaarto.firebasestorage.app",
+            messagingSenderId: "668820445702",
+            appId: "1:668820445702:web:ef121c7b3f0c683a020187",
+            measurementId: "G-75ZEK1GWW5"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.database();
+
         function loadComments() {
             const list = document.getElementById('comm-list');
-            const data = JSON.parse(localStorage.getItem('ded_comments') || '[]');
-            if(data.length > 0) list.style.display = 'flex';
-            list.innerHTML = data.map(c => `
-                <div class="comm-item">
-                    <div class="comm-header"><span class="comm-name">${c.name}</span></div>
-                    <div class="comm-text">${c.msg}</div>
-                </div>
-            `).join('');
+            db.ref('comments').on('value', (snapshot) => {
+                list.innerHTML = '';
+                const data = snapshot.val();
+                
+                if (data) {
+                    list.style.display = 'flex';
+                    const commentsArray = Object.values(data).reverse();
+                    
+                    commentsArray.forEach(c => {
+                        const safeName = c.name ? c.name.replace(/</g, "&lt;") : "Аноним";
+                        const safeMsg = c.msg ? c.msg.replace(/</g, "&lt;") : "";
+
+                        list.innerHTML += `
+                            <div class="comm-item">
+                                <div class="comm-header"><span class="comm-name">${safeName}</span></div>
+                                <div class="comm-text">${safeMsg}</div>
+                            </div>
+                        `;
+                    });
+                } else {
+                    list.style.display = 'none';
+                }
+            });
         }
-        
+
         function sendComment() {
             const name = document.getElementById('comm-name').value.trim();
             const email = document.getElementById('comm-email').value.trim();
             const msg = document.getElementById('comm-msg').value.trim();
             
-            if(!name || !email || !msg) return alert('Заполни все поля!');
-            
-            let data = JSON.parse(localStorage.getItem('ded_comments') || '[]');
-            
-            // Проверка почты: если почта есть, а ник другой - ошибка
-            const existingUser = data.find(u => u.email === email);
-            if(existingUser && existingUser.name !== name) {
-                return alert('Эта почта уже занята другим ником!');
+            if(!name || !email || !msg) {
+                return alert('Заполни все поля!');
             }
             
-            data.unshift({ name, email, msg });
-            localStorage.setItem('ded_comments', JSON.stringify(data));
-            
-            document.getElementById('comm-msg').value = '';
-            loadComments();
+            if (!email.includes('@') || !email.includes('.')) {
+                return alert('Неверная почта');
+            }
+
+            db.ref('comments').once('value').then((snapshot) => {
+                const data = snapshot.val();
+                let emailTaken = false;
+
+                if (data) {
+                    const commentsArray = Object.values(data);
+                    const existingUser = commentsArray.find(u => u.email === email);
+                    
+                    if (existingUser && existingUser.name !== name) {
+                        alert('Эта почта уже занята другим ником!');
+                        emailTaken = true;
+                    }
+                }
+
+                if (!emailTaken) {
+                    db.ref('comments').push({
+                        name: name,
+                        email: email,
+                        msg: msg,
+                        timestamp: Date.now()
+                    }).then(() => {
+                        document.getElementById('comm-msg').value = '';
+                    }).catch((error) => {
+                        alert('Ошибка: ' + error.message);
+                    });
+                }
+            });
         }
-        
+
         loadComments();
 
-        // ОСТАЛЬНОЙ JS (Плеер, Снег, Загадка)
         const audio = document.getElementById('bgMusic');
         const tracks = ['1.mp3', '2.mp3', '3.mp3', '4.mp3', '5.mp3', '6.mp3', '7.mp3']; 
         let curT = 0, shuffle = false, drag = false, ox, oy, cooldown = false;
