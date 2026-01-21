@@ -78,9 +78,16 @@
             font-size: 12px; font-weight: 700; color: rgba(255,255,255,0.7);
         }
         .current-stat { font-size: 24px; color: white; text-shadow: 0 0 10px var(--twitch-purple); }
+        .progress-sub {
+            font-size: 13px; font-weight: 900; text-transform: uppercase; color: white;
+            text-shadow: 0 0 15px var(--twitch-purple); text-align: left;
+            margin-top: 2px; letter-spacing: 1px;
+        }
 
+        /* --- ИСПРАВЛЕНИЕ БАГА С ОТОБРАЖЕНИЕМ НА ТЕЛЕФОНЕ --- */
         .comm-form {
-            margin: 0 20px 100px; background: var(--glass);
+            margin: 0 20px 20px; /* Отступ снизу */
+            background: var(--glass);
             padding: 20px; border-radius: 20px; border: 1px solid var(--glass-border);
         }
         .inp-group { margin-bottom: 12px; position: relative; }
@@ -96,7 +103,13 @@
             transition: 0.3s; margin-top: 5px;
         }
         .c-btn:hover { box-shadow: 0 0 20px var(--twitch-purple); transform: translateY(-2px); }
-        .comm-list { margin-top: 25px; display: flex; flex-direction: column; gap: 10px; }
+        
+        /* Исправил отступы для списка */
+        .comm-list { 
+            margin-top: 0; 
+            margin-bottom: 120px; 
+            display: flex; flex-direction: column; gap: 10px; 
+        }
         .comm-item {
             background: rgba(255,255,255,0.03); padding: 15px; border-radius: 12px;
             border-left: 3px solid var(--twitch-purple); text-align: left;
@@ -104,6 +117,7 @@
         .comm-header { display: flex; justify-content: space-between; font-size: 12px; opacity: 0.6; margin-bottom: 5px; }
         .comm-name { font-weight: 900; color: var(--twitch-purple); font-size: 14px; }
         .comm-text { font-size: 14px; line-height: 1.4; word-wrap: break-word; }
+        .status-msg { font-size: 12px; opacity: 0.5; font-style: italic; }
 
         .trail-dot { position: fixed; width: 8px; height: 8px; background: var(--twitch-purple); border-radius: 50%; pointer-events: none; z-index: 999998; opacity: 0.8; transform: translate(-50%, -50%); box-shadow: 0 0 5px var(--twitch-purple); transition: opacity 0.3s; }
         .toggle-switch { appearance: none; width: 40px; height: 22px; background: #333; border-radius: 20px; position: relative; cursor: pointer; transition: 0.3s cubic-bezier(0.4, 0.0, 0.2, 1); outline: none; }
@@ -240,6 +254,7 @@
                     <span class="current-stat">128</span>
                     <span>/ 130 цель</span>
                 </div>
+                <div class="progress-sub">подписчиков</div>
             </div>
 
             <div class="comm-form">
@@ -255,7 +270,8 @@
                 <button class="c-btn" onclick="sendComment()">Отправить</button>
             </div>
 
-            <div id="comm-list" class="comm-form comm-list" style="margin-top: -80px; display: none;"></div>
+            <!-- ЗДЕСЬ ИСПРАВЛЕН ОТСТУП ДЛЯ ТЕЛЕФОНА -->
+            <div id="comm-list" class="comm-form comm-list"><div class="status-msg">Загрузка комментариев...</div></div>
         </section>
         
         <div id="secret-lock">
@@ -343,7 +359,7 @@
                         `;
                     });
                 } else {
-                    list.style.display = 'none';
+                    list.innerHTML = '<div class="status-msg">Пока нет комментариев. Будь первым!</div>';
                 }
             });
         }
