@@ -26,14 +26,15 @@
         }
 
         .top-nav {
-            display: flex; gap: 15px; margin-top: 20px; z-index: 20;
+            display: flex; gap: 10px; margin-top: 20px; z-index: 20;
             background: rgba(0,0,0,0.3); padding: 5px; border-radius: 15px;
             backdrop-filter: blur(10px); border: 1px solid var(--glass-border);
+            flex-wrap: wrap; justify-content: center;
         }
         .nav-btn {
             background: transparent; border: none; color: rgba(255,255,255,0.6);
-            padding: 10px 20px; border-radius: 10px; font-weight: 900;
-            font-size: 14px; transition: 0.3s; text-transform: uppercase;
+            padding: 10px 15px; border-radius: 10px; font-weight: 900;
+            font-size: 13px; transition: 0.3s; text-transform: uppercase;
         }
         .nav-btn.active {
             background: var(--twitch-purple); color: white;
@@ -41,9 +42,84 @@
         }
         .nav-btn:hover:not(.active) { color: white; background: rgba(255,255,255,0.1); }
 
-        .view-section { display: none; width: 100%; max-width: 420px; animation: fadeIn 0.5s ease; }
+        .view-section { display: none; width: 100%; max-width: 420px; animation: fadeIn 0.5s ease; margin-bottom: 100px;}
         .view-section.active-view { display: block; }
+        
+        #about-view { max-width: 900px; width: 95%; }
+
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        @media (max-width: 768px) {
+            .about-grid { grid-template-columns: 1fr; }
+            .about-box { padding: 20px; }
+        }
+        
+        .about-box {
+            background: rgba(255, 255, 255, 0.03); 
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 25px;
+            text-align: left;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            position: relative;
+            overflow: hidden;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+        .about-box.full-width {
+            grid-column: 1 / -1;
+            max-width: 600px;
+            margin: 0 auto;
+            width: 100%;
+        }
+        @media (max-width: 768px) {
+            .about-box.full-width { max-width: 100%; }
+        }
+
+        .about-box::before {
+            content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%;
+            background: var(--twitch-purple); box-shadow: 0 0 10px var(--twitch-purple);
+        }
+        .about-title {
+            color: var(--twitch-purple); font-weight: 900; text-transform: uppercase;
+            margin-bottom: 15px; font-size: 16px; letter-spacing: 1px;
+            text-shadow: 0 0 10px rgba(145, 70, 255, 0.4); display: flex; align-items: center; gap: 10px;
+        }
+        .about-title svg { width: 18px; height: 18px; fill: var(--twitch-purple); }
+        .about-text {
+            font-size: 14px; line-height: 1.6; color: rgba(255,255,255,0.85); font-weight: 400;
+        }
+        .donator-list { display: flex; flex-direction: column; gap: 8px; flex-grow: 1; }
+        .donator-item {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 10px; background: rgba(0,0,0,0.2); border-radius: 10px;
+            border: 1px solid transparent; transition: 0.3s;
+        }
+        .donator-item:hover { border-color: rgba(255,255,255,0.1); background: rgba(255,255,255,0.05); }
+        .donator-name { font-weight: 700; font-size: 14px; color: white; display: flex; align-items: center; gap: 8px;}
+        
+        .donator-amount { 
+            color: white; 
+            font-weight: 900; 
+            font-size: 14px; 
+            text-shadow: 0 0 10px var(--twitch-purple), 0 0 20px var(--twitch-purple); 
+            font-family: monospace; 
+        }
+        
+        .coop-link {
+            color: white; text-decoration: none; font-weight: 700; padding-bottom: 2px;
+            border-bottom: 1px dashed var(--twitch-purple); transition: 0.3s; font-size: 14px; word-break: break-all;
+        }
+        .coop-link:hover { color: var(--twitch-purple); border-bottom-style: solid; text-shadow: 0 0 10px var(--twitch-purple); }
 
         .progress-box {
             margin: 30px 20px; padding: 25px;
@@ -84,9 +160,8 @@
             margin-top: 2px; letter-spacing: 1px;
         }
 
-        /* --- ИСПРАВЛЕНИЕ БАГА С ОТОБРАЖЕНИЕМ НА ТЕЛЕФОНЕ --- */
         .comm-form {
-            margin: 0 20px 20px; /* Отступ снизу */
+            margin: 0 20px 20px;
             background: var(--glass);
             padding: 20px; border-radius: 20px; border: 1px solid var(--glass-border);
         }
@@ -104,7 +179,6 @@
         }
         .c-btn:hover { box-shadow: 0 0 20px var(--twitch-purple); transform: translateY(-2px); }
         
-        /* Исправил отступы для списка */
         .comm-list { 
             margin-top: 0; 
             margin-bottom: 120px; 
@@ -126,7 +200,7 @@
         .toggle-switch:checked::after { transform: translateX(18px); }
         body.eco-mode .bg-orbs, body.eco-mode #snow-canvas, body.eco-mode #cursor-glow, body.eco-mode .bg-image, body.eco-mode .trail-dot { display: none !important; }
         body.eco-mode * { backdrop-filter: none !important; box-shadow: none !important; text-shadow: none !important; transition: none !important; }
-        body.eco-mode .card, body.eco-mode #music-player, body.eco-mode .welcome-sub-box, body.eco-mode #settings-menu, body.eco-mode .bio-text, body.eco-mode .progress-box, body.eco-mode .comm-form { background: #111 !important; border: 1px solid #333 !important; box-shadow: none !important; backdrop-filter: none !important; }
+        body.eco-mode .card, body.eco-mode #music-player, body.eco-mode .welcome-sub-box, body.eco-mode #settings-menu, body.eco-mode .bio-text, body.eco-mode .progress-box, body.eco-mode .comm-form, body.eco-mode .about-box { background: #111 !important; border: 1px solid #333 !important; box-shadow: none !important; backdrop-filter: none !important; }
         .bg-orbs { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
         .orb { position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.15; background: var(--twitch-purple); animation: float 20s infinite ease-in-out; }
         .orb-1 { width: 400px; height: 400px; top: -100px; left: -100px; animation-duration: 25s; }
@@ -144,13 +218,13 @@
         #cursor-dot { width: 6px; height: 6px; background: white; border-radius: 50%; box-shadow: 0 0 15px var(--twitch-purple); transform: translate(-50%, -50%); }
         @media (hover: none) and (pointer: coarse) { #cursor-glow, #cursor-dot, .trail-dot { display: none !important; } * { cursor: auto !important; } }
         
-        main { width: 100%; padding: 40px 20px 120px; text-align: center; z-index: 10; perspective: 1200px; box-sizing: border-box; }
+        main { width: 100%; padding: 40px 20px 0; text-align: center; z-index: 10; perspective: 1200px; box-sizing: border-box; }
         
         .avatar-container { width: 110px; height: 110px; margin: 0 auto 15px; border-radius: 50%; border: 2px solid var(--twitch-purple); padding: 5px; transition: 0.3s; position: relative; }
         .avatar-img { width: 100%; height: 100%; border-radius: 50%; background: url('ava.jpg') center/cover; }
         .bio-text { background: var(--glass); border: 1px solid var(--glass-border); padding: 15px 20px; border-radius: 16px; margin: 10px 0 25px; color: rgba(255, 255, 255, 0.85); font-size: 15px; line-height: 1.5; text-align: center; backdrop-filter: blur(10px); box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2); }
         
-        .links { display: flex; flex-direction: column; gap: 12px; margin-top: 0; width: 100%; position: relative; }
+        .links { display: flex; flex-direction: column; gap: 12px; margin-top: 0; width: 100%; position: relative; margin-bottom: 120px; }
         .link-container { position: relative; width: 100%; z-index: 1; }
         .bg-image { position: absolute; z-index: -1; pointer-events: none; transition: 0.3s; }
         .steam-container .bg-image { height: 160px; top: -65px; right: -70px; transform: rotate(10deg); }
@@ -217,6 +291,7 @@
         <nav class="top-nav">
             <button class="nav-btn active" onclick="switchView('hub', this)">Hub</button>
             <button class="nav-btn" onclick="switchView('community', this)">Сообщество</button>
+            <button class="nav-btn" onclick="switchView('about', this)">Обо мне</button>
         </nav>
 
         <main id="hub-view" class="view-section active-view">
@@ -229,6 +304,11 @@
             
             <div class="links">
                 <a href="https://t.me/DeD_u1ya" target="_blank" class="card"><img src="tg.png"> Telegram</a>
+                
+                <a href="https://m.twitch.tv/ded_u1ya/home" target="_blank" class="card">
+                    <svg fill="#9146ff" viewBox="0 0 24 24"><path d="M11.571 4.714h1.715v5.143H11.57zm4.715 0H18v5.143h-1.714zM6 0L1.714 4.286v15.428h5.143V24l4.286-4.286h3.428L22.286 12V0zm14.571 11.143l-3.428 3.428h-3.429l-3 3v-3H6.857V1.714h13.714Z"/></svg> 
+                    Twitch
+                </a>
                 
                 <div class="link-container steam-container">
                     <img src="ded1.png" class="bg-image" alt="">
@@ -270,8 +350,57 @@
                 <button class="c-btn" onclick="sendComment()">Отправить</button>
             </div>
 
-            <!-- ЗДЕСЬ ИСПРАВЛЕН ОТСТУП ДЛЯ ТЕЛЕФОНА -->
             <div id="comm-list" class="comm-form comm-list"><div class="status-msg">Загрузка комментариев...</div></div>
+        </section>
+
+        <section id="about-view" class="view-section">
+            <div class="about-grid">
+                <div class="about-box">
+                    <div class="about-title">
+                        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+                        Обо мне
+                    </div>
+                    <div class="about-text">
+                        Мне 19 лет. Начал стримить недавно и хочу хоть чего то добиться.<br><br>
+                        Вы наверное замечали меня мельком на чужих стримах, но это не важно. Я прошу вас подписаться на меня здесь и в телеграме, мне больше ничего и не надо.
+                    </div>
+                </div>
+
+                <div class="about-box">
+                    <div class="about-title">
+                        <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                        Топ донатеры
+                    </div>
+                    <div class="donator-list">
+                        <div class="donator-item">
+                            <span class="donator-name">Fgarto</span>
+                            <span class="donator-amount">3 620 РУБ.</span>
+                        </div>
+                        <div class="donator-item">
+                            <span class="donator-name">Аноним</span>
+                            <span class="donator-amount">500 РУБ.</span>
+                        </div>
+                        <div class="donator-item">
+                            <span class="donator-name">Николай</span>
+                            <span class="donator-amount">100 РУБ.</span>
+                        </div>
+                        <div class="donator-item">
+                            <span class="donator-name">Makhovick</span>
+                            <span class="donator-amount">180 РУБ.</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="about-box full-width">
+                    <div class="about-title" style="justify-content: center;">
+                        <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+                        Сотрудничество и реклама
+                    </div>
+                    <div class="about-text" style="text-align: center;">
+                        <a href="mailto:ded.u1ya.cooperation@gmail.com" class="coop-link">ded.u1ya.cooperation@gmail.com</a>
+                    </div>
+                </div>
+            </div>
         </section>
         
         <div id="secret-lock">
@@ -308,7 +437,6 @@
         </div>
     </div>
 
-    <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 
