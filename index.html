@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>DeD_u1ya | Hub</title>
+    <title>DeD_u1ya | Технические работы</title>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;700;900&family=Press+Start+2P&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -12,491 +12,374 @@
             --white: #ffffff;
             --glass: rgba(255, 255, 255, 0.08);
             --glass-border: rgba(255, 255, 255, 0.15);
-            --success: #00ff88;
-            --error: #ff4444;
         }
-        * { cursor: none !important; -webkit-tap-highlight-color: transparent; outline: none; box-sizing: border-box; }
+        
+        * { 
+            cursor: none !important; 
+            -webkit-tap-highlight-color: transparent; 
+            outline: none; 
+            box-sizing: border-box; 
+            margin: 0;
+            padding: 0;
+        }
+        
         body {
-            margin: 0; font-family: 'Outfit', sans-serif;
-            background-color: var(--bg-dark); color: var(--white);
-            display: flex; flex-direction: column; align-items: center;
-            min-height: 100vh; overflow-x: hidden;
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--white);
+            min-height: 100vh;
+            overflow: hidden;
             background: radial-gradient(circle at 50% 0%, #1f1635 0%, var(--bg-dark) 100%);
             position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
-        .top-nav { display: flex; gap: 10px; margin-top: 20px; z-index: 20; background: rgba(0,0,0,0.3); padding: 5px; border-radius: 15px; backdrop-filter: blur(10px); border: 1px solid var(--glass-border); flex-wrap: wrap; justify-content: center; }
-        .nav-btn { background: transparent; border: none; color: rgba(255,255,255,0.6); padding: 10px 15px; border-radius: 10px; font-weight: 900; font-size: 13px; transition: 0.3s; text-transform: uppercase; }
-        .nav-btn.active { background: var(--twitch-purple); color: white; box-shadow: 0 0 15px rgba(145, 70, 255, 0.4); }
-        .nav-btn:hover:not(.active) { color: white; background: rgba(255,255,255,0.1); }
-        .view-section { display: none; width: 100%; max-width: 420px; animation: fadeIn 0.5s ease; margin-bottom: 100px;}
-        .view-section.active-view { display: block; }
-        #about-view { max-width: 900px; width: 95%; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 20px; }
-        @media (max-width: 768px) { .about-grid { grid-template-columns: 1fr; } .about-box { padding: 20px; } }
-        .about-box { background: rgba(255, 255, 255, 0.03); border: 1px solid var(--glass-border); border-radius: 20px; padding: 25px; text-align: left; backdrop-filter: blur(10px); box-shadow: 0 4px 20px rgba(0,0,0,0.1); position: relative; overflow: hidden; height: 100%; display: flex; flex-direction: column; }
-        .about-box.full-width { grid-column: 1 / -1; max-width: 600px; margin: 0 auto; width: 100%; }
-        @media (max-width: 768px) { .about-box.full-width { max-width: 100%; } }
-        .about-box::before { content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%; background: var(--twitch-purple); box-shadow: 0 0 10px var(--twitch-purple); }
-        .about-title { color: var(--twitch-purple); font-weight: 900; text-transform: uppercase; margin-bottom: 15px; font-size: 16px; letter-spacing: 1px; text-shadow: 0 0 10px rgba(145, 70, 255, 0.4); display: flex; align-items: center; gap: 10px; }
-        .about-title svg { width: 18px; height: 18px; fill: var(--twitch-purple); }
-        .about-text { font-size: 14px; line-height: 1.6; color: rgba(255,255,255,0.85); font-weight: 400; }
-        .donator-list { display: flex; flex-direction: column; gap: 8px; flex-grow: 1; }
-        .donator-item { display: flex; justify-content: space-between; align-items: center; padding: 10px; background: rgba(0,0,0,0.2); border-radius: 10px; border: 1px solid transparent; transition: 0.3s; }
-        .donator-item:hover { border-color: rgba(255,255,255,0.1); background: rgba(255,255,255,0.05); }
-        .donator-name { font-weight: 700; font-size: 14px; color: white; display: flex; align-items: center; gap: 8px;}
-        .donator-amount { color: white; font-weight: 900; font-size: 14px; text-shadow: 0 0 10px var(--twitch-purple), 0 0 20px var(--twitch-purple); font-family: monospace; }
-        .coop-link { color: white; text-decoration: none; font-weight: 700; padding-bottom: 2px; border-bottom: 1px dashed var(--twitch-purple); transition: 0.3s; font-size: 14px; word-break: break-all; }
-        .coop-link:hover { color: var(--twitch-purple); border-bottom-style: solid; text-shadow: 0 0 10px var(--twitch-purple); }
-        .progress-box { margin: 30px 20px; padding: 25px; background: linear-gradient(145deg, rgba(255,255,255,0.05) 0%, rgba(20,20,20,0.8) 100%); border: 1px solid var(--glass-border); border-radius: 20px; position: relative; overflow: hidden; }
-        .progress-title { font-size: 18px; font-weight: 900; text-transform: uppercase; margin-bottom: 20px; letter-spacing: 2px; text-align: center; text-shadow: 0 0 15px var(--twitch-purple); }
-        .progress-track { height: 16px; background: rgba(0,0,0,0.5); border-radius: 10px; position: relative; overflow: hidden; box-shadow: inset 0 0 10px #000; }
-        .progress-fill { height: 100%; width: 0%; background: linear-gradient(90deg, #6441a5, var(--twitch-purple), #d9b3ff); border-radius: 10px; position: relative; box-shadow: 0 0 20px var(--twitch-purple); transition: width 1.5s cubic-bezier(0.22, 1, 0.36, 1); }
-        .progress-fill::after { content: ''; position: absolute; top: 0; left: 0; bottom: 0; right: 0; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent); transform: skewX(-20deg) translateX(-150%); animation: shine 2s infinite; }
-        @keyframes shine { 100% { transform: skewX(-20deg) translateX(250%); } }
-        .progress-stats { display: flex; justify-content: space-between; margin-top: 10px; font-size: 12px; font-weight: 700; color: rgba(255,255,255,0.7); }
-        .current-stat { font-size: 24px; color: white; text-shadow: 0 0 10px var(--twitch-purple); }
-        .progress-sub { font-size: 13px; font-weight: 900; text-transform: uppercase; color: white; text-shadow: 0 0 15px var(--twitch-purple); text-align: left; margin-top: 2px; letter-spacing: 1px; }
-        .comm-form { margin: 0 20px 20px; background: var(--glass); padding: 20px; border-radius: 20px; border: 1px solid var(--glass-border); }
-        .inp-group { margin-bottom: 12px; position: relative; }
-        .c-input { width: 100%; background: rgba(0,0,0,0.3); border: 1px solid var(--glass-border); padding: 14px; border-radius: 12px; color: white; font-family: 'Outfit', sans-serif; transition: 0.3s; }
-        .c-input:focus { border-color: var(--twitch-purple); box-shadow: 0 0 15px rgba(145, 70, 255, 0.2); }
-        .c-btn { width: 100%; background: var(--twitch-purple); border: none; padding: 14px; border-radius: 12px; color: white; font-weight: 900; text-transform: uppercase; transition: 0.3s; margin-top: 5px; }
-        .c-btn:hover { box-shadow: 0 0 20px var(--twitch-purple); transform: translateY(-2px); }
-        .comm-list { margin-top: 0; margin-bottom: 120px; display: flex; flex-direction: column; gap: 10px; }
-        .comm-item { background: rgba(255,255,255,0.03); padding: 15px; border-radius: 12px; border-left: 3px solid var(--twitch-purple); text-align: left; }
-        .comm-header { display: flex; justify-content: space-between; font-size: 12px; opacity: 0.6; margin-bottom: 5px; }
-        .comm-name { font-weight: 900; color: var(--twitch-purple); font-size: 14px; }
-        .comm-text { font-size: 14px; line-height: 1.4; word-wrap: break-word; }
-        .status-msg { font-size: 12px; opacity: 0.5; font-style: italic; }
-        .trail-dot { position: fixed; width: 8px; height: 8px; background: var(--twitch-purple); border-radius: 50%; pointer-events: none; z-index: 999998; opacity: 0.8; transform: translate(-50%, -50%); box-shadow: 0 0 5px var(--twitch-purple); transition: opacity 0.3s; }
-        .toggle-switch { appearance: none; width: 40px; height: 22px; background: #333; border-radius: 20px; position: relative; cursor: pointer; transition: 0.3s cubic-bezier(0.4, 0.0, 0.2, 1); outline: none; }
-        .toggle-switch::after { content: ''; position: absolute; top: 3px; left: 3px; width: 16px; height: 16px; background: white; border-radius: 50%; transition: 0.3s; box-shadow: 0 2px 5px rgba(0,0,0,0.3); }
-        .toggle-switch:checked { background: var(--twitch-purple); box-shadow: 0 0 10px rgba(145, 70, 255, 0.4); }
-        .toggle-switch:checked::after { transform: translateX(18px); }
-        body.eco-mode .bg-orbs, body.eco-mode #snow-canvas, body.eco-mode #cursor-glow, body.eco-mode .bg-image, body.eco-mode .trail-dot { display: none !important; }
-        body.eco-mode * { backdrop-filter: none !important; box-shadow: none !important; text-shadow: none !important; transition: none !important; }
-        body.eco-mode .card, body.eco-mode #music-player, body.eco-mode .welcome-sub-box, body.eco-mode #settings-menu, body.eco-mode .bio-text, body.eco-mode .progress-box, body.eco-mode .comm-form, body.eco-mode .about-box, body.eco-mode #secret-chat { background: #111 !important; border: 1px solid #333 !important; box-shadow: none !important; backdrop-filter: none !important; }
-        .bg-orbs { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
-        .orb { position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.15; background: var(--twitch-purple); animation: float 20s infinite ease-in-out; }
-        .orb-1 { width: 400px; height: 400px; top: -100px; left: -100px; animation-duration: 25s; }
-        .orb-2 { width: 300px; height: 300px; bottom: -50px; right: -50px; background: #6441a5; animation-duration: 18s; animation-delay: -5s; }
-        .orb-3 { width: 250px; height: 250px; top: 40%; left: 60%; background: #9146ff; animation-duration: 30s; animation-delay: -10s; }
-        @keyframes float { 0%, 100% { transform: translate(0, 0) scale(1); } 33% { transform: translate(30px, 50px) scale(1.1); } 66% { transform: translate(-20px, 20px) scale(0.9); } }
-        #content-wrapper { width: 100%; display: flex; flex-direction: column; align-items: center; transition: 1s ease-in-out; filter: blur(20px); position: relative; z-index: 2; }
-        #welcome-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.95); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 50000; backdrop-filter: blur(25px); transition: 0.6s; padding: 20px; }
-        .welcome-title { font-size: clamp(32px, 8vw, 48px); font-weight: 900; margin-bottom: 10px; text-shadow: 0 0 20px var(--twitch-purple); text-align: center; }
-        .welcome-sub-box { background: var(--glass); border: 1px solid var(--glass-border); padding: 15px 25px; border-radius: 15px; margin-bottom: 30px; max-width: 300px; text-align: center; font-size: 14px; color: rgba(255,255,255,0.7); line-height: 1.4; }
-        .ok-btn { background: var(--twitch-purple); border: none; color: white; padding: 15px 40px; border-radius: 12px; font-weight: 900; font-size: 16px; transition: 0.3s; cursor: pointer; }
-        .ok-btn:hover { transform: scale(1.05); box-shadow: 0 0 20px var(--twitch-purple); }
-        #cursor-glow, #cursor-dot { position: fixed; pointer-events: none; z-index: 999999; left: 0; top: 0; display: block; }
-        #cursor-glow { width: 300px; height: 300px; background: radial-gradient(circle, rgba(145, 70, 255, 0.15) 0%, transparent 70%); transform: translate(-50%, -50%); }
-        #cursor-dot { width: 6px; height: 6px; background: white; border-radius: 50%; box-shadow: 0 0 15px var(--twitch-purple); transform: translate(-50%, -50%); }
-        @media (hover: none) and (pointer: coarse) { #cursor-glow, #cursor-dot, .trail-dot { display: none !important; } * { cursor: auto !important; } }
-        main { width: 100%; padding: 40px 20px 0; text-align: center; z-index: 10; perspective: 1200px; box-sizing: border-box; }
-        .avatar-container { width: 110px; height: 110px; margin: 0 auto 15px; border-radius: 50%; border: 2px solid var(--twitch-purple); padding: 5px; transition: 0.3s; position: relative; }
-        .avatar-img { width: 100%; height: 100%; border-radius: 50%; background: url('ava.jpg') center/cover; }
-        .bio-text { background: var(--glass); border: 1px solid var(--glass-border); padding: 15px 20px; border-radius: 16px; margin: 10px 0 25px; color: rgba(255, 255, 255, 0.85); font-size: 15px; line-height: 1.5; text-align: center; backdrop-filter: blur(10px); box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2); }
-        .links { display: flex; flex-direction: column; gap: 12px; margin-top: 0; width: 100%; position: relative; margin-bottom: 120px; }
-        .link-container { position: relative; width: 100%; z-index: 1; }
-        .bg-image { position: absolute; z-index: -1; pointer-events: none; transition: 0.3s; }
-        .steam-container .bg-image { height: 160px; top: -65px; right: -70px; transform: rotate(10deg); }
-        .youtube-container .bg-image { height: 150px; top: -40px; left: -85px; transform: rotate(-10deg); }
-        .link-container:hover .bg-image { transform: scale(1.05) rotate(0deg); }
-        .card { display: flex; align-items: center; padding: 16px 20px; background: var(--glass); border: 2px solid transparent; border-radius: 16px; text-decoration: none; color: white; font-weight: 700; transition: all 0.2s ease-out; transform-style: preserve-3d; opacity: 0; transform: translateY(20px); box-sizing: border-box; width: 100%; position: relative; z-index: 2; backdrop-filter: blur(10px); }
-        .card.show { opacity: 1; transform: translateY(0); }
-        @media (hover: hover) { .card:hover { border-color: var(--twitch-purple); background: rgba(145, 70, 255, 0.1); box-shadow: 0 0 15px rgba(145, 70, 255, 0.3); } }
-        .card img, .card svg { width: 22px; height: 22px; margin-right: 15px; flex-shrink: 0; }
-        #music-player { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: rgba(15, 15, 20, 0.85); backdrop-filter: blur(25px); border: 1px solid var(--glass-border); border-radius: 50px; padding: 8px 16px; display: flex; align-items: center; gap: 8px; z-index: 30000; box-shadow: 0 10px 30px rgba(0,0,0,0.5); width: fit-content; max-width: 95vw; will-change: left, top; }
-        .visualizer { display: flex; align-items: flex-end; gap: 3px; height: 14px; }
-        .vis-bar { width: 3px; background: var(--twitch-purple); border-radius: 1px; height: 4px; }
-        .playing .vis-bar { animation: wave 0.8s ease-in-out infinite; }
-        .playing .vis-bar:nth-child(2) { animation-delay: 0.1s; }
-        .playing .vis-bar:nth-child(3) { animation-delay: 0.2s; }
-        @keyframes wave { 0%, 100% { height: 4px; } 50% { height: 14px; } }
-        .p-btn { background: none; border: none; color: white; padding: 6px; display: flex; }
-        .p-btn svg { width: 18px; height: 18px; fill: currentColor; }
-        #playPauseBtn { background: var(--twitch-purple); border-radius: 50%; padding: 8px; }
-        #settings-menu { display: none; position: absolute; bottom: 65px; right: 0; background: rgba(20, 20, 25, 0.98); border: 1px solid var(--glass-border); padding: 15px; border-radius: 20px; width: 200px; cursor: default !important; }
-        .sett-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; font-size: 13px; font-weight: 700; }
-        .falling-phrase { position: fixed; pointer-events: none; font-weight: 900; color: white; text-shadow: 0 0 10px var(--twitch-purple); z-index: 10000; font-size: 1.1rem; white-space: nowrap; }
-        #snow-canvas { position: fixed; inset: 0; pointer-events: none; z-index: 1; }
-        input[type=range] { width: 40px; accent-color: var(--twitch-purple); }
-        #secret-lock { position: fixed; bottom: 20px; right: 20px; width: 40px; height: 40px; background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); border-radius: 12px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.5s cubic-bezier(0.2, 0.8, 0.2, 1); z-index: 40000; }
-        #secret-lock:hover { background: var(--twitch-purple); box-shadow: 0 0 20px var(--twitch-purple); transform: scale(1.1) rotate(15deg); }
-        #secret-lock svg { width: 20px; height: 20px; fill: white; transition: 0.5s; }
-        #secret-lock:hover svg { fill: white; transform: rotate(-15deg); }
-        @media (max-width: 768px) { #secret-lock { bottom: auto; right: auto; top: 20px; left: 20px; } }
-        #riddle-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 50000; display: none; align-items: center; justify-content: center; backdrop-filter: blur(10px); }
-        .riddle-box { background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.1); padding: 40px; border-radius: 20px; text-align: center; max-width: 400px; width: 90%; box-shadow: 0 20px 50px rgba(0,0,0,0.5); backdrop-filter: blur(20px); transform: scale(0.9); transition: 0.3s; }
-        .riddle-text { font-size: 20px; font-weight: 700; margin-bottom: 20px; }
-        .liquid-input { width: 100%; padding: 15px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.2); background: rgba(255, 255, 255, 0.05); color: white; font-family: 'Outfit', sans-serif; font-size: 16px; text-align: center; margin-bottom: 20px; box-sizing: border-box; transition: 0.3s; }
-        .liquid-input:focus { background: rgba(255, 255, 255, 0.1); border-color: var(--twitch-purple); box-shadow: 0 0 15px rgba(145, 70, 255, 0.3); }
-        #secret-scene { position: fixed; inset: 0; background: black; z-index: 60000; display: none; flex-direction: column; align-items: center; justify-content: center; opacity: 0; transition: opacity 1s ease; }
-        .scene-content { display: flex; flex-direction: column; align-items: center; gap: 20px; transition: 1s cubic-bezier(0.4, 0, 0.2, 1); }
-        .ded-photo { width: 220px; height: 220px; border-radius: 20px; border: 3px solid var(--twitch-purple); box-shadow: 0 0 30px var(--twitch-purple); object-fit: cover; transition: 1.5s ease; }
-        .dialog-box { width: 320px; padding: 25px; background: rgba(20, 20, 20, 0.95); border: 2px solid var(--twitch-purple); border-radius: 15px; font-size: 14px; line-height: 1.5; color: #fff; min-height: 80px; text-align: center; font-family: 'Press Start 2P', cursive; }
-        .scene-choices { display: flex; gap: 10px; margin-top: 20px; flex-wrap: wrap; justify-content: center; transition: 0.5s; }
-        .choice-btn { background: transparent; border: 1px solid var(--twitch-purple); color: var(--twitch-purple); padding: 10px 20px; font-weight: 700; font-size: 16px; border-radius: 8px; transition: 0.3s; cursor: none; }
-        .choice-btn:hover { background: var(--twitch-purple); color: white; box-shadow: 0 0 15px var(--twitch-purple); }
-        #you-dead { position: fixed; inset: 0; display: none; align-items: center; justify-content: center; color: #ff0000; font-size: 60px; font-weight: 900; text-transform: uppercase; z-index: 100000; background: rgba(0,0,0,0.95); opacity: 0; transition: 0.5s; text-shadow: 0 0 30px #ff0000; }
-        #victory-pulse { position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0); width: 10px; height: 10px; background: var(--twitch-purple); border-radius: 50%; z-index: 59000; pointer-events: none; opacity: 0; transition: 2s ease-out; }
-        #secret-chat { display: none; position: fixed; bottom: 80px; right: 20px; width: 320px; height: 350px; background: rgba(15, 15, 20, 0.95); backdrop-filter: blur(15px); border: 2px solid var(--twitch-purple); border-radius: 20px; padding: 15px; z-index: 45000; box-shadow: 0 10px 40px rgba(0,0,0,0.6); flex-direction: column; }
-        #secret-chat.active { display: flex; }
-        .chat-title { font-size: 12px; opacity: 0.8; margin-bottom: 10px; font-weight: 900; color: var(--twitch-purple); text-align: center; text-transform: uppercase; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 5px; }
-        .chat-history { flex: 1; overflow-y: auto; margin-bottom: 10px; padding-right: 5px; display: flex; flex-direction: column; gap: 8px; }
-        .chat-bubble { max-width: 80%; padding: 8px 12px; border-radius: 12px; font-size: 13px; line-height: 1.4; word-wrap: break-word; }
-        .msg-user { align-self: flex-end; background: rgba(145, 70, 255, 0.2); border: 1px solid var(--twitch-purple); color: white; border-bottom-right-radius: 2px; }
-        .msg-admin { align-self: flex-start; background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.3); color: #ccc; border-bottom-left-radius: 2px; }
-        .chat-input-row { display: flex; gap: 8px; }
-        .chat-inp { flex: 1; background: rgba(0,0,0,0.3); border: 1px solid var(--glass-border); border-radius: 10px; padding: 10px; color: white; font-family: 'Outfit', sans-serif; font-size: 13px; outline: none; transition: 0.3s; }
-        .chat-inp:focus { border-color: var(--twitch-purple); }
-        .chat-send { background: var(--twitch-purple); border: none; border-radius: 10px; width: 40px; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.3s; }
-        .chat-send:hover { background: #7a3bd6; }
-        .chat-send svg { width: 16px; height: 16px; fill: white; }
-        .chat-status { font-size: 10px; color: var(--success); text-align: center; height: 12px; opacity: 0; transition: 0.3s; }
-        .chat-status.visible { opacity: 1; }
-        body.is-streaming .avatar-container { border-color: #ff0000; box-shadow: 0 0 30px #ff0000; animation: pulseRed 1.5s infinite; }
-        @keyframes pulseRed { 0% { box-shadow: 0 0 20px #ff0000; } 50% { box-shadow: 0 0 50px #ff0000; } 100% { box-shadow: 0 0 20px #ff0000; } }
-        .live-badge { display: none; position: absolute; bottom: -5px; left: 50%; transform: translateX(-50%); background: #ff0000; color: white; padding: 2px 8px; border-radius: 5px; font-size: 10px; font-weight: 900; z-index: 5; box-shadow: 0 0 10px #ff0000; }
-        body.is-streaming .live-badge { display: block; }
-        .stream-alert-text { display: none; color: #ff0000; font-weight: 900; font-size: 14px; margin: 10px 0 0; text-shadow: 0 0 10px rgba(255,0,0,0.5); text-transform: uppercase; }
-        body.is-streaming .stream-alert-text { display: block; animation: blink 2s infinite; }
-        @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.7; } }
+
+        .bg-orbs {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+        
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.15;
+            background: var(--twitch-purple);
+            animation: float 20s infinite ease-in-out;
+        }
+        
+        .orb-1 {
+            width: 400px;
+            height: 400px;
+            top: -100px;
+            left: -100px;
+            animation-duration: 25s;
+        }
+        
+        .orb-2 {
+            width: 300px;
+            height: 300px;
+            bottom: -50px;
+            right: -50px;
+            background: #6441a5;
+            animation-duration: 18s;
+            animation-delay: -5s;
+        }
+        
+        .orb-3 {
+            width: 250px;
+            height: 250px;
+            top: 40%;
+            left: 60%;
+            background: #9146ff;
+            animation-duration: 30s;
+            animation-delay: -10s;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(30px, 50px) scale(1.1); }
+            66% { transform: translate(-20px, 20px) scale(0.9); }
+        }
+
+        .maintenance-container {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            padding: 40px 20px;
+            max-width: 600px;
+            width: 90%;
+        }
+
+        .maintenance-box {
+            background: var(--glass);
+            border: 2px solid var(--glass-border);
+            border-radius: 30px;
+            padding: 60px 40px;
+            backdrop-filter: blur(20px);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            position: relative;
+            overflow: hidden;
+            animation: fadeIn 1s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .tools-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 30px;
+            animation: rotate 3s ease-in-out infinite;
+        }
+
+        .tools-icon svg {
+            width: 100%;
+            height: 100%;
+            fill: var(--twitch-purple);
+            filter: drop-shadow(0 0 20px var(--twitch-purple));
+        }
+
+        @keyframes rotate {
+            0%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(-15deg); }
+            75% { transform: rotate(15deg); }
+        }
+
+        .maintenance-title {
+            font-size: clamp(28px, 6vw, 42px);
+            font-weight: 900;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            background: linear-gradient(135deg, #ffffff, var(--twitch-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: glow 2s ease-in-out infinite;
+        }
+
+        @keyframes glow {
+            0%, 100% { filter: brightness(1); }
+            50% { filter: brightness(1.3); }
+        }
+
+        .maintenance-text {
+            font-size: 16px;
+            line-height: 1.6;
+            color: rgba(255, 255, 255, 0.85);
+            margin-bottom: 30px;
+            font-weight: 400;
+        }
+
+        .progress-container {
+            width: 100%;
+            height: 6px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #6441a5, var(--twitch-purple), #d9b3ff);
+            border-radius: 10px;
+            width: 0%;
+            animation: loading 3s ease-in-out infinite;
+            box-shadow: 0 0 15px var(--twitch-purple);
+        }
+
+        @keyframes loading {
+            0% { width: 0%; }
+            50% { width: 70%; }
+            100% { width: 100%; }
+        }
+
+        .dots {
+            display: inline-block;
+        }
+
+        .dots::after {
+            content: '...';
+            animation: dots 1.5s steps(3, end) infinite;
+        }
+
+        @keyframes dots {
+            0%, 20% { content: '.'; }
+            40% { content: '..'; }
+            60%, 100% { content: '...'; }
+        }
+
+        #cursor-glow, #cursor-dot {
+            position: fixed;
+            pointer-events: none;
+            z-index: 999999;
+        }
+
+        #cursor-glow {
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, rgba(145, 70, 255, 0.15) 0%, transparent 70%);
+            transform: translate(-50%, -50%);
+            transition: left 0.1s, top 0.1s;
+        }
+
+        #cursor-dot {
+            width: 6px;
+            height: 6px;
+            background: white;
+            border-radius: 50%;
+            box-shadow: 0 0 15px var(--twitch-purple);
+            transform: translate(-50%, -50%);
+            transition: left 0.05s, top 0.05s;
+        }
+
+        #snow-canvas {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        @media (hover: none) and (pointer: coarse) {
+            #cursor-glow, #cursor-dot, .trail-dot {
+                display: none !important;
+            }
+            * {
+                cursor: auto !important;
+            }
+        }
+
+        .trail-dot {
+            position: fixed;
+            width: 8px;
+            height: 8px;
+            background: var(--twitch-purple);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 999998;
+            opacity: 0.8;
+            transform: translate(-50%, -50%);
+            box-shadow: 0 0 5px var(--twitch-purple);
+        }
+
+        @media (max-width: 768px) {
+            .maintenance-box {
+                padding: 40px 25px;
+            }
+            
+            .maintenance-text {
+                font-size: 14px;
+            }
+        }
     </style>
 </head>
 <body>
-    <div class="bg-orbs"><div class="orb orb-1"></div><div class="orb orb-2"></div><div class="orb orb-3"></div></div>
+    <div class="bg-orbs">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+    </div>
+
     <canvas id="snow-canvas"></canvas>
-    <div id="cursor-glow"></div><div id="cursor-dot"></div>
-    <div id="victory-pulse"></div>
-    <div id="you-dead"><div class="death-text">ю дед(you dead)</div></div>
-    <div id="welcome-overlay">
-        <div class="welcome-title">Всем привет!</div>
-        <div class="welcome-sub-box">Здесь находятся все мои ссылки, спасибо что зашли</div>
-        <button class="ok-btn" id="startBtn">ВОЙТИ</button>
-    </div>
-    <div id="content-wrapper">
-        <nav class="top-nav">
-            <button class="nav-btn active" onclick="switchView('hub', this)">Hub</button>
-            <button class="nav-btn" onclick="switchView('community', this)">Сообщество</button>
-            <button class="nav-btn" onclick="switchView('about', this)">Обо мне</button>
-        </nav>
-        <main id="hub-view" class="view-section active-view">
-            <div class="avatar-container" id="avatar">
-                <div class="avatar-img"></div>
-                <div class="live-badge">LIVE</div>
+
+    <div id="cursor-glow"></div>
+    <div id="cursor-dot"></div>
+
+    <div class="maintenance-container">
+        <div class="maintenance-box">
+            <div class="tools-icon">
+                <svg viewBox="0 0 24 24">
+                    <path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.7C.4 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/>
+                </svg>
             </div>
-            <div class="stream-alert-text">DeD_u1ya ведет стрим заходи скорей только тебя не хватает!</div>
-            <h1>DeD_u1ya</h1>
-            <div class="bio-text">Приветствую тебя путник, подписываясь на мои соцсети не забудь стать моим другом. В будущем нас будет много!</div>
-            <div class="links">
-                <a href="https://t.me/DeD_u1ya" target="_blank" class="card"><img src="tg.png"> Telegram</a>
-                <a href="https://m.twitch.tv/ded_u1ya/home" target="_blank" class="card"><svg fill="#9146ff" viewBox="0 0 24 24"><path d="M11.571 4.714h1.715v5.143H11.57zm4.715 0H18v5.143h-1.714zM6 0L1.714 4.286v15.428h5.143V24l4.286-4.286h3.428L22.286 12V0zm14.571 11.143l-3.428 3.428h-3.429l-3 3v-3H6.857V1.714h13.714Z"/></svg> Twitch</a>
-                <div class="link-container steam-container"><img src="ded1.png" class="bg-image" alt=""><a href="https://steamcommunity.com/id/_D_I_C_H_/" target="_blank" class="card"><img src="Без названия (1).png"> Steam</a></div>
-                <a href="https://www.tiktok.com/@dedu1ya1" target="_blank" class="card"><svg fill="white" viewBox="0 0 24 24"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.17-2.81-.74-3.94-1.67-.49-.42-.94-.87-1.33-1.38v7.41c.01 2.23-.74 4.54-2.4 6.06-1.8 1.7-4.4 2.15-6.68 1.4-2.73-.85-4.6-3.7-4.2-6.53.28-2.4 2.1-4.52 4.48-5.11.83-.22 1.7-.26 2.54-.15v4.1c-.88-.25-1.85-.08-2.55.51-.77.62-1.08 1.66-.89 2.62.2 1.05 1.13 1.88 2.19 2.03.95.14 2-.15 2.59-.92.36-.45.56-1.02.55-1.6V.02z"/></svg> TikTok</a>
-                <a href="https://www.donationalerts.com/r/ded_u1ya" target="_blank" class="card"><svg fill="#ffa500" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg> DonationAlerts</a>
-                <div class="link-container youtube-container"><a href="https://www.youtube.com/@DeD_u1ya" target="_blank" class="card"><img src="yt.png"> YouTube</a></div>
-            </div>
-        </main>
-        <section id="community-view" class="view-section">
-            <div class="progress-box">
-                <div class="progress-title">Преодолено</div>
-                <div class="progress-track"><div class="progress-fill" id="p-bar"></div></div>
-                <div class="progress-stats"><span class="current-stat">128</span><span>/ 130 цель</span></div>
-                <div class="progress-sub">подписчиков</div>
-            </div>
-            <div class="comm-form">
-                <div class="inp-group"><input type="text" id="comm-name" class="c-input" placeholder="Твой ник"></div>
-                <div class="inp-group"><input type="email" id="comm-email" class="c-input" placeholder="Email (для верификации)"></div>
-                <div class="inp-group"><textarea id="comm-msg" class="c-input" placeholder="Напиши что-нибудь..." style="height: 80px; resize: vertical;"></textarea></div>
-                <button class="c-btn" onclick="sendComment()">Отправить</button>
-            </div>
-            <div id="comm-list" class="comm-form comm-list"><div class="status-msg">Загрузка комментариев...</div></div>
-        </section>
-        <section id="about-view" class="view-section">
-            <div class="about-grid">
-                <div class="about-box">
-                    <div class="about-title"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>Обо мне</div>
-                    <div class="about-text">Мне 19 лет. Начал стримить недавно и хочу хоть чего то добиться.<br><br>Вы наверное замечали меня мельком на чужих стримах, но это не важно. Я прошу вас подписаться на меня здесь и в телеграме, мне больше ничего и не надо.</div>
-                </div>
-                <div class="about-box">
-                    <div class="about-title"><svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>Топ донатеры</div>
-                    <div class="donator-list">
-                        <div class="donator-item"><span class="donator-name">Fgarto</span><span class="donator-amount">3 620 РУБ.</span></div>
-                        <div class="donator-item"><span class="donator-name">Аноним</span><span class="donator-amount">500 РУБ.</span></div>
-                        <div class="donator-item"><span class="donator-name">Николай</span><span class="donator-amount">100 РУБ.</span></div>
-                        <div class="donator-item"><span class="donator-name">Makhovick</span><span class="donator-amount">180 РУБ.</span></div>
-                    </div>
-                </div>
-                <div class="about-box full-width">
-                    <div class="about-title" style="justify-content: center;"><svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>Сотрудничество и реклама</div>
-                    <div class="about-text" style="text-align: center;"><a href="mailto:ded.u1ya.cooperation@gmail.com" class="coop-link">ded.u1ya.cooperation@gmail.com</a></div>
-                </div>
-            </div>
-        </section>
-        <div id="secret-lock"><svg viewBox="0 0 24 24"><path d="M12 17c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm6-9h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zM9 6c0-1.66 1.34-3 3-3s3 1.34 3 3v2H9V6z"/></svg></div>
-        <div id="secret-chat">
-            <div class="chat-title">Секретная связь с Fgarto или Ded_u1ya</div>
-            <div class="chat-history" id="chat-history"></div>
-            <div class="chat-status" id="chat-status">сообщение отправлено</div>
-            <div class="chat-input-row">
-                <input type="text" id="secret-msg-input" class="chat-inp" placeholder="Написать...">
-                <button class="chat-send" onclick="sendSecretMessage()"><svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg></button>
-            </div>
-        </div>
-        <div id="music-player">
-            <div class="visualizer" id="viz"><div class="vis-bar"></div><div class="vis-bar"></div><div class="vis-bar"></div></div>
-            <div style="font-size:11px; min-width:35px; color:var(--twitch-purple); font-weight:700" id="currentTime">0:00</div>
-            <button class="p-btn" id="prevBtn"><svg viewBox="0 0 24 24"><path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/></svg></button>
-            <button class="p-btn" id="playPauseBtn"><svg id="playPauseIcon" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></button>
-            <button class="p-btn" id="nextBtn"><svg viewBox="0 0 24 24"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/></svg></button>
-            <input type="range" id="volumeSlider" min="0" max="1" step="0.01" value="0.1">
-            <button class="p-btn" id="settBtn"><svg viewBox="0 0 24 24"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg></button>
-            <div id="settings-menu">
-                <div class="sett-row"><span>Eco Mode</span><input type="checkbox" id="ecoToggle" class="toggle-switch"></div>
-                <div class="sett-row"><span>Снег</span><input type="checkbox" id="nyToggle" checked class="toggle-switch"></div>
-                <div class="sett-row"><span>Shuffle</span><input type="checkbox" id="shuffleToggle" class="toggle-switch"></div>
+            
+            <h1 class="maintenance-title">Технические работы</h1>
+            
+            <p class="maintenance-text">
+                Сайт временно недоступен<span class="dots"></span><br>
+                Идут технические работы, просьба подождать
+            </p>
+            
+            <div class="progress-container">
+                <div class="progress-bar"></div>
             </div>
         </div>
     </div>
-    <audio id="bgMusic"></audio>
-    <div id="riddle-modal">
-        <div class="riddle-box">
-            <div class="riddle-text">Решите загадку и замок откроется<br><br>"Во что играет дед но называет парашей?"</div>
-            <input type="text" class="liquid-input" id="riddle-answer" placeholder="(на английском с пробелом)">
-        </div>
-    </div>
-    <div id="secret-scene">
-        <div class="scene-content" id="final-container">
-            <img src="DeD.png" class="ded-photo" id="ded-img">
-            <div class="dialog-box" id="dialogText"></div>
-            <div class="scene-choices" id="choicesBox"></div>
-        </div>
-    </div>
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+
     <script>
-        function switchView(viewId, btn) {
-            document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active-view'));
-            document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('active'));
-            document.getElementById(viewId + '-view').classList.add('active-view');
-            btn.classList.add('active');
-            if(viewId === 'community') setTimeout(() => document.getElementById('p-bar').style.width = '84.3%', 100);
+        const cGlow = document.getElementById('cursor-glow');
+        const cDot = document.getElementById('cursor-dot');
+        const trailDots = [];
+        const trailCount = 15;
+
+        for(let i = 0; i < trailCount; i++) {
+            const d = document.createElement('div');
+            d.className = 'trail-dot';
+            document.body.appendChild(d);
+            trailDots.push({el: d, x: 0, y: 0});
         }
-        const firebaseConfig = {
-            apiKey: "AIzaSyCKF_ipQCwh5ZXlKjE3-W3RBb9RCxq2nkg",
-            authDomain: "fgaarto.firebaseapp.com",
-            databaseURL: "https://fgaarto-default-rtdb.firebaseio.com",
-            projectId: "fgaarto",
-            storageBucket: "fgaarto.firebasestorage.app",
-            messagingSenderId: "668820445702",
-            appId: "1:668820445702:web:ef121c7b3f0c683a020187",
-            measurementId: "G-75ZEK1GWW5"
-        };
-        firebase.initializeApp(firebaseConfig);
-        const db = firebase.database();
-        db.ref('streamStatus').on('value', (snapshot) => {
-            const isStreaming = snapshot.val();
-            if (isStreaming) document.body.classList.add('is-streaming'); else document.body.classList.remove('is-streaming');
-        });
-        const chatHistory = document.getElementById('chat-history');
-        const chatStatus = document.getElementById('chat-status');
-        db.ref('secret_chat/messages').limitToLast(20).on('child_added', (snapshot) => {
-            const data = snapshot.val();
-            const msgDiv = document.createElement('div');
-            msgDiv.className = `chat-bubble ${data.sender === 'admin' ? 'msg-admin' : 'msg-user'}`;
-            msgDiv.innerText = data.text;
-            chatHistory.appendChild(msgDiv);
-            chatHistory.scrollTop = chatHistory.scrollHeight;
-        });
-        function sendSecretMessage() {
-            const inp = document.getElementById('secret-msg-input');
-            const msg = inp.value.trim();
-            if(!msg) return;
-            db.ref('secret_chat/messages').push({ text: msg, sender: 'user', timestamp: Date.now() });
-            inp.value = '';
-            chatStatus.classList.add('visible');
-            setTimeout(() => chatStatus.classList.remove('visible'), 2000);
-        }
-        function loadComments() {
-            const list = document.getElementById('comm-list');
-            db.ref('comments').on('value', (snapshot) => {
-                list.innerHTML = '';
-                const data = snapshot.val();
-                if (data) {
-                    list.style.display = 'flex';
-                    const commentsArray = Object.values(data).reverse();
-                    commentsArray.forEach(c => {
-                        const safeName = c.name ? c.name.replace(/</g, "&lt;") : "Аноним";
-                        const safeMsg = c.msg ? c.msg.replace(/</g, "&lt;") : "";
-                        list.innerHTML += `<div class="comm-item"><div class="comm-header"><span class="comm-name">${safeName}</span></div><div class="comm-text">${safeMsg}</div></div>`;
-                    });
-                } else { list.innerHTML = '<div class="status-msg">Пока нет комментариев. Будь первым!</div>'; }
+
+        document.addEventListener('mousemove', (e) => {
+            const x = e.clientX;
+            const y = e.clientY;
+            
+            cGlow.style.left = x + 'px';
+            cGlow.style.top = y + 'px';
+            cDot.style.left = x + 'px';
+            cDot.style.top = y + 'px';
+
+            trailDots.forEach((dot, index) => {
+                setTimeout(() => {
+                    dot.el.style.left = x + 'px';
+                    dot.el.style.top = y + 'px';
+                    dot.el.style.opacity = (1 - index / trailCount) * 0.7;
+                    dot.el.style.transform = `translate(-50%, -50%) scale(${1 - index / trailCount})`;
+                }, index * 30);
             });
-        }
-        function sendComment() {
-            const name = document.getElementById('comm-name').value.trim();
-            const email = document.getElementById('comm-email').value.trim();
-            const msg = document.getElementById('comm-msg').value.trim();
-            if(!name || !email || !msg) return alert('Заполни все поля!');
-            if (!email.includes('@') || !email.includes('.')) return alert('Неверная почта');
-            db.ref('comments').once('value').then((snapshot) => {
-                const data = snapshot.val();
-                let emailTaken = false;
-                if (data) {
-                    const commentsArray = Object.values(data);
-                    const existingUser = commentsArray.find(u => u.email === email);
-                    if (existingUser && existingUser.name !== name) { alert('Эта почта уже занята другим ником!'); emailTaken = true; }
-                }
-                if (!emailTaken) { db.ref('comments').push({ name: name, email: email, msg: msg, timestamp: Date.now() }).then(() => document.getElementById('comm-msg').value = '').catch((error) => alert('Ошибка: ' + error.message)); }
-            });
-        }
-        loadComments();
-        const audio = document.getElementById('bgMusic');
-        const tracks = ['1.mp3', '2.mp3', '3.mp3', '4.mp3', '5.mp3', '6.mp3', '7.mp3']; 
-        let curT = 0, shuffle = false, drag = false, ox, oy, cooldown = false;
-        const player = document.getElementById('music-player'), viz = document.getElementById('viz');
-        const icon = document.getElementById('playPauseIcon').querySelector('path');
-        const cGlow = document.getElementById('cursor-glow'), cDot = document.getElementById('cursor-dot');
-        const ecoToggle = document.getElementById('ecoToggle');
-        const trailDots = []; const trailCount = 20; 
-        for(let i=0; i<trailCount; i++) { const d = document.createElement('div'); d.className = 'trail-dot'; document.body.appendChild(d); trailDots.push({el: d}); }
-        audio.volume = 0.1; 
-        function loadT(i) { audio.src = tracks[i]; audio.load(); }
-        loadT(0);
-        ecoToggle.onchange = (e) => { if(e.target.checked) document.body.classList.add('eco-mode'); else document.body.classList.remove('eco-mode'); };
-        document.getElementById('playPauseBtn').onclick = () => { if(audio.paused) { audio.play(); viz.classList.add('playing'); icon.setAttribute('d', 'M6 19h4V5H6v14zm8-14v14h4V5h-4z'); } else { audio.pause(); viz.classList.remove('playing'); icon.setAttribute('d', 'M8 5v14l11-7z'); } };
-        document.getElementById('nextBtn').onclick = () => { curT = shuffle ? Math.floor(Math.random()*tracks.length) : (curT+1)%tracks.length; loadT(curT); audio.play(); viz.classList.add('playing'); icon.setAttribute('d', 'M6 19h4V5H6v14zm8-14v14h4V5h-4z'); };
-        document.getElementById('prevBtn').onclick = () => { curT = (curT-1+tracks.length)%tracks.length; loadT(curT); audio.play(); viz.classList.add('playing'); icon.setAttribute('d', 'M6 19h4V5H6v14zm8-14v14h4V5h-4z'); };
-        document.getElementById('volumeSlider').oninput = (e) => audio.volume = e.target.value;
-        document.getElementById('shuffleToggle').onchange = (e) => shuffle = e.target.checked;
-        audio.ontimeupdate = () => { const m = Math.floor(audio.currentTime / 60), s = Math.floor(audio.currentTime % 60); document.getElementById('currentTime').innerText = `${m}:${s<10?'0':''}${s}`; };
-        audio.onended = () => document.getElementById('nextBtn').click();
-        document.getElementById('settBtn').onclick = (e) => { e.stopPropagation(); const m = document.getElementById('settings-menu'); m.style.display = m.style.display === 'block' ? 'none' : 'block'; };
-        document.getElementById('settings-menu').onclick = (e) => e.stopPropagation();
-        window.onclick = () => document.getElementById('settings-menu').style.display = 'none';
-        document.querySelectorAll('.card').forEach(el => { el.addEventListener('mousemove', (e) => { if(!document.body.classList.contains('eco-mode') && window.matchMedia("(hover: hover)").matches) { const r = el.getBoundingClientRect(), x = e.clientX - r.left - r.width/2, y = e.clientY - r.top - r.height/2; el.style.transform = `perspective(1000px) translate(${x*0.1}px, ${y*0.1}px) rotateX(${-y*0.05}deg) rotateY(${x*0.05}deg) scale(1.02)`; } }); el.addEventListener('mouseleave', () => el.style.transform = ''); });
-        const phrases = ["Бля буду", "Ой напьюсь я", "Здарова плесень"];
-        document.getElementById('avatar').onclick = (e) => {
-            if(cooldown) return; cooldown = true;
-            const p = document.createElement('div'); p.className = 'falling-phrase'; p.innerText = phrases[Math.floor(Math.random()*phrases.length)]; document.body.appendChild(p);
-            let x = e.type === 'click' ? e.clientX : e.touches[0].clientX, y = e.type === 'click' ? e.clientY : e.touches[0].clientY;
-            let vx = (Math.random()-0.5)*10, vy = -8, g = 0.4;
-            function anim() { x += vx; vy += g; y += vy; p.style.left = x + 'px'; p.style.top = y + 'px'; p.style.opacity = parseFloat(p.style.opacity || 1) - 0.02; if(y < window.innerHeight && parseFloat(p.style.opacity) > 0) requestAnimationFrame(anim); else p.remove(); }
-            anim(); setTimeout(() => cooldown = false, 1500);
-        };
-        player.onmousedown = (e) => { if(e.target.closest('button') || e.target.closest('input') || e.target.closest('#settings-menu')) return; drag = true; const r = player.getBoundingClientRect(); ox = e.clientX - r.left; oy = e.clientY - r.top; player.style.transition = 'none'; };
-        window.onmousemove = (e) => {
-            cDot.style.left = cGlow.style.left = e.clientX + 'px'; cDot.style.top = cGlow.style.top = e.clientY + 'px';
-            trailDots.forEach((dot, index) => { setTimeout(() => { dot.el.style.left = e.clientX + 'px'; dot.el.style.top = e.clientY + 'px'; dot.el.style.opacity = (1 - index/trailCount) * 0.8; dot.el.style.transform = `translate(-50%, -50%) scale(${1 - index/trailCount})`; }, index * 35); });
-            if(drag) { player.style.left = (e.clientX - ox + player.offsetWidth / 2) + 'px'; player.style.top = (e.clientY - oy + player.offsetHeight / 2) + 'px'; player.style.bottom = 'auto'; player.style.transform = 'translateX(-50%)'; }
-        };
-        window.onmouseup = () => { drag = false; player.style.transition = '0.3s cubic-bezier(0.2, 0.8, 0.2, 1)'; };
-        const canvas = document.getElementById('snow-canvas'), ctx = canvas.getContext('2d'), nyT = document.getElementById('nyToggle');
-        let flakes = []; 
+        });
+
+        const canvas = document.getElementById('snow-canvas');
+        const ctx = canvas.getContext('2d');
+        let flakes = [];
+
         function initSnow() {
-            canvas.width = window.innerWidth; canvas.height = window.innerHeight;
-            if(flakes.length === 0) { for(let i=0; i<80; i++) { flakes.push({ x: Math.random() * canvas.width, y: Math.random() * canvas.height, r: Math.random() * 2 + 0.5, d: Math.random() * 1 + 0.5, a: Math.random() * Math.PI * 2, o: Math.random() * 0.5 + 0.3 }); } }
-        }
-        window.addEventListener('resize', () => { canvas.width = window.innerWidth; canvas.height = window.innerHeight; });
-        initSnow();
-        function drawSnow() { 
-            ctx.clearRect(0,0,canvas.width,canvas.height); 
-            if(nyT.checked && !document.body.classList.contains('eco-mode')) { 
-                flakes.forEach(p => { 
-                    ctx.fillStyle = `rgba(255,255,255, ${p.o})`; ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI*2); ctx.fill(); 
-                    p.y += p.d; p.x += Math.sin(p.a) * 0.5; p.a += 0.02; 
-                    if(p.y > canvas.height) { p.y = -5; p.x = Math.random() * canvas.width; }
-                    if(p.x > canvas.width) p.x = 0; if(p.x < 0) p.x = canvas.width;
-                }); 
-            } 
-            requestAnimationFrame(drawSnow); 
-        }
-        drawSnow();
-        const lock = document.getElementById('secret-lock');
-        const modal = document.getElementById('riddle-modal');
-        const input = document.getElementById('riddle-answer');
-        const scene = document.getElementById('secret-scene');
-        const wrapper = document.getElementById('content-wrapper');
-        const dialogText = document.getElementById('dialogText');
-        const choicesBox = document.getElementById('choicesBox');
-        const youDead = document.getElementById('you-dead');
-        const dedImg = document.getElementById('ded-img');
-        const victoryPulse = document.getElementById('victory-pulse');
-        const questions = [
-            { q: "Сколько мне лет?", a: ["-12", "75", "19"], c: 2 },
-            { q: "Существует ли 2 дед в чате твича", a: ["Да", "нет", "Что такое твич"], c: 0 },
-            { q: "Какие игры появлялись больше всего на стриме в последние время?", a: ["Dota 2", "Cs 2", "Standoff 9"], c: 0 },
-            { q: "Дед мастер в доте или нет", a: ["Да", "Нет", "Он нищита в доте"], c: 0 }
-        ];
-        let qIdx = 0;
-        lock.onclick = () => { modal.style.display = 'flex'; input.value = ""; setTimeout(() => document.querySelector('.riddle-box').style.transform = 'scale(1)', 10); };
-        modal.onclick = (e) => { if(e.target === modal) modal.style.display = 'none'; };
-        input.oninput = () => {
-            if(input.value.toLowerCase().trim() === 'dota 2') {
-                modal.style.display = 'none'; wrapper.style.opacity = '0';
-                setTimeout(() => { wrapper.style.display = 'none'; scene.style.display = 'flex'; setTimeout(() => scene.style.opacity = '1', 100); startIntro(); }, 1000);
-            }
-        };
-        function startIntro() {
-            typeWriter("А ты умен что будешь делать дальше?", () => {
-                choicesBox.innerHTML = '';
-                const b1 = document.createElement("button"); b1.className = "choice-btn"; b1.innerText = "Не еби мозги, я выйду от сюда"; b1.onclick = backToHub;
-                const b2 = document.createElement("button"); b2.className = "choice-btn"; b2.innerText = "Ну давай дальше пойду че лох что ли";
-                b2.onclick = () => { typeWriter("Хорошо игра началась", () => setTimeout(nextQuestion, 1000)); };
-                choicesBox.appendChild(b1); choicesBox.appendChild(b2); choicesBox.style.opacity = "1";
-            });
-        }
-        function nextQuestion() {
-            if (qIdx >= questions.length) { finishGame(); return; }
-            const curr = questions[qIdx];
-            typeWriter(curr.q, () => {
-                choicesBox.innerHTML = "";
-                curr.a.forEach((ans, i) => {
-                    const b = document.createElement("button"); b.className = "choice-btn"; b.innerText = ans;
-                    b.onclick = () => { if (i === curr.c) { qIdx++; nextQuestion(); } else { death(); } };
-                    choicesBox.appendChild(b);
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            
+            for(let i = 0; i < 80; i++) {
+                flakes.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    r: Math.random() * 2 + 0.5,
+                    d: Math.random() * 1 + 0.5,
+                    a: Math.random() * Math.PI * 2,
+                    o: Math.random() * 0.5 + 0.3
                 });
-                choicesBox.style.opacity = "1";
+            }
+        }
+
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+
+        initSnow();
+
+        function drawSnow() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            flakes.forEach(p => {
+                ctx.fillStyle = `rgba(255, 255, 255, ${p.o})`;
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+                ctx.fill();
+                
+                p.y += p.d;
+                p.x += Math.sin(p.a) * 0.5;
+                p.a += 0.02;
+                
+                if(p.y > canvas.height) {
+                    p.y = -5;
+                    p.x = Math.random() * canvas.width;
+                }
+                
+                if(p.x > canvas.width) p.x = 0;
+                if(p.x < 0) p.x = canvas.width;
             });
+            
+            requestAnimationFrame(drawSnow);
         }
-        function typeWriter(txt, cb) {
-            choicesBox.style.opacity = "0"; dialogText.innerHTML = ""; let i = 0;
-            const t = setInterval(() => { dialogText.innerHTML += txt.charAt(i); i++; if (i >= txt.length) { clearInterval(t); if (cb) cb(); } }, 40);
-        }
-        function death() {
-            youDead.style.display = "flex"; setTimeout(() => youDead.style.opacity = "1", 50);
-            setTimeout(() => { youDead.style.opacity = "0"; setTimeout(() => { youDead.style.display = "none"; backToHub(); }, 500); }, 2500);
-        }
-        function backToHub() {
-            scene.style.opacity = "0"; qIdx = 0;
-            setTimeout(() => { scene.style.display = "none"; wrapper.style.display = "flex"; setTimeout(() => wrapper.style.opacity = "1", 50); }, 800);
-        }
-        function finishGame() {
-            choicesBox.style.opacity = "0"; dialogText.style.opacity = "0";
-            victoryPulse.style.opacity = "0.5"; victoryPulse.style.transform = "translate(-50%, -50%) scale(300)";
-            dedImg.style.transform = "rotate(360deg) scale(1.2)";
-            setTimeout(() => { dedImg.style.opacity = "0"; }, 1000);
-            setTimeout(() => {
-                dedImg.style.opacity = "1"; dedImg.style.transform = "none";
-                victoryPulse.style.opacity = "0"; victoryPulse.style.transform = "translate(-50%, -50%) scale(0)";
-                dialogText.style.opacity = "1";
-                db.ref('admin_notifications').push({ text: "⚠️ КТО-ТО ПРОШЕЛ ЗАГАДКУ!", timestamp: Date.now() });
-                document.getElementById('secret-chat').classList.add('active');
-                backToHub();
-            }, 3000);
-        }
-        document.getElementById('startBtn').onclick = () => {
-            document.getElementById('welcome-overlay').style.opacity = '0';
-            setTimeout(() => {
-                document.getElementById('welcome-overlay').style.display = 'none';
-                document.getElementById('content-wrapper').style.filter = 'none';
-                document.querySelectorAll('.card').forEach((c, i) => { setTimeout(() => c.classList.add('show'), i * 120); });
-                audio.play(); viz.classList.add('playing'); icon.setAttribute('d', 'M6 19h4V5H6v14zm8-14v14h4V5h-4z');
-            }, 600);
-        };
+
+        drawSnow();
     </script>
 </body>
 </html>
-
