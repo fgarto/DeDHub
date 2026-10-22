@@ -1,0 +1,1315 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DeD_u1ya | Hub</title>
+<meta name="description" content="Все ссылки DeD_u1ya в одном месте: Telegram, Twitch, YouTube, TikTok, Steam и DonationAlerts.">
+<meta name="theme-color" content="#0B0B10">
+<meta property="og:type" content="website">
+<meta property="og:title" content="DeD_u1ya | Hub">
+<meta property="og:description" content="Все ссылки DeD_u1ya в одном месте: Telegram, Twitch, YouTube, TikTok, Steam и DonationAlerts.">
+<meta property="og:image" content="ava.jpg">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%230B0B10'/%3E%3Ctext x='32' y='43' font-family='Verdana,sans-serif' font-size='28' font-weight='bold' fill='%233B82F6' text-anchor='middle'%3EDU%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500;700&family=Russo+One&display=swap" rel="stylesheet">
+<style>
+    /* ================= tokens ================= */
+    :root {
+        --bg: #0B0B10;
+        --bg-raise: #101017;
+        --surface: #141419;
+        --surface-2: #1E1E26;
+        --ink: #F8FAFC;
+        --muted: #94A3B8;
+        --faint: #64748B;
+        --line: rgba(255, 255, 255, 0.09);
+        --line-strong: rgba(255, 255, 255, 0.17);
+        --accent: #3B82F6;
+        --accent-strong: #2563EB;
+        --accent-hi: #60A5FA;
+        --accent-soft: rgba(59, 130, 246, 0.14);
+        --accent-tint: rgba(59, 130, 246, 0.30);
+
+        --r-card: 20px;
+        --r-inner: 14px;
+        --r-pill: 999px;
+
+        --ease: cubic-bezier(0.32, 0.72, 0, 1);
+        --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+        --ease-bar: cubic-bezier(0.16, 1, 0.3, 1);
+
+        --z-nav: 10;
+        --z-content: 20;
+        --z-player: 30;
+        --z-overlay: 40;
+        --z-grain: 45;
+        --z-cursor: 50;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+    html { -webkit-text-size-adjust: 100%; }
+
+    body {
+        margin: 0;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        font-family: 'Exo 2', system-ui, sans-serif;
+        font-size: 16px;
+        line-height: 1.55;
+        color: var(--ink);
+        background-color: var(--bg);
+        overflow-x: hidden;
+        background:
+            radial-gradient(1100px 560px at 50% -10%, rgba(59, 130, 246, 0.13) 0%, transparent 62%),
+            radial-gradient(900px 500px at 100% 100%, rgba(37, 99, 235, 0.09) 0%, transparent 58%),
+            var(--bg);
+    }
+
+    *:focus { outline: none; }
+    *:focus-visible {
+        outline: 2px solid var(--accent);
+        outline-offset: 3px;
+        border-radius: 6px;
+    }
+
+    .sr-only {
+        position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+        overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+    }
+
+    /* ================= backdrop layers ================= */
+    body::before {
+        content: ''; position: fixed; inset: 0; z-index: var(--z-grain); pointer-events: none;
+        opacity: 0.035; mix-blend-mode: overlay;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    }
+
+    .bg-orbs { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+    .orb {
+        position: absolute; border-radius: 50%; filter: blur(100px); opacity: 0.10;
+        animation: float 30s infinite var(--ease); will-change: transform;
+    }
+    .orb-1 { width: 520px; height: 520px; top: -160px; left: -150px; background: var(--accent); }
+    .orb-2 { width: 400px; height: 400px; bottom: -140px; right: -110px; background: var(--accent-strong); animation-duration: 38s; animation-delay: -9s; }
+    .orb-3 { width: 320px; height: 320px; top: 42%; left: 58%; background: #1D4ED8; animation-duration: 44s; animation-delay: -16s; }
+    @keyframes float {
+        0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+        33% { transform: translate3d(44px, 62px, 0) scale(1.12); }
+        66% { transform: translate3d(-26px, 32px, 0) scale(0.92); }
+    }
+
+    #snow-canvas { position: fixed; inset: 0; pointer-events: none; z-index: 1; }
+
+    /* ================= nav ================= */
+    .top-nav {
+        position: sticky; top: 18px; z-index: var(--z-nav);
+        display: flex; gap: 4px; align-items: center;
+        width: fit-content; max-width: calc(100% - 24px);
+        margin: 18px auto 0; padding: 5px;
+        background: rgba(11, 11, 16, 0.72);
+        border: 1px solid var(--line);
+        border-radius: var(--r-pill);
+        backdrop-filter: blur(18px) saturate(140%);
+        -webkit-backdrop-filter: blur(18px) saturate(140%);
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06), 0 16px 40px -20px rgba(0, 0, 0, 0.9);
+    }
+    .nav-btn {
+        background: transparent; border: none; color: var(--muted);
+        padding: 10px 18px; border-radius: var(--r-pill);
+        font-family: 'Russo One', sans-serif; font-weight: 400;
+        font-size: 13px; letter-spacing: 0.02em;
+        transition: color 0.2s var(--ease), background-color 0.2s var(--ease);
+    }
+    .nav-btn:hover { color: var(--ink); }
+    .nav-btn[aria-current="page"] {
+        color: var(--ink);
+        background: var(--accent-soft);
+        box-shadow: inset 0 0 0 1px rgba(59, 130, 246, 0.34);
+    }
+    .nav-btn:active { transform: scale(0.97); }
+
+    /* ================= views ================= */
+    #content-wrapper {
+        width: 100%; display: flex; flex-direction: column; align-items: center;
+        position: relative; z-index: var(--z-content);
+        transition: filter 0.8s var(--ease), opacity 0.5s var(--ease);
+        filter: blur(18px);
+    }
+    .viewport {
+        position: relative;
+        width: 100%; max-width: 920px;
+        padding: 0 clamp(16px, 4vw, 28px) 150px;
+    }
+    .view-section { display: none; }
+    .view-section.active-view { display: block; animation: viewIn 0.28s var(--ease-out) both; }
+    .view-section.leaving {
+        display: block; position: absolute; top: 0;
+        left: clamp(16px, 4vw, 28px); right: clamp(16px, 4vw, 28px);
+        animation: viewOut 0.15s var(--ease) both; pointer-events: none;
+    }
+    @keyframes viewIn {
+        from { opacity: 0; transform: translateY(10px); filter: blur(8px); }
+        to { opacity: 1; transform: none; filter: blur(0); }
+    }
+    @keyframes viewOut {
+        from { opacity: 1; filter: blur(0); }
+        to { opacity: 0; filter: blur(8px); }
+    }
+
+    /* ================= bento ================= */
+    .bento {
+        display: grid;
+        grid-template-columns: repeat(12, 1fr);
+        grid-template-rows: 134px 134px 98px;
+        gap: 14px;
+        margin-top: 20px;
+    }
+    .cell {
+        position: relative; overflow: hidden;
+        display: flex; flex-direction: column;
+        border-radius: var(--r-card);
+        border: 1px solid var(--line);
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.055), rgba(255, 255, 255, 0.018));
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.07), 0 20px 44px -28px rgba(0, 0, 0, 0.9);
+        transition: transform 0.22s var(--ease), border-color 0.22s var(--ease), box-shadow 0.22s var(--ease);
+    }
+    .cell::before {
+        content: ''; position: absolute; inset: 0; pointer-events: none; border-radius: inherit;
+        background: radial-gradient(120% 80% at 10% -12%, rgba(255, 255, 255, 0.10), transparent 46%);
+    }
+    .cell > * { position: relative; z-index: 1; }
+
+    /* profile cell */
+    .c-profile { grid-column: 1 / 5; grid-row: 1 / 4; padding: 22px; justify-content: space-between; }
+    .profile-top { display: flex; align-items: center; gap: 16px; }
+    .avatar-shell { position: relative; width: 92px; height: 92px; flex-shrink: 0; }
+    .avatar-frame {
+        width: 100%; height: 100%; border-radius: 50%; padding: 3px;
+        background: linear-gradient(140deg, rgba(255, 255, 255, 0.35), rgba(255, 255, 255, 0.04));
+        box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.14), 0 16px 32px -14px rgba(0, 0, 0, 0.8);
+        transition: box-shadow 0.4s var(--ease), background 0.4s var(--ease);
+    }
+    .avatar-img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; display: block; }
+    .profile-name {
+        margin: 0; font-family: 'Russo One', sans-serif; font-weight: 400;
+        font-size: clamp(24px, 4vw, 30px); line-height: 1.05; letter-spacing: -0.01em;
+    }
+    .profile-role {
+        margin: 6px 0 0; font-size: 12px; letter-spacing: 0.14em;
+        text-transform: uppercase; color: var(--muted);
+    }
+    .profile-bio {
+        margin: 18px 0 0; font-size: 13.5px; line-height: 1.62; color: var(--muted);
+        max-width: 38ch;
+    }
+    .profile-foot { margin-top: auto; padding-top: 18px; }
+    .pf-row { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; }
+    .pf-label { font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--faint); }
+    .pf-value { font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 15px; }
+    .pf-value small { font-weight: 400; color: var(--muted); }
+    .pf-track {
+        height: 4px; margin-top: 8px; border-radius: 2px;
+        background: rgba(255, 255, 255, 0.08); overflow: hidden;
+    }
+    .pf-track i {
+        display: block; height: 100%; width: 100%; border-radius: 2px;
+        background: linear-gradient(90deg, var(--accent-strong), var(--accent-hi));
+        transform: scaleX(0); transform-origin: left;
+        transition: transform 0.9s var(--ease-bar);
+    }
+    .pf-track.on i { transform: scaleX(var(--p, 0.64)); }
+
+    /* link cells */
+    .link { padding: 20px; text-decoration: none; color: inherit; justify-content: space-between; }
+    .link-icon { width: 30px; height: 30px; flex-shrink: 0; }
+    .link-icon svg { width: 100%; height: 100%; fill: currentColor; display: block; }
+    .link-text { display: flex; flex-direction: column; gap: 3px; }
+    .link-label { font-family: 'Russo One', sans-serif; font-weight: 400; font-size: 17px; letter-spacing: 0.01em; }
+    .link-sub { font-size: 12px; color: var(--muted); }
+    .link-ghost {
+        position: absolute; right: -16px; bottom: -20px; width: 104px; height: 104px;
+        opacity: 0.09; pointer-events: none; color: inherit;
+        transition: transform 0.5s var(--ease), opacity 0.5s var(--ease);
+    }
+    .link-ghost svg { width: 100%; height: 100%; fill: currentColor; display: block; }
+    .go {
+        position: absolute; top: 16px; right: 16px; width: 30px; height: 30px;
+        border-radius: 50%; display: grid; place-items: center;
+        background: rgba(255, 255, 255, 0.06); border: 1px solid var(--line);
+        transition: transform 0.22s var(--ease), background-color 0.22s var(--ease), border-color 0.22s var(--ease);
+    }
+    .go svg { width: 14px; height: 14px; stroke: var(--muted); fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    @media (hover: hover) {
+        .link:hover {
+            border-color: var(--accent-tint);
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.09), 0 26px 56px -26px rgba(0, 0, 0, 0.95);
+            transform: translateY(-3px);
+        }
+        .link:hover .go { transform: translate(2px, -2px); background: var(--accent-strong); border-color: transparent; }
+        .link:hover .go svg { stroke: #fff; }
+        .link:hover .link-ghost { transform: scale(1.1) rotate(-5deg); opacity: 0.17; }
+    }
+    .link:active { transform: translateY(-1px) scale(0.99); }
+
+    .c-tg { grid-column: 5 / 9; grid-row: 1; color: #2AABEE; }
+    .c-twitch { grid-column: 9 / 13; grid-row: 1; color: #A78BFA; }
+    .c-yt { grid-column: 5 / 9; grid-row: 2; color: #FF3B30; }
+    .c-tt { grid-column: 9 / 11; grid-row: 2; color: #F2F2F7; }
+    .c-steam { grid-column: 11 / 13; grid-row: 2; color: #66C0F4; }
+    .c-steam .steam-art {
+        position: absolute; right: -12px; bottom: -12px; width: 76px; height: 76px;
+        object-fit: cover; border-radius: 16px; opacity: 0.16; pointer-events: none;
+        filter: saturate(0.7) contrast(1.05);
+        transition: transform 0.6s var(--ease), opacity 0.6s var(--ease);
+    }
+    @media (hover: hover) {
+        .c-steam:hover .steam-art { transform: scale(1.08) rotate(-4deg); opacity: 0.26; }
+    }
+    .link-label { color: var(--ink); }
+
+    /* donation CTA */
+    .c-don {
+        grid-column: 5 / 13; grid-row: 3; flex-direction: row; align-items: center; gap: 16px;
+        padding: 0 22px;
+        background: linear-gradient(115deg, #1D4ED8, #2563EB 55%, #3B82F6);
+        border-color: rgba(255, 255, 255, 0.14);
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.22), 0 24px 50px -26px rgba(37, 99, 235, 0.85);
+    }
+    .c-don::before { background: radial-gradient(80% 150% at 100% 50%, rgba(255, 255, 255, 0.20), transparent 62%); }
+    .don-icon { width: 30px; height: 30px; flex-shrink: 0; color: #F0B460; }
+    .don-icon svg { width: 100%; height: 100%; fill: currentColor; display: block; }
+    .don-text { display: flex; flex-direction: column; gap: 2px; }
+    .don-title { font-family: 'Russo One', sans-serif; font-weight: 400; font-size: 16px; color: #fff; }
+    .don-sub { font-size: 12px; color: rgba(255, 255, 255, 0.75); }
+    .c-don .go { background: rgba(255, 255, 255, 0.16); border-color: rgba(255, 255, 255, 0.22); }
+    .c-don .go svg { stroke: #fff; }
+    @media (hover: hover) {
+        .c-don:hover { border-color: rgba(255, 255, 255, 0.3); transform: translateY(-3px); }
+        .c-don:hover .go { background: #fff; }
+        .c-don:hover .go svg { stroke: var(--accent-strong); }
+    }
+    .c-don:active { transform: translateY(-1px) scale(0.995); }
+
+    /* reveal */
+    body.booting .cell { opacity: 0; transform: translateY(16px) scale(0.96); }
+    body.booting .nav-btn { opacity: 0; transform: scale(0.4); }
+    .bento.ready .cell { animation: cellIn 0.42s var(--ease-out) backwards; animation-delay: calc(var(--i, 0) * 55ms); }
+    .top-nav.ready .nav-btn { animation: growIn 0.45s var(--ease-out) backwards; animation-delay: calc(var(--i, 0) * 70ms); }
+    @keyframes cellIn {
+        from { opacity: 0; transform: translateY(16px) scale(0.96); }
+        to { opacity: 1; transform: none; }
+    }
+
+    /* ================= panels (community / about) ================= */
+    .panel {
+        position: relative; overflow: hidden;
+        padding: 24px;
+        border-radius: var(--r-card);
+        border: 1px solid var(--line);
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.018));
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.07), 0 20px 44px -28px rgba(0, 0, 0, 0.9);
+    }
+    .panel::before {
+        content: ''; position: absolute; inset: 0; pointer-events: none; border-radius: inherit;
+        background: radial-gradient(120% 80% at 10% -12%, rgba(255, 255, 255, 0.09), transparent 46%);
+    }
+    .panel > * { position: relative; z-index: 1; }
+    .panel-head {
+        display: flex; align-items: baseline; justify-content: space-between; gap: 12px;
+        padding-bottom: 14px; border-bottom: 1px solid var(--line);
+    }
+    .panel-title {
+        margin: 0; font-family: 'Russo One', sans-serif; font-weight: 400;
+        font-size: 15px; letter-spacing: 0.01em;
+    }
+    .panel-note { font-size: 12px; color: var(--muted); }
+
+    .comm-grid {
+        display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 20px;
+    }
+    .stat { display: flex; align-items: baseline; gap: 8px; margin-top: 18px; }
+    .stat-num {
+        font-family: 'JetBrains Mono', monospace; font-weight: 700;
+        font-size: clamp(38px, 7vw, 52px); line-height: 1; letter-spacing: -0.03em;
+        font-variant-numeric: tabular-nums;
+    }
+    .stat-goal { font-family: 'JetBrains Mono', monospace; font-size: 16px; color: var(--muted); }
+    .progress-track {
+        position: relative; height: 10px; margin: 20px 0 12px;
+        border-radius: 5px; background: rgba(255, 255, 255, 0.07); overflow: hidden;
+    }
+    .progress-fill {
+        position: absolute; inset: 0; border-radius: 5px;
+        background: linear-gradient(90deg, var(--accent-strong), var(--accent) 60%, var(--accent-hi));
+        transform: scaleX(0); transform-origin: left;
+        transition: transform 0.9s var(--ease-bar);
+    }
+    .progress-track.on .progress-fill { transform: scaleX(var(--p, 0.64)); }
+    .stat-foot { margin: 0; font-size: 13px; color: var(--muted); }
+    .stat-foot b { color: var(--ink); font-family: 'JetBrains Mono', monospace; font-weight: 500; }
+
+    .donator-list { list-style: none; margin: 0; padding: 0; }
+    .donator-item {
+        display: flex; align-items: center; gap: 14px;
+        padding: 12px 0; border-bottom: 1px solid var(--line);
+    }
+    .donator-item:last-child { border-bottom: none; padding-bottom: 0; }
+    .rank { width: 20px; font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--faint); }
+    .donator-item:first-child .rank { color: var(--accent-hi); }
+    .donator-name { flex: 1; font-size: 14px; font-weight: 500; }
+    .donator-amount {
+        font-family: 'JetBrains Mono', monospace; font-weight: 500; font-size: 13px;
+        font-variant-numeric: tabular-nums;
+    }
+    .donator-item:first-child .donator-amount { color: var(--accent-hi); }
+
+    /* about */
+    .about-grid {
+        display: grid; grid-template-columns: 1.4fr 0.6fr; gap: 14px; margin-top: 20px;
+        align-items: stretch;
+    }
+    .about-lead { display: flex; flex-direction: column; }
+    .about-text { margin: 14px 0 0; font-size: 14.5px; line-height: 1.65; color: var(--muted); }
+    .about-text:first-of-type { color: var(--ink); font-size: 16px; }
+    .fact-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 20px; }
+    .fact {
+        display: inline-flex; align-items: center;
+        padding: 6px 13px; border-radius: var(--r-pill);
+        border: 1px solid var(--line); background: rgba(255, 255, 255, 0.035);
+        font-size: 12px; color: var(--muted); text-decoration: none;
+        transition: color 0.2s var(--ease), border-color 0.2s var(--ease), background-color 0.2s var(--ease), transform 0.2s var(--ease);
+    }
+    @media (hover: hover) {
+        .fact:hover {
+            color: var(--ink); border-color: var(--accent-tint);
+            background: var(--accent-soft); transform: translateY(-1px);
+        }
+    }
+    .about-figure {
+        margin: 0; border-radius: var(--r-card); overflow: hidden;
+        border: 1px solid var(--line); background: var(--surface);
+        box-shadow: 0 20px 44px -28px rgba(0, 0, 0, 0.9);
+    }
+    .about-figure img { display: block; width: 100%; height: 100%; object-fit: cover; }
+
+    .about-video {
+        position: relative; margin-top: 14px; overflow: hidden;
+        border-radius: var(--r-card); border: 1px solid var(--line); background: #000;
+        box-shadow: 0 24px 60px -30px rgba(0, 0, 0, 0.95);
+    }
+    .about-video video { display: block; width: 100%; max-height: 420px; object-fit: cover; background: #000; }
+    .video-sound {
+        position: absolute; right: 14px; bottom: 14px;
+        display: flex; align-items: center; gap: 8px;
+        padding: 9px 14px; border-radius: var(--r-pill);
+        background: rgba(11, 11, 16, 0.74); border: 1px solid var(--line);
+        color: var(--ink); font-family: 'Exo 2', sans-serif; font-size: 12px; font-weight: 500;
+        backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+        transition: background-color 0.2s var(--ease), border-color 0.2s var(--ease), transform 0.2s var(--ease);
+    }
+    .video-sound:hover { background: rgba(11, 11, 16, 0.92); border-color: var(--line-strong); }
+    .video-sound:active { transform: scale(0.97); }
+    .video-sound svg { width: 15px; height: 15px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+    .video-sound[aria-pressed="true"] { color: var(--accent-hi); border-color: var(--accent-tint); }
+
+    .coop-panel { margin-top: 14px; text-align: center; }
+    .coop-panel .panel-head { justify-content: center; border-bottom: none; padding-bottom: 4px; }
+    .coop-btn {
+        display: inline-flex; align-items: center; gap: 12px; margin-top: 14px;
+        padding: 11px 20px; border-radius: var(--r-pill);
+        background: rgba(255, 255, 255, 0.05); border: 1px solid var(--line);
+        color: var(--ink); font-family: 'Exo 2', sans-serif; font-size: 14px; font-weight: 500;
+        transition: background-color 0.2s var(--ease), border-color 0.2s var(--ease), transform 0.2s var(--ease);
+    }
+    .coop-btn:hover { background: rgba(255, 255, 255, 0.08); border-color: var(--line-strong); }
+    .coop-btn:active { transform: scale(0.98); }
+    .coop-mail { font-family: 'JetBrains Mono', monospace; font-size: 13px; word-break: break-all; }
+    .coop-copy {
+        padding: 3px 9px; border-radius: var(--r-pill);
+        background: var(--accent-soft); color: var(--accent-hi);
+        font-size: 11px; letter-spacing: 0.04em; white-space: nowrap;
+    }
+
+    /* ================= music player ================= */
+    #music-player {
+        position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+        z-index: var(--z-player);
+        display: flex; align-items: center; gap: 8px;
+        width: fit-content; max-width: 94vw; padding: 7px 12px;
+        background: rgba(11, 11, 16, 0.84);
+        border: 1px solid var(--line); border-radius: var(--r-pill);
+        backdrop-filter: blur(22px) saturate(140%);
+        -webkit-backdrop-filter: blur(22px) saturate(140%);
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06), 0 24px 60px -20px rgba(0, 0, 0, 0.9);
+    }
+    .viz { display: flex; align-items: flex-end; gap: 2px; height: 15px; width: 20px; }
+    .viz i {
+        display: block; width: 3px; height: 100%; border-radius: 2px;
+        background: var(--accent); transform-origin: bottom; transform: scaleY(0.2);
+    }
+    .now {
+        display: flex; align-items: center; gap: 8px;
+        font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--muted);
+    }
+    .now b { color: var(--accent-hi); font-weight: 500; }
+    .p-btn {
+        background: none; border: none; color: var(--muted); padding: 6px;
+        display: flex; border-radius: 50%;
+        transition: color 0.2s var(--ease), background-color 0.2s var(--ease);
+    }
+    .p-btn:hover { color: var(--ink); background: rgba(255, 255, 255, 0.06); }
+    .p-btn svg { width: 17px; height: 17px; fill: currentColor; display: block; }
+    #playPauseBtn { background: var(--accent-strong); color: #fff; padding: 9px; }
+    #playPauseBtn:hover { color: #fff; background: var(--accent); }
+    .vol { display: flex; align-items: center; }
+    .vol input[type=range] { width: 56px; height: 16px; accent-color: var(--accent); cursor: ew-resize; }
+    #settings-menu {
+        position: absolute; bottom: calc(100% + 12px); right: 0;
+        width: 214px; padding: 16px;
+        display: grid; gap: 12px;
+        background: rgba(11, 11, 16, 0.97); border: 1px solid var(--line);
+        border-radius: 18px;
+        box-shadow: 0 26px 60px -20px rgba(0, 0, 0, 0.95);
+        opacity: 0; transform: translateY(8px) scale(0.97); transform-origin: bottom right;
+        pointer-events: none;
+        transition: opacity 0.2s var(--ease), transform 0.2s var(--ease);
+    }
+    #settings-menu.open { opacity: 1; transform: none; pointer-events: auto; }
+    .sett-row { display: flex; justify-content: space-between; align-items: center; gap: 12px; font-size: 13px; font-weight: 500; }
+    .toggle-switch {
+        appearance: none; width: 40px; height: 22px; flex-shrink: 0;
+        background: rgba(255, 255, 255, 0.14); border: 1px solid var(--line);
+        border-radius: var(--r-pill); position: relative; margin: 0;
+        transition: background-color 0.2s var(--ease), border-color 0.2s var(--ease);
+    }
+    .toggle-switch::after {
+        content: ''; position: absolute; top: 2px; left: 2px; width: 16px; height: 16px;
+        background: #fff; border-radius: 50%;
+        transition: transform 0.2s var(--ease);
+    }
+    .toggle-switch:checked { background: var(--accent-strong); border-color: transparent; }
+    .toggle-switch:checked::after { transform: translateX(18px); }
+
+    /* ================= cursor ================= */
+    #cursor-dot {
+        position: fixed; left: 0; top: 0; pointer-events: none;
+        z-index: var(--z-cursor);
+        width: 7px; height: 7px; margin: -3.5px 0 0 -3.5px;
+        background: #fff; border-radius: 50%;
+        box-shadow: 0 0 0 1px rgba(59, 130, 246, 0.9);
+        will-change: transform;
+    }
+    .trail-dot {
+        position: fixed; left: 0; top: 0; width: 7px; height: 7px;
+        margin: -3.5px 0 0 -3.5px; border-radius: 50%;
+        background: var(--accent); pointer-events: none; z-index: calc(var(--z-cursor) - 2);
+        opacity: 0; will-change: transform;
+    }
+    /* системный курсор гасится только пока включён кастомный */
+    html.cursor-on, html.cursor-on * { cursor: none !important; }
+
+    /* ================= intro ================= */
+    #welcome-overlay {
+        position: fixed; inset: 0; z-index: var(--z-overlay);
+        display: flex; flex-direction: column; align-items: center; justify-content: center;
+        gap: 22px; padding: 24px; text-align: center;
+        background: rgba(11, 11, 16, 0.94);
+        backdrop-filter: blur(26px) saturate(130%);
+        -webkit-backdrop-filter: blur(26px) saturate(130%);
+        transition: opacity 0.4s var(--ease);
+    }
+    .welcome-avatar {
+        width: 96px; height: 96px; border-radius: 50%; object-fit: cover;
+        border: 1px solid var(--line-strong);
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12), 0 20px 44px -18px rgba(0, 0, 0, 0.9);
+    }
+    .welcome-title {
+        margin: 0; font-family: 'Russo One', sans-serif; font-weight: 400;
+        font-size: clamp(28px, 8vw, 44px); line-height: 1.05; letter-spacing: -0.02em;
+    }
+    .welcome-sub {
+        max-width: 340px; margin: 0; padding: 13px 22px;
+        border-radius: var(--r-pill); border: 1px solid var(--line);
+        background: rgba(255, 255, 255, 0.035);
+        font-size: 14px; line-height: 1.5; color: var(--muted);
+    }
+    .ok-btn {
+        position: relative;
+        display: inline-flex; align-items: center; gap: 14px;
+        padding: 8px 9px 8px 32px; border-radius: var(--r-pill);
+        border: 1px solid rgba(255, 255, 255, 0.72);
+        background: linear-gradient(180deg, #17171E, #0B0B10);
+        color: var(--ink);
+        font-family: 'Russo One', sans-serif; font-weight: 400;
+        font-size: 13px; letter-spacing: 0.24em; text-transform: uppercase;
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1), 0 0 0 1px rgba(59, 130, 246, 0.22), 0 18px 44px -22px rgba(59, 130, 246, 0.8);
+        transition: transform 0.2s var(--ease), box-shadow 0.25s var(--ease), border-color 0.25s var(--ease);
+    }
+    .ok-label { margin-right: -0.24em; }
+    .ok-go {
+        width: 32px; height: 32px; border-radius: 50%; flex: 0 0 auto;
+        display: grid; place-items: center; background: var(--accent-strong);
+        transition: background-color 0.2s var(--ease), transform 0.25s var(--ease);
+    }
+    .ok-go svg { width: 15px; height: 15px; stroke: #fff; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    .ok-btn:hover {
+        transform: translateY(-2px);
+        border-color: var(--accent-hi);
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.14), 0 0 0 1px rgba(59, 130, 246, 0.45), 0 26px 60px -22px rgba(59, 130, 246, 1);
+    }
+    .ok-btn:hover .ok-go { background: var(--accent); transform: translate(2px, -2px); }
+    .ok-btn:active { transform: translateY(0) scale(0.98); }
+    .welcome-hint { font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--faint); }
+
+    /* элементы вырастают из мелких: сначала размер, потом полнота */
+    @keyframes growIn {
+        from { opacity: 0; transform: scale(0.4); }
+        to { opacity: 1; transform: none; }
+    }
+    #welcome-overlay > * { animation: growIn 0.5s var(--ease-out) backwards; }
+    #welcome-overlay > :nth-child(1) { animation-delay: 0.05s; }
+    #welcome-overlay > :nth-child(2) { animation-delay: 0.12s; }
+    #welcome-overlay > :nth-child(3) { animation-delay: 0.19s; }
+    #welcome-overlay > :nth-child(4) { animation-delay: 0.26s; }
+    #welcome-overlay > :nth-child(5) { animation-delay: 0.34s; }
+
+    /* ================= eco mode ================= */
+    body.eco-mode .bg-orbs,
+    body.eco-mode #snow-canvas,
+    body.eco-mode #cursor-dot,
+    body.eco-mode .trail-dot { display: none !important; }
+    /* кастомный курсор выключен - возвращаем системный */
+    body.eco-mode, body.eco-mode *, html:has(body.eco-mode) { cursor: auto !important; }
+    body.eco-mode * {
+        backdrop-filter: none !important; -webkit-backdrop-filter: none !important;
+        transition-duration: 0.01ms !important; animation: none !important;
+        box-shadow: none !important; text-shadow: none !important;
+    }
+    body.eco-mode .cell, body.eco-mode .panel, body.eco-mode #music-player, body.eco-mode #settings-menu {
+        background: var(--surface) !important;
+        border-color: var(--line) !important;
+    }
+
+    /* ================= responsive ================= */
+    @media (max-width: 900px) {
+        .bento {
+            grid-template-columns: repeat(2, 1fr);
+            grid-template-rows: none;
+            grid-auto-rows: minmax(120px, auto);
+        }
+        .c-profile { grid-column: 1 / -1; grid-row: auto; }
+        .c-tg, .c-twitch { grid-column: span 1; grid-row: auto; }
+        .c-yt { grid-column: 1 / -1; grid-row: auto; }
+        .c-tt, .c-steam { grid-column: span 1; grid-row: auto; }
+        .c-don { grid-column: 1 / -1; grid-row: auto; }
+        .comm-grid { grid-template-columns: 1fr; }
+        .about-grid { grid-template-columns: 1fr; }
+        .about-figure { max-height: 320px; }
+    }
+    @media (max-width: 520px) {
+        .bento { grid-template-columns: 1fr; }
+        .c-tg, .c-twitch, .c-tt, .c-steam { grid-column: 1 / -1; }
+        .c-don { flex-direction: column; align-items: flex-start; gap: 10px; padding: 20px; }
+        .c-don .go { display: none; }
+        .viewport { padding-bottom: 130px; }
+        .now { display: none; }
+    }
+
+    /* ================= reduced motion ================= */
+    @media (prefers-reduced-motion: reduce) {
+        *, *::before, *::after {
+            animation-duration: 0.01ms !important;
+            animation-delay: 0s !important;
+            animation-iteration-count: 1 !important;
+            transition-duration: 0.01ms !important;
+            scroll-behavior: auto !important;
+        }
+        .bg-orbs, #snow-canvas, #cursor-dot, .trail-dot { display: none !important; }
+        html.cursor-on, html.cursor-on * { cursor: auto !important; }
+    }
+</style>
+</head>
+<body>
+
+<div class="bg-orbs" aria-hidden="true">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+</div>
+<canvas id="snow-canvas" aria-hidden="true"></canvas>
+<div id="cursor-dot" aria-hidden="true"></div>
+
+<div id="welcome-overlay">
+    <img class="welcome-avatar" src="ava.jpg" alt="" width="640" height="640">
+    <h1 class="welcome-title">Всем привет!</h1>
+    <p class="welcome-sub">Здесь находятся все мои ссылки, спасибо что зашли</p>
+        <button class="ok-btn" id="startBtn">
+            <span class="ok-label">ВОЙТИ</span>
+            <span class="ok-go" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+        </button>
+    <span class="welcome-hint">нажми в любом месте, чтобы войти</span>
+</div>
+
+<div id="content-wrapper">
+    <nav class="top-nav" aria-label="Разделы">
+        <button class="nav-btn" type="button" data-view="hub" style="--i:0" aria-current="page">Hub</button>
+        <button class="nav-btn" type="button" data-view="community" style="--i:1">Сообщество</button>
+        <button class="nav-btn" type="button" data-view="about" style="--i:2">Обо мне</button>
+    </nav>
+
+    <main class="viewport">
+
+        <!-- ============ HUB ============ -->
+        <section id="hub-view" class="view-section active-view">
+            <div class="bento" id="bento">
+
+                <div class="cell c-profile" style="--i:0">
+                    <div class="profile-top">
+                        <div class="avatar-shell" id="avatar">
+                            <div class="avatar-frame">
+                                <img class="avatar-img" src="ava.jpg" alt="Аватар DeD_u1ya" width="640" height="640">
+                            </div>
+                        </div>
+                        <div>
+                            <h1 class="profile-name">DeD_u1ya</h1>
+                            <p class="profile-role">Стример</p>
+                        </div>
+                    </div>
+
+                    <p class="profile-bio">
+                        Приветствую тебя, путник. Подписываясь на мои соцсети - не забудь стать моим другом. В будущем нас будет много!
+                    </p>
+
+                    <div class="profile-foot">
+                        <div class="pf-row">
+                            <span class="pf-label">подписчиков</span>
+                            <span class="pf-value">128<small> / 200</small></span>
+                        </div>
+                        <div class="pf-track" id="pf-track" style="--p:.64"><i></i></div>
+                    </div>
+                </div>
+
+                <a href="https://t.me/DeD_u1ya" target="_blank" rel="noopener" class="cell link c-tg" style="--i:1">
+                    <span class="link-ghost" aria-hidden="true">
+                        <svg viewBox="0 0 24 24"><path d="M21.94 4.3 19.2 19.1c-.2 1-.8 1.2-1.6.75l-4.4-3.25-2.13 2.05c-.24.24-.43.43-.88.43l.31-4.47 8.13-7.35c.35-.31-.08-.49-.55-.19L7.27 13.3l-4.36-1.36c-.95-.3-.97-.95.2-1.4L20.5 3.3c.8-.3 1.5.2 1.44.98z"/></svg>
+                    </span>
+                    <span class="go" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+                    <span class="link-icon"><svg viewBox="0 0 24 24"><path d="M21.94 4.3 19.2 19.1c-.2 1-.8 1.2-1.6.75l-4.4-3.25-2.13 2.05c-.24.24-.43.43-.88.43l.31-4.47 8.13-7.35c.35-.31-.08-.49-.55-.19L7.27 13.3l-4.36-1.36c-.95-.3-.97-.95.2-1.4L20.5 3.3c.8-.3 1.5.2 1.44.98z"/></svg></span>
+                    <span class="link-text">
+                        <span class="link-label">Telegram</span>
+                        <span class="link-sub">@DeD_u1ya</span>
+                    </span>
+                </a>
+
+                <a href="https://m.twitch.tv/ded_u1ya/home" target="_blank" rel="noopener" class="cell link c-twitch" style="--i:2">
+                    <span class="link-ghost" aria-hidden="true">
+                        <svg viewBox="0 0 24 24"><path d="M11.571 4.714h1.715v5.143H11.57zm4.715 0H18v5.143h-1.714zM6 0L1.714 4.286v15.428h5.143V24l4.286-4.286h3.428L22.286 12V0zm14.571 11.143l-3.428 3.428h-3.429l-3 3v-3H6.857V1.714h13.714Z"/></svg>
+                    </span>
+                    <span class="go" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+                    <span class="link-icon"><svg viewBox="0 0 24 24"><path d="M11.571 4.714h1.715v5.143H11.57zm4.715 0H18v5.143h-1.714zM6 0L1.714 4.286v15.428h5.143V24l4.286-4.286h3.428L22.286 12V0zm14.571 11.143l-3.428 3.428h-3.429l-3 3v-3H6.857V1.714h13.714Z"/></svg></span>
+                    <span class="link-text">
+                        <span class="link-label">Twitch</span>
+                        <span class="link-sub">ded_u1ya</span>
+                    </span>
+                </a>
+
+                <a href="https://www.youtube.com/@DeD_u1ya" target="_blank" rel="noopener" class="cell link c-yt" style="--i:3">
+                    <span class="link-ghost" aria-hidden="true">
+                        <svg viewBox="0 0 24 24"><path d="M23.5 6.2a3 3 0 0 0-2.12-2.13C19.5 3.55 12 3.55 12 3.55s-7.5 0-9.38.52A3 3 0 0 0 .5 6.2 31.3 31.3 0 0 0 0 12a31.3 31.3 0 0 0 .5 5.8 3 3 0 0 0 2.12 2.13c1.88.52 9.38.52 9.38.52s7.5 0 9.38-.52a3 3 0 0 0 2.12-2.13A31.3 31.3 0 0 0 24 12a31.3 31.3 0 0 0-.5-5.8zM9.55 15.6V8.4L15.8 12z"/></svg>
+                    </span>
+                    <span class="go" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+                    <span class="link-icon"><svg viewBox="0 0 24 24"><path d="M23.5 6.2a3 3 0 0 0-2.12-2.13C19.5 3.55 12 3.55 12 3.55s-7.5 0-9.38.52A3 3 0 0 0 .5 6.2 31.3 31.3 0 0 0 0 12a31.3 31.3 0 0 0 .5 5.8 3 3 0 0 0 2.12 2.13c1.88.52 9.38.52 9.38.52s7.5 0 9.38-.52a3 3 0 0 0 2.12-2.13A31.3 31.3 0 0 0 24 12a31.3 31.3 0 0 0-.5-5.8zM9.55 15.6V8.4L15.8 12z"/></svg></span>
+                    <span class="link-text">
+                        <span class="link-label">YouTube</span>
+                        <span class="link-sub">@DeD_u1ya</span>
+                    </span>
+                </a>
+
+                <a href="https://www.tiktok.com/@dedu1ya1" target="_blank" rel="noopener" class="cell link c-tt" style="--i:4">
+                    <span class="link-ghost" aria-hidden="true">
+                        <svg viewBox="0 0 24 24"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.17-2.81-.74-3.94-1.67-.49-.42-.94-.87-1.33-1.38v7.41c.01 2.23-.74 4.54-2.4 6.06-1.8 1.7-4.4 2.15-6.68 1.4-2.73-.85-4.6-3.7-4.2-6.53.28-2.4 2.1-4.52 4.48-5.11.83-.22 1.7-.26 2.54-.15v4.1c-.88-.25-1.85-.08-2.55.51-.77.62-1.08 1.66-.89 2.62.2 1.05 1.13 1.88 2.19 2.03.95.14 2-.15 2.59-.92.36-.45.56-1.02.55-1.6V.02z"/></svg>
+                    </span>
+                    <span class="go" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+                    <span class="link-icon"><svg viewBox="0 0 24 24"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.17-2.81-.74-3.94-1.67-.49-.42-.94-.87-1.33-1.38v7.41c.01 2.23-.74 4.54-2.4 6.06-1.8 1.7-4.4 2.15-6.68 1.4-2.73-.85-4.6-3.7-4.2-6.53.28-2.4 2.1-4.52 4.48-5.11.83-.22 1.7-.26 2.54-.15v4.1c-.88-.25-1.85-.08-2.55.51-.77.62-1.08 1.66-.89 2.62.2 1.05 1.13 1.88 2.19 2.03.95.14 2-.15 2.59-.92.36-.45.56-1.02.55-1.6V.02z"/></svg></span>
+                    <span class="link-text">
+                        <span class="link-label">TikTok</span>
+                        <span class="link-sub">@dedu1ya1</span>
+                    </span>
+                </a>
+
+                <a href="https://steamcommunity.com/id/_D_I_C_H_/" target="_blank" rel="noopener" class="cell link c-steam" style="--i:5">
+                    <img class="steam-art" src="ded1.png" alt="" width="1024" height="1024" loading="lazy" decoding="async">
+                    <span class="link-ghost" aria-hidden="true">
+                        <svg viewBox="0 0 24 24"><path d="M11.979 0C5.678 0 .511 4.86.022 11.037l6.432 2.658c.545-.371 1.203-.59 1.912-.59.063 0 .125.004.188.006l2.861-4.142V8.91c0-2.495 2.028-4.524 4.524-4.524 2.494 0 4.524 2.031 4.524 4.527s-2.03 4.525-4.524 4.525h-.105l-4.076 2.911c0 .052.004.105.004.159 0 1.875-1.515 3.396-3.39 3.396-1.635 0-3.016-1.173-3.331-2.727L.436 15.27C1.862 20.307 6.486 24 11.979 24c6.627 0 11.999-5.373 11.999-12S18.605 0 11.979 0zM7.54 18.21l-1.473-.61c.262.543.714.999 1.314 1.25 1.297.539 2.793-.076 3.332-1.375.263-.63.264-1.319.005-1.949s-.75-1.121-1.377-1.383c-.624-.26-1.29-.249-1.878-.03l1.523.63c.956.4 1.409 1.5 1.009 2.455-.397.957-1.497 1.41-2.454 1.012H7.54zm11.415-9.303c0-1.662-1.353-3.015-3.015-3.015-1.665 0-3.015 1.353-3.015 3.015 0 1.665 1.35 3.015 3.015 3.015 1.663 0 3.015-1.35 3.015-3.015zm-5.273-.005c0-1.252 1.013-2.266 2.265-2.266 1.249 0 2.266 1.014 2.266 2.266 0 1.251-1.017 2.265-2.266 2.265-1.253 0-2.265-1.014-2.265-2.265z"/></svg>
+                    </span>
+                    <span class="go" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+                    <span class="link-icon"><svg viewBox="0 0 24 24"><path d="M11.979 0C5.678 0 .511 4.86.022 11.037l6.432 2.658c.545-.371 1.203-.59 1.912-.59.063 0 .125.004.188.006l2.861-4.142V8.91c0-2.495 2.028-4.524 4.524-4.524 2.494 0 4.524 2.031 4.524 4.527s-2.03 4.525-4.524 4.525h-.105l-4.076 2.911c0 .052.004.105.004.159 0 1.875-1.515 3.396-3.39 3.396-1.635 0-3.016-1.173-3.331-2.727L.436 15.27C1.862 20.307 6.486 24 11.979 24c6.627 0 11.999-5.373 11.999-12S18.605 0 11.979 0zM7.54 18.21l-1.473-.61c.262.543.714.999 1.314 1.25 1.297.539 2.793-.076 3.332-1.375.263-.63.264-1.319.005-1.949s-.75-1.121-1.377-1.383c-.624-.26-1.29-.249-1.878-.03l1.523.63c.956.4 1.409 1.5 1.009 2.455-.397.957-1.497 1.41-2.454 1.012H7.54zm11.415-9.303c0-1.662-1.353-3.015-3.015-3.015-1.665 0-3.015 1.353-3.015 3.015 0 1.665 1.35 3.015 3.015 3.015 1.663 0 3.015-1.35 3.015-3.015zm-5.273-.005c0-1.252 1.013-2.266 2.265-2.266 1.249 0 2.266 1.014 2.266 2.266 0 1.251-1.017 2.265-2.266 2.265-1.253 0-2.265-1.014-2.265-2.265z"/></svg></span>
+                    <span class="link-text">
+                        <span class="link-label">Steam</span>
+                        <span class="link-sub">_D_I_C_H_</span>
+                    </span>
+                </a>
+
+                <a href="https://www.donationalerts.com/r/ded_u1ya" target="_blank" rel="noopener" class="cell c-don" style="--i:6">
+                    <span class="don-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                    </span>
+                    <span class="don-text">
+                        <span class="don-title">Поддержать стримера</span>
+                        <span class="don-sub">donationalerts.com</span>
+                    </span>
+                    <span class="go" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+                </a>
+
+            </div>
+        </section>
+
+        <!-- ============ COMMUNITY ============ -->
+        <section id="community-view" class="view-section">
+            <div class="comm-grid">
+
+                <article class="panel">
+                    <header class="panel-head">
+                        <h2 class="panel-title">Прогресс до цели</h2>
+                        <span class="panel-note">подписчиков</span>
+                    </header>
+                    <div class="stat">
+                        <span class="stat-num" id="subCount">128</span>
+                        <span class="stat-goal">/ 200</span>
+                    </div>
+                    <div class="progress-track" id="p-track" style="--p:.64">
+                        <div class="progress-fill" id="p-bar"></div>
+                    </div>
+                    <p class="stat-foot">До цели осталось <b>72</b> подписчика</p>
+                </article>
+
+                <article class="panel">
+                    <header class="panel-head">
+                        <h2 class="panel-title">Топ донатеры</h2>
+                        <span class="panel-note">4 человека</span>
+                    </header>
+                    <ol class="donator-list">
+                        <li class="donator-item">
+                            <span class="rank">1</span>
+                            <span class="donator-name">Fgarto</span>
+                            <span class="donator-amount">3 620 ₽</span>
+                        </li>
+                        <li class="donator-item">
+                            <span class="rank">2</span>
+                            <span class="donator-name">Аноним</span>
+                            <span class="donator-amount">500 ₽</span>
+                        </li>
+                        <li class="donator-item">
+                            <span class="rank">3</span>
+                            <span class="donator-name">Makhovick</span>
+                            <span class="donator-amount">180 ₽</span>
+                        </li>
+                        <li class="donator-item">
+                            <span class="rank">4</span>
+                            <span class="donator-name">Николай</span>
+                            <span class="donator-amount">100 ₽</span>
+                        </li>
+                    </ol>
+                </article>
+
+            </div>
+        </section>
+
+        <!-- ============ ABOUT ============ -->
+        <section id="about-view" class="view-section">
+
+            <div class="about-grid">
+                <article class="panel about-lead">
+                    <header class="panel-head">
+                        <h2 class="panel-title">Обо мне</h2>
+                    </header>
+                    <p class="about-text">Мне 19 лет. Начал стримить недавно и хочу хоть чего-то добиться.</p>
+                    <p class="about-text">Вы наверное замечали меня мельком на чужих стримах, но это не важно. Я прошу вас подписаться на меня здесь и в телеграме - мне больше ничего и не надо.</p>
+                    <div class="fact-row">
+                        <a class="fact" href="https://m.twitch.tv/ded_u1ya/home" target="_blank" rel="noopener">Twitch</a>
+                        <a class="fact" href="https://www.youtube.com/@DeD_u1ya" target="_blank" rel="noopener">YouTube</a>
+                        <a class="fact" href="https://www.tiktok.com/@dedu1ya1" target="_blank" rel="noopener">TikTok</a>
+                        <a class="fact" href="https://t.me/DeD_u1ya" target="_blank" rel="noopener">Telegram</a>
+                    </div>
+                </article>
+                <figure class="about-figure">
+                    <img src="DeD.png" alt="DeD_u1ya" width="960" height="1280" loading="lazy" decoding="async">
+                </figure>
+            </div>
+
+            <div class="about-video">
+                <video id="aboutVideo" muted loop playsinline preload="none" poster="ava.jpg">
+                    <source src="Bombiz.mp4" type="video/mp4">
+                </video>
+                <button class="video-sound" id="videoSound" type="button" aria-pressed="false" aria-label="Включить звук в видео">
+                    <svg id="soundIcon" viewBox="0 0 24 24"><path d="M11 5 6 9H3v6h3l5 4V5z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/></svg>
+                    <span id="soundLabel">Звук выкл</span>
+                </button>
+            </div>
+
+            <article class="panel coop-panel">
+                <header class="panel-head">
+                    <h2 class="panel-title">Сотрудничество и реклама</h2>
+                </header>
+                <button class="coop-btn" id="copyMail" type="button">
+                    <span class="coop-mail">ded.u1ya.cooperation@gmail.com</span>
+                    <span class="coop-copy" id="copyLabel">копировать</span>
+                </button>
+            </article>
+
+        </section>
+
+    </main>
+</div>
+
+<div id="music-player" role="region" aria-label="Плеер фоновой музыки">
+    <div class="viz" id="viz" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
+    <div class="now" aria-hidden="true">
+        <b id="trackNo">01</b><span>/ 07</span>
+        <span id="currentTime">0:00</span>
+    </div>
+    <button class="p-btn" id="prevBtn" type="button" aria-label="Предыдущий трек">
+        <svg viewBox="0 0 24 24"><path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"/></svg>
+    </button>
+    <button class="p-btn" id="playPauseBtn" type="button" aria-label="Воспроизвести">
+        <svg id="playPauseIcon" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+    </button>
+    <button class="p-btn" id="nextBtn" type="button" aria-label="Следующий трек">
+        <svg viewBox="0 0 24 24"><path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"/></svg>
+    </button>
+    <label class="vol">
+        <span class="sr-only">Громкость</span>
+        <input type="range" id="volumeSlider" min="0" max="1" step="0.01" value="0.15">
+    </label>
+    <button class="p-btn" id="settBtn" type="button" aria-label="Настройки" aria-expanded="false">
+        <svg viewBox="0 0 24 24"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg>
+    </button>
+    <div id="settings-menu">
+        <div class="sett-row"><span>Eco Mode</span><input type="checkbox" id="ecoToggle" class="toggle-switch"></div>
+        <div class="sett-row"><span>Снег</span><input type="checkbox" id="nyToggle" class="toggle-switch" checked></div>
+        <div class="sett-row"><span>Shuffle</span><input type="checkbox" id="shuffleToggle" class="toggle-switch"></div>
+        <div class="sett-row"><span>Курсор</span><input type="checkbox" id="curToggle" class="toggle-switch" checked></div>
+    </div>
+</div>
+
+<audio id="bgMusic" preload="none"></audio>
+
+<script>
+document.body.classList.add('booting');
+
+const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+const $ = (id) => document.getElementById(id);
+
+/* ---------- views ---------- */
+const navBtns = document.querySelectorAll('.nav-btn');
+const bento = $('bento');
+let currentView = 'hub';
+
+function revealHub() {
+    bento.classList.remove('ready');
+    void bento.offsetWidth;
+    bento.classList.add('ready');
+}
+
+function switchView(view) {
+    if (view === currentView) return;
+    const cur = document.querySelector('.view-section.active-view');
+    const next = $(view + '-view');
+    if (!next) return;
+
+    navBtns.forEach(b => b.removeAttribute('aria-current'));
+    document.querySelector(`.nav-btn[data-view="${view}"]`).setAttribute('aria-current', 'page');
+
+    if (cur) {
+        cur.classList.remove('active-view');
+        cur.classList.add('leaving');
+        setTimeout(() => cur.classList.remove('leaving'), 160);
+    }
+    next.classList.add('active-view');
+    currentView = view;
+
+    if (view === 'hub') { revealHub(); armBars(); }
+    if (view === 'community') { armBars(); }
+    if (view === 'about') { startVideo(); } else { pauseVideo(); }
+}
+navBtns.forEach(b => b.addEventListener('click', () => switchView(b.dataset.view)));
+
+/* ---------- progress bars (scaleX, layout-free) ---------- */
+const pTrack = $('p-track');
+const pfTrack = $('pf-track');
+let barsArmed = false;
+function armBars() {
+    if (barsArmed) return;
+    barsArmed = true;
+    setTimeout(() => {
+        pTrack.classList.add('on');
+        pfTrack.classList.add('on');
+    }, 120);
+}
+
+/* ---------- video (about view) ---------- */
+const aboutVideo = $('aboutVideo');
+const soundBtn = $('videoSound');
+const soundLabel = $('soundLabel');
+const soundIcon = $('soundIcon');
+
+function startVideo() {
+    if (!aboutVideo) return;
+    const p = aboutVideo.play();
+    if (p && p.catch) p.catch(() => {});
+}
+function pauseVideo() {
+    if (aboutVideo) aboutVideo.pause();
+}
+function paintSoundBtn() {
+    const on = !aboutVideo.muted;
+    soundBtn.setAttribute('aria-pressed', String(on));
+    soundBtn.setAttribute('aria-label', on ? 'Выключить звук в видео' : 'Включить звук в видео');
+    soundLabel.textContent = on ? 'Звук вкл' : 'Звук выкл';
+    soundIcon.innerHTML = on
+        ? '<path d="M11 5 6 9H3v6h3l5 4V5z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M18.5 5.5a9 9 0 0 1 0 13"/>'
+        : '<path d="M11 5 6 9H3v6h3l5 4V5z"/><path d="M16 9.5l5 5M21 9.5l-5 5"/>';
+}
+soundBtn.addEventListener('click', () => {
+    aboutVideo.muted = !aboutVideo.muted;
+    if (aboutVideo.paused) aboutVideo.play().catch(() => {});
+    paintSoundBtn();
+});
+paintSoundBtn();
+
+/* ---------- copy email ---------- */
+const copyLabel = $('copyLabel');
+$('copyMail').addEventListener('click', async () => {
+    const mail = 'ded.u1ya.cooperation@gmail.com';
+    let ok = false;
+    try {
+        await navigator.clipboard.writeText(mail);
+        ok = true;
+    } catch (e) {
+        const ta = document.createElement('textarea');
+        ta.value = mail;
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        try { ok = document.execCommand('copy'); } catch (err) { ok = false; }
+        ta.remove();
+    }
+    copyLabel.textContent = ok ? 'скопировано' : 'не вышло';
+    setTimeout(() => { copyLabel.textContent = 'копировать'; }, 1800);
+});
+
+/* ---------- cursor ---------- */
+const cDot = $('cursor-dot');
+const TRAIL = 12;
+const trail = [];
+for (let i = 0; i < TRAIL; i++) {
+    const d = document.createElement('div');
+    d.className = 'trail-dot';
+    document.body.appendChild(d);
+    trail.push({ el: d, x: 0, y: 0 });
+}
+let mx = window.innerWidth / 2, my = window.innerHeight / 2;
+let px = mx, py = my, dotScale = 1, hot = false, pointerSeen = false;
+
+document.addEventListener('pointermove', (e) => {
+    if (e.pointerType !== 'mouse') return;
+    mx = e.clientX; my = e.clientY;
+    if (!pointerSeen) {
+        pointerSeen = true;
+        px = mx; py = my;
+        trail.forEach(t => { t.x = mx; t.y = my; });
+    }
+}, { passive: true });
+
+document.addEventListener('mouseover', (e) => {
+    hot = !!e.target.closest('a,button,input,video');
+});
+
+function cursorFrame() {
+    px += (mx - px) * 0.38;
+    py += (my - py) * 0.38;
+    const target = hot ? 1.9 : 1;
+    dotScale += (target - dotScale) * 0.18;
+
+    cDot.style.transform = `translate3d(${px}px, ${py}px, 0) translate(-50%, -50%) scale(${dotScale.toFixed(3)})`;
+
+    let tx = px, ty = py;
+    for (let i = 0; i < trail.length; i++) {
+        const t = trail[i];
+        tx += (px - tx) * 0.26;
+        ty += (py - ty) * 0.26;
+        t.x = tx; t.y = ty;
+        const s = 1 - i / trail.length;
+        t.el.style.opacity = (s * 0.55).toFixed(3);
+        t.el.style.transform = `translate3d(${t.x}px, ${t.y}px, 0) translate(-50%, -50%) scale(${s.toFixed(3)})`;
+    }
+    requestAnimationFrame(cursorFrame);
+}
+if (!reduceMotion.matches) requestAnimationFrame(cursorFrame);
+
+/* ---------- snow ---------- */
+const canvas = $('snow-canvas');
+const ctx = canvas.getContext('2d');
+const nyT = $('nyToggle');
+let flakes = [];
+const snowOn = () => nyT.checked && !document.body.classList.contains('eco-mode') && !reduceMotion.matches;
+
+function initSnow() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    const count = window.innerWidth < 720 ? 40 : 80;
+    if (flakes.length !== count) {
+        flakes = [];
+        for (let i = 0; i < count; i++) {
+            flakes.push({
+                x: Math.random() * canvas.width, y: Math.random() * canvas.height,
+                r: Math.random() * 2 + 0.5, d: Math.random() + 0.5,
+                a: Math.random() * Math.PI * 2, o: Math.random() * 0.5 + 0.3
+            });
+        }
+    }
+}
+initSnow();
+window.addEventListener('resize', initSnow);
+
+function drawSnow() {
+    if (snowOn()) {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = 'rgba(255,255,255,0.85)';
+        for (const p of flakes) {
+            ctx.globalAlpha = p.o;
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+            ctx.fill();
+            p.y += p.d;
+            p.x += Math.sin(p.a) * 0.5;
+            p.a += 0.02;
+            if (p.y > canvas.height) { p.y = -5; p.x = Math.random() * canvas.width; }
+            if (p.x > canvas.width) p.x = 0;
+            if (p.x < 0) p.x = canvas.width;
+        }
+        ctx.globalAlpha = 1;
+    }
+    requestAnimationFrame(drawSnow);
+}
+requestAnimationFrame(drawSnow);
+document.addEventListener('visibilitychange', () => { if (document.hidden) ctx.clearRect(0, 0, canvas.width, canvas.height); });
+
+/* ---------- music player ---------- */
+const audio = $('bgMusic');
+const player = $('music-player');
+const viz = $('viz');
+const vizBars = [...viz.querySelectorAll('i')];
+const playIcon = $('playPauseIcon').querySelector('path');
+const volumeSlider = $('volumeSlider');
+const tracks = ['1.mp3', '2.mp3', '3.mp3', '4.mp3', '5.mp3', '6.mp3', '7.mp3'];
+let curT = 0, shuffle = false;
+let volume = parseFloat(volumeSlider.value);
+audio.volume = volume;
+
+const ICON_PLAY = 'M8 5v14l11-7z';
+const ICON_PAUSE = 'M6 19h4V5H6v14zm8-14v14h4V5h-4z';
+
+let analyser = null, freqData = null, tapState = 0;
+
+/* спектр снимаем через captureStream: сам элемент играет нативно и всегда слышен.
+   на file:// браузер запрещает captureStream - тогда визуализатор декоративный */
+function initTap() {
+    if (tapState) return;
+    try {
+        const stream = audio.captureStream();
+        if (!stream.getAudioTracks().length) return;
+        const AC = window.AudioContext || window.webkitAudioContext;
+        const ctx = new AC();
+        const src = ctx.createMediaStreamSource(stream);
+        analyser = ctx.createAnalyser();
+        analyser.fftSize = 128;
+        analyser.smoothingTimeConstant = 0.75;
+        freqData = new Uint8Array(analyser.frequencyBinCount);
+        src.connect(analyser);
+        tapState = 1;
+    } catch (e) {
+        tapState = 2;
+    }
+}
+
+function loadTrack(i) {
+    curT = i;
+    audio.src = tracks[i];
+    audio.load();
+    $('trackNo').textContent = String(i + 1).padStart(2, '0');
+}
+
+function play() {
+    const p = audio.play();
+    if (p && p.catch) p.catch(() => pause());
+    viz.classList.add('playing');
+    playIcon.setAttribute('d', ICON_PAUSE);
+    $('playPauseBtn').setAttribute('aria-label', 'Пауза');
+}
+function pause() {
+    audio.pause();
+    viz.classList.remove('playing');
+    playIcon.setAttribute('d', ICON_PLAY);
+    $('playPauseBtn').setAttribute('aria-label', 'Воспроизвести');
+}
+function nextTrack() {
+    loadTrack(shuffle ? Math.floor(Math.random() * tracks.length) : (curT + 1) % tracks.length);
+    play();
+}
+function prevTrack() {
+    loadTrack((curT - 1 + tracks.length) % tracks.length);
+    play();
+}
+
+$('playPauseBtn').addEventListener('click', () => (audio.paused ? play() : pause()));
+$('nextBtn').addEventListener('click', nextTrack);
+$('prevBtn').addEventListener('click', prevTrack);
+volumeSlider.addEventListener('input', (e) => { volume = parseFloat(e.target.value); audio.volume = volume; });
+$('shuffleToggle').addEventListener('change', (e) => { shuffle = e.target.checked; });
+audio.addEventListener('timeupdate', () => {
+    const m = Math.floor(audio.currentTime / 60);
+    const s = Math.floor(audio.currentTime % 60);
+    $('currentTime').textContent = `${m}:${s < 10 ? '0' : ''}${s}`;
+    initTap();
+});
+audio.addEventListener('ended', nextTrack);
+audio.addEventListener('play', () => { viz.classList.add('playing'); playIcon.setAttribute('d', ICON_PAUSE); $('playPauseBtn').setAttribute('aria-label', 'Пауза'); initTap(); });
+audio.addEventListener('pause', () => { viz.classList.remove('playing'); playIcon.setAttribute('d', ICON_PLAY); $('playPauseBtn').setAttribute('aria-label', 'Воспроизвести'); });
+
+/* визуализатор: реальный спектр, если медиа его отдает, иначе - декоративная анимация */
+function drawViz() {
+    if (!audio.paused) {
+        if (analyser && freqData) {
+            analyser.getByteFrequencyData(freqData);
+            for (let i = 0; i < vizBars.length; i++) {
+                const v = freqData[Math.min(freqData.length - 1, i * 4)] / 255;
+                vizBars[i].style.transform = `scaleY(${(0.18 + v * 0.82).toFixed(3)})`;
+            }
+        } else {
+            const t = audio.currentTime;
+            for (let i = 0; i < vizBars.length; i++) {
+                const p = t * (2.3 + i * 0.41) + i * 1.7;
+                const v = Math.max(0, Math.min(1, Math.sin(p) * 0.55 + Math.sin(p * 2.7) * 0.25 + 0.45));
+                vizBars[i].style.transform = `scaleY(${(0.18 + v * 0.82).toFixed(3)})`;
+            }
+        }
+    }
+    requestAnimationFrame(drawViz);
+}
+requestAnimationFrame(drawViz);
+
+/* settings menu */
+const settingsMenu = $('settings-menu');
+const settBtn = $('settBtn');
+settBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const open = settingsMenu.classList.toggle('open');
+    settBtn.setAttribute('aria-expanded', String(open));
+});
+settingsMenu.addEventListener('click', (e) => e.stopPropagation());
+document.addEventListener('click', () => {
+    if (settingsMenu.classList.contains('open')) {
+        settingsMenu.classList.remove('open');
+        settBtn.setAttribute('aria-expanded', 'false');
+    }
+});
+
+$('ecoToggle').addEventListener('change', (e) => document.body.classList.toggle('eco-mode', e.target.checked));
+nyT.addEventListener('change', () => ctx.clearRect(0, 0, canvas.width, canvas.height));
+const curToggle = $('curToggle');
+function applyCursor(on) {
+    document.documentElement.classList.toggle('cursor-on', on);
+    cDot.style.display = on ? '' : 'none';
+    trail.forEach(t => { t.el.style.display = on ? '' : 'none'; });
+}
+curToggle.addEventListener('change', (e) => applyCursor(e.target.checked));
+applyCursor(true);
+
+/* draggable player */
+let drag = null;
+player.addEventListener('pointerdown', (e) => {
+    if (e.target.closest('button') || e.target.closest('input') || e.target.closest('#settings-menu')) return;
+    const r = player.getBoundingClientRect();
+    drag = { dx: e.clientX - r.left, dy: e.clientY - r.top, w: r.width, h: r.height };
+    player.style.left = '0px';
+    player.style.top = '0px';
+    player.style.bottom = 'auto';
+    player.style.right = 'auto';
+    player.style.transform = `translate3d(${r.left}px, ${r.top}px, 0)`;
+    player.style.transition = 'none';
+    player.setPointerCapture(e.pointerId);
+});
+player.addEventListener('pointermove', (e) => {
+    if (!drag) return;
+    const x = Math.min(Math.max(0, e.clientX - drag.dx), window.innerWidth - drag.w - 8);
+    const y = Math.min(Math.max(0, e.clientY - drag.dy), window.innerHeight - drag.h - 8);
+    player.style.transform = `translate3d(${x}px, ${y}px, 0)`;
+});
+const endDrag = () => {
+    if (!drag) return;
+    drag = null;
+    player.style.transition = 'transform .25s var(--ease)';
+};
+player.addEventListener('pointerup', endDrag);
+player.addEventListener('pointercancel', endDrag);
+
+/* ---------- avatar easter egg ---------- */
+const phrases = ["Бля буду", "Ой напьюсь я", "Здарова плесень"];
+let eggCooldown = false;
+$('avatar').addEventListener('click', () => {
+    if (eggCooldown) return;
+    eggCooldown = true;
+    const p = document.createElement('div');
+    p.className = 'falling-phrase';
+    p.textContent = phrases[Math.floor(Math.random() * phrases.length)];
+    p.style.cssText = 'position:fixed;left:0;top:0;pointer-events:none;font-weight:700;color:#F8FAFC;text-shadow:0 2px 12px rgba(0,0,0,.6);z-index:25;font-size:1.1rem;white-space:nowrap;';
+    document.body.appendChild(p);
+    const r = $('avatar').getBoundingClientRect();
+    let x = r.left + r.width / 2 + (Math.random() - 0.5) * 18;
+    let y = r.top - 8;
+    let vx = (Math.random() - 0.5) * 1.2, vy = -2.4;
+    const g = 0.06;
+    function anim() {
+        x += vx; vy += g; y += vy;
+        p.style.transform = `translate3d(${x}px, ${y}px, 0) translateX(-50%)`;
+        p.style.opacity = Math.max(0, parseFloat(p.style.opacity || 1) - 0.016);
+        if (parseFloat(p.style.opacity) > 0) requestAnimationFrame(anim);
+        else p.remove();
+    }
+    anim();
+    setTimeout(() => { eggCooldown = false; }, 1500);
+});
+
+/* ---------- boot ---------- */
+const overlay = $('welcome-overlay');
+const content = $('content-wrapper');
+let booted = false;
+
+function finishIntro() {
+    if (booted) return;
+    booted = true;
+    overlay.style.opacity = '0';
+    setTimeout(() => { overlay.style.display = 'none'; }, 400);
+    content.style.filter = 'none';
+    content.style.opacity = '0';
+    void content.offsetWidth;
+    content.style.opacity = '1';
+    document.body.classList.remove('booting');
+    document.querySelector('.top-nav').classList.add('ready');
+    revealHub();
+    armBars();
+    loadTrack(0);
+    play();
+}
+
+$('startBtn').addEventListener('click', finishIntro);
+overlay.addEventListener('click', (e) => { if (e.target !== $('startBtn')) finishIntro(); });
+</script>
+</body>
+</html>
